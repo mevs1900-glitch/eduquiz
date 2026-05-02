@@ -103,7 +103,7 @@ const getResults = () => LS.get(SK.results) || [];
 const addResult = r => { const arr = [r, ...getResults()].slice(0,100); LS.set(SK.results, arr); };
 
 // API Key desde variable de entorno o hardcoded como respaldo
-const API_KEY = import.meta.env.VITE_ANTHROPIC_KEY || "TU_NUEVA_CLAVE_AQUI";
+const API_KEY = import.meta.env.VITE_ANTHROPIC_KEY || "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";
 
 async function callClaude(messages, system, tools=null) {
   const body = { model:"claude-sonnet-4-20250514", max_tokens:1000, system, messages };
@@ -718,4 +718,7 @@ Total exacto: ${numMC+numTF+numDev} preguntas.`;
     </>
   );
 }
+
+
+
 
