@@ -27,7 +27,7 @@ body{background:#000;color:#fff;font-family:'DM Sans',sans-serif;min-height:100v
 .pop{animation:pop .45s cubic-bezier(.22,1,.36,1) both}
 input[type=text],input[type=email],input[type=password],textarea{width:100%;background:#0a0a0a;border:1px solid #1e1e1e;border-radius:10px;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;padding:13px 15px;outline:none;transition:border-color .18s,box-shadow .18s;}
 textarea{resize:vertical}
-input::placeholder,textarea::placeholder{color:#52525b}
+input::placeholder,textarea::placeholder{color:#ffffff}
 input:focus,textarea:focus{border-color:#0ea5e9;box-shadow:0 0 0 3px rgba(14,165,233,.1)}
 input.err{border-color:#f43f5e}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 22px;border-radius:10px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;transition:all .18s;white-space:nowrap}
@@ -36,16 +36,16 @@ input.err{border-color:#f43f5e}
 .btn-sky:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
 .btn-outline{background:transparent;color:#a1a1aa;border:1px solid #1e1e1e}
 .btn-outline:hover{border-color:#0ea5e9;color:#0ea5e9;background:rgba(14,165,233,.08)}
-.btn-ghost{background:transparent;color:#52525b;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;padding:6px;transition:color .15s}
+.btn-ghost{background:transparent;color:#ffffff;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;padding:6px;transition:color .15s}
 .btn-ghost:hover{color:#0ea5e9}
 .btn-full{width:100%}
 .card{background:#111;border:1px solid #1e1e1e;border-radius:16px;padding:26px}
 .glass{background:rgba(10,10,10,.92);backdrop-filter:blur(20px);border:1px solid #1e1e1e;border-radius:18px;padding:28px}
 .tab-bar{display:flex;background:#0a0a0a;border:1px solid #1e1e1e;border-radius:10px;padding:3px;gap:3px;margin-bottom:24px}
-.tab{flex:1;padding:9px;border-radius:7px;border:none;background:transparent;color:#52525b;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .18s;text-align:center}
+.tab{flex:1;padding:9px;border-radius:7px;border:none;background:transparent;color:#ffffff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .18s;text-align:center}
 .tab.on{background:#0ea5e9;color:#000;box-shadow:0 0 16px rgba(14,165,233,.2)}
 .field{margin-bottom:15px}
-.field label{display:block;font-size:11px;font-weight:700;color:#52525b;letter-spacing:.06em;margin-bottom:7px}
+.field label{display:block;font-size:11px;font-weight:700;color:#ffffff;letter-spacing:.06em;margin-bottom:7px}
 .field-err{font-size:11px;color:#f43f5e;margin-top:4px}
 .opt{width:100%;text-align:left;padding:13px 16px;border-radius:10px;border:1px solid #1e1e1e;background:#0a0a0a;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .16s;display:flex;align-items:center;gap:12px}
 .opt:hover:not(:disabled){border-color:#0ea5e9;background:rgba(14,165,233,.08)}
@@ -53,7 +53,7 @@ input.err{border-color:#f43f5e}
 .opt.correct{border-color:#10b981;background:rgba(16,185,129,.08)}
 .opt.wrong{border-color:#f43f5e;background:rgba(244,63,94,.08)}
 .opt:disabled{cursor:default}
-.letter{width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;border:1px solid #1e1e1e;background:#1a1a1a;color:#52525b;transition:all .16s}
+.letter{width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;border:1px solid #1e1e1e;background:#1a1a1a;color:#ffffff;transition:all .16s}
 .opt.chosen .letter{border-color:#0ea5e9;background:#0ea5e9;color:#000}
 .opt.correct .letter{border-color:#10b981;background:#10b981;color:#000}
 .opt.wrong .letter{border-color:#f43f5e;background:#f43f5e;color:#fff}
@@ -63,14 +63,14 @@ input.err{border-color:#f43f5e}
 .chip-sky{background:rgba(14,165,233,.1);color:#0ea5e9;border:1px solid rgba(14,165,233,.2)}
 .chip-em{background:rgba(16,185,129,.1);color:#10b981;border:1px solid rgba(16,185,129,.2)}
 .chip-am{background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2)}
-.chip-dark{background:#1a1a1a;color:#52525b;border:1px solid #1e1e1e}
+.chip-dark{background:#1a1a1a;color:#ffffff;border:1px solid #1e1e1e}
 .tog-group{display:flex;background:#0a0a0a;border:1px solid #1e1e1e;border-radius:10px;padding:3px;gap:3px}
-.tog-item{flex:1;padding:9px 10px;border-radius:7px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#52525b;cursor:pointer;transition:all .18s;text-align:center}
+.tog-item{flex:1;padding:9px 10px;border-radius:7px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#ffffff;cursor:pointer;transition:all .18s;text-align:center}
 .tog-item.on{background:#0ea5e9;color:#000;box-shadow:0 0 14px rgba(14,165,233,.2)}
 .spinner{width:20px;height:20px;border:2px solid #1e1e1e;border-top-color:#0ea5e9;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
 .drop{border:1.5px dashed #1e1e1e;border-radius:12px;padding:40px 20px;text-align:center;cursor:pointer;background:#0a0a0a;transition:all .18s}
 .drop:hover,.drop.over{border-color:#0ea5e9;background:rgba(14,165,233,.06)}
-.upload-fab{position:absolute;bottom:10px;right:10px;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:8px;border:1px solid #1e1e1e;background:#111;color:#52525b;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;z-index:2}
+.upload-fab{position:absolute;bottom:10px;right:10px;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:8px;border:1px solid #1e1e1e;background:#111;color:#ffffff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;z-index:2}
 .upload-fab:hover{border-color:#0ea5e9;color:#0ea5e9;background:rgba(14,165,233,.08)}
 .textarea-wrap{position:relative}
 .file-pill{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;border:1px solid rgba(14,165,233,.25);background:rgba(14,165,233,.08);margin-bottom:10px;font-size:13px}
@@ -718,6 +718,7 @@ Total exacto: ${numMC+numTF+numDev} preguntas.`;
     </>
   );
 }
+
 
 
 
