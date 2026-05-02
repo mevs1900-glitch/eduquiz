@@ -102,7 +102,8 @@ const logout = () => LS.del(SK.user);
 const getResults = () => LS.get(SK.results) || [];
 const addResult = r => { const arr = [r, ...getResults()].slice(0,100); LS.set(SK.results, arr); };
 
-const API_KEY = "sk-ant-api03-kyo9g6zpYe9hiFLhEUhi_4jqgDSX6f4he18186DYsLsbSW6rQOB6LTxVEBCeQLtl5fKyMI8KUwGGVYtTiFaRBg-pzObkwAA";
+// API Key desde variable de entorno o hardcoded como respaldo
+const API_KEY = import.meta.env.VITE_ANTHROPIC_KEY || "sk-ant-api03-kyo9g6zpYe9hiFLhEUhi_4jqgDSX6f4he18186DYsLsbSW6rQOB6LTxVEBCeQLtl5fKyMI8KUwGGVYtTiFaRBg-pzObkwAA";
 
 async function callClaude(messages, system, tools=null) {
   const body = { model:"claude-sonnet-4-20250514", max_tokens:1000, system, messages };
@@ -192,9 +193,9 @@ function Auth({onLogin, showToast}) {
   const validate = () => {
     const e={};
     if(tab==="register"&&!f.name.trim()) e.name="Ingresa tu nombre";
-    if(!f.email.includes("@")) e.email="Email inválido";
-    if(f.pass.length<6) e.pass="Mínimo 6 caracteres";
-    if(tab==="register"&&f.pass!==f.confirm) e.confirm="Las contraseñas no coinciden";
+    if(!f.email.includes("@")) e.email="Email invalido";
+    if(f.pass.length<6) e.pass="Minimo 6 caracteres";
+    if(tab==="register"&&f.pass!==f.confirm) e.confirm="Las contrasenas no coinciden";
     setErrs(e); return Object.keys(e).length===0;
   };
   const submit = async () => {
@@ -209,7 +210,7 @@ function Auth({onLogin, showToast}) {
       showToast(`Bienvenido/a, ${u.name}!`,"ok"); onLogin(u);
     } else {
       const u=users[f.email.toLowerCase()];
-      if(!u||u.pass!==f.pass) { setErrs({pass:"Email o contraseña incorrectos"}); setLoading(false); return; }
+      if(!u||u.pass!==f.pass) { setErrs({pass:"Email o contrasena incorrectos"}); setLoading(false); return; }
       setMe(u); showToast(`Hola de nuevo, ${u.name}!`,"ok"); onLogin(u);
     }
     setLoading(false);
@@ -321,8 +322,8 @@ function Home({user,onNav}) {
       <div className="card">
         <h3 style={{fontWeight:700,fontSize:14,marginBottom:14,color:D.muted,letterSpacing:".04em"}}>ACCESO RAPIDO</h3>
         {[
-          {icon:"",label:"Nuevo cuestionario",sub:"Desde texto, PDF, Word o foto",action:"quiz",color:D.sky},
-          {icon:"",label:"Mi historial",sub:`${stats.total} evaluaciones guardadas`,action:"history",color:D.am},
+          {label:"Nuevo cuestionario",sub:"Desde texto, PDF, Word o foto",action:"quiz",color:D.sky},
+          {label:"Mi historial",sub:`${stats.total} evaluaciones guardadas`,action:"history",color:D.am},
         ].map((a,i)=>(
           <button key={i} onClick={()=>onNav(a.action)} style={{all:"unset",cursor:"pointer",width:"100%",display:"block",marginBottom:i===0?10:0}}>
             <div style={{display:"flex",alignItems:"center",gap:12,padding:"13px 15px",borderRadius:11,background:D.s1,border:`1px solid ${D.border}`,transition:"all .16s"}}>
