@@ -106,7 +106,7 @@ const addResult = r => { const arr = [r, ...getResults()].slice(0,100); LS.set(S
 const API_KEY = import.meta.env.VITE_ANTHROPIC_KEY || "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";
 
 async function callClaude(messages, system, tools=null) {
-  const body = { model:"claude-sonnet-4-20250514", max_tokens:1000, system, messages };
+  const body = { model:"claude-sonnet-4-20250514", max_tokens:4000, system, messages };
   if (tools) body.tools = tools;
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method:"POST",
@@ -718,6 +718,7 @@ Total exacto: ${numMC+numTF+numDev} preguntas.`;
     </>
   );
 }
+
 
 
 
