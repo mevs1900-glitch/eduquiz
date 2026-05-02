@@ -103,7 +103,7 @@ const getResults = () => LS.get(SK.results) || [];
 const addResult = r => { const arr = [r, ...getResults()].slice(0,100); LS.set(SK.results, arr); };
 
 // API Key desde variable de entorno o hardcoded como respaldo
-const API_KEY = import.meta.env.VITE_ANTHROPIC_KEY || "sk-ant-api03-kyo9g6zpYe9hiFLhEUhi_4jqgDSX6f4he18186DYsLsbSW6rQOB6LTxVEBCeQLtl5fKyMI8KUwGGVYtTiFaRBg-pzObkwAA";
+const API_KEY = import.meta.env.VITE_ANTHROPIC_KEY || "TU_NUEVA_CLAVE_AQUI";
 
 async function callClaude(messages, system, tools=null) {
   const body = { model:"claude-sonnet-4-20250514", max_tokens:1000, system, messages };
