@@ -511,7 +511,7 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
         {q.type==="true_false"&&(
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
             {[["true","Verdadero",D.em],["false","Falso",D.ro]].map(([val,label,clr])=>{const isSel=answers[cur]===val,isOk=fb&&val===q.answer,isBad=fb&&isSel&&val!==q.answer;return(
-              <button key={val} className={`opt ${isOk?"correct":isBad?"wrong":isSel?"chosen":""}`} onClick={()=>handleTF(val)} disabled={answered} style={{justifyContent:"center",fontWeight:600,fontSize:15,color:isSel?clr:undefined}}>{label}</button>
+              <button key={val} className={`opt ${isOk?"correct":isBad?"wrong":isSel?"chosen":""}`} onClick={()=>handleTF(val)} disabled={answered} style={{justifyContent:"center",fontWeight:600,fontSize:15,color:isSel?clr:#fff}}>{label}</button>
             );})}
           </div>
         )}
@@ -718,6 +718,7 @@ Total exacto: ${numMC+numTF+numDev} preguntas.`;
     </>
   );
 }
+
 
 
 
