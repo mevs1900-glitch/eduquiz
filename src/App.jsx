@@ -202,16 +202,16 @@ function useToast() {
   return {Toast, show};
 }
 
-function Logo({size=36}) {
+function Logo({size=36, compact=false}) {
   return (
-    <div style={{display:"flex",alignItems:"center",gap:10}}>
-      <div style={{width:size,height:size,borderRadius:10,background:"linear-gradient(135deg,#0ea5e9,#8b5cf6)",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:`0 0 20px rgba(14,165,233,.4)`,flexShrink:0}}>
+    <div style={{display:"flex",alignItems:"center",gap:8}}>
+      <div style={{width:size,height:size,borderRadius:10,background:"linear-gradient(135deg,#0ea5e9,#8b5cf6)",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 0 20px rgba(14,165,233,.4)",flexShrink:0}}>
         <span style={{color:"#fff",fontWeight:800,fontSize:size*.38,fontFamily:"'JetBrains Mono'"}}>EQ</span>
       </div>
-      <div>
-        <div style={{fontWeight:800,fontSize:15,lineHeight:1,color:"#fff",letterSpacing:"-.02em"}}>EduQuiz <span style={{background:"linear-gradient(135deg,#0ea5e9,#8b5cf6)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>IA</span></div>
+      {!compact&&<div>
+        <div style={{fontWeight:800,fontSize:14,lineHeight:1,color:"#fff",letterSpacing:"-.02em"}}>EduQuiz <span style={{background:"linear-gradient(135deg,#0ea5e9,#8b5cf6)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>IA</span></div>
         <div style={{fontSize:9,color:"#475569",fontWeight:600,letterSpacing:".1em",marginTop:2}}>CREADO POR MANU</div>
-      </div>
+      </div>}
     </div>
   );
 }
@@ -306,13 +306,15 @@ function Auth({onLogin, showToast}) {
 
 function TopBar({user,page,onNav,onLogout}) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth<=640);
+  useEffect(()=>{ const h=()=>setIsMobile(window.innerWidth<=640); window.addEventListener('resize',h); return()=>window.removeEventListener('resize',h); },[]);
   const pages=[{id:"home",label:"Inicio",icon:"🏠"},{id:"quiz",label:"Nuevo Quiz",icon:"✦"},{id:"history",label:"Historial",icon:"📋"}];
   return (
     <>
       <div className="topbar">
         <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${D.sky},#8b5cf6,transparent)`}}/>
         <div className="topbar-inner">
-          <Logo size={28}/>
+          <Logo size={28} compact={isMobile}/>
           {/* Desktop nav */}
           <div style={{display:"flex",gap:2,marginLeft:"auto"}} className="desktop-nav">
             {pages.map(p=>(<button key={p.id} className={`nav-btn ${page===p.id?"active":""}`} onClick={()=>onNav(p.id)}>{p.label}</button>))}
