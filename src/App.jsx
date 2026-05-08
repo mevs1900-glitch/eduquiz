@@ -7,7 +7,7 @@ const D = {
   em:"#10b981",emdim:"rgba(16,185,129,.1)",
   ro:"#f43f5e",rodim:"rgba(244,63,94,.1)",
   am:"#f59e0b",amdim:"rgba(245,158,11,.1)",
-  text:"#fff",sub:"#a1a1aa",muted:"#52525b",line:"#1a1a1a",
+  text:"#fff",sub:"#fff",muted:"#a1a1aa",line:"#1a1a1a",
 };
 
 const CSS = `
@@ -26,26 +26,26 @@ body{background:#000;color:#fff;font-family:'DM Sans',sans-serif;min-height:100v
 .sr{animation:slideR .32s cubic-bezier(.22,1,.36,1) both}
 .pop{animation:pop .45s cubic-bezier(.22,1,.36,1) both}
 input[type=text],input[type=email],input[type=password],textarea{width:100%;background:#0a0a0a;border:1px solid #1e1e1e;border-radius:10px;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;padding:13px 15px;outline:none;transition:border-color .18s,box-shadow .18s;}
-textarea{resize:vertical}
-input::placeholder,textarea::placeholder{color:#ffffff}
+textarea{resize:vertical;color:#fff}
+input::placeholder,textarea::placeholder{color:#a1a1aa}
 input:focus,textarea:focus{border-color:#0ea5e9;box-shadow:0 0 0 3px rgba(14,165,233,.1)}
 input.err{border-color:#f43f5e}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 22px;border-radius:10px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;transition:all .18s;white-space:nowrap}
 .btn-sky{background:#0ea5e9;color:#000;box-shadow:0 0 20px rgba(14,165,233,.22)}
 .btn-sky:hover{background:#38bdf8;box-shadow:0 0 32px rgba(14,165,233,.3);transform:translateY(-1px)}
 .btn-sky:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
-.btn-outline{background:transparent;color:#a1a1aa;border:1px solid #1e1e1e}
+.btn-outline{background:transparent;color:#fff;border:1px solid #1e1e1e}
 .btn-outline:hover{border-color:#0ea5e9;color:#0ea5e9;background:rgba(14,165,233,.08)}
-.btn-ghost{background:transparent;color:#ffffff;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;padding:6px;transition:color .15s}
+.btn-ghost{background:transparent;color:#fff;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;padding:6px;transition:color .15s}
 .btn-ghost:hover{color:#0ea5e9}
 .btn-full{width:100%}
 .card{background:#111;border:1px solid #1e1e1e;border-radius:16px;padding:26px}
 .glass{background:rgba(10,10,10,.92);backdrop-filter:blur(20px);border:1px solid #1e1e1e;border-radius:18px;padding:28px}
 .tab-bar{display:flex;background:#0a0a0a;border:1px solid #1e1e1e;border-radius:10px;padding:3px;gap:3px;margin-bottom:24px}
-.tab{flex:1;padding:9px;border-radius:7px;border:none;background:transparent;color:#ffffff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .18s;text-align:center}
+.tab{flex:1;padding:9px;border-radius:7px;border:none;background:transparent;color:#a1a1aa;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .18s;text-align:center}
 .tab.on{background:#0ea5e9;color:#000;box-shadow:0 0 16px rgba(14,165,233,.2)}
 .field{margin-bottom:15px}
-.field label{display:block;font-size:11px;font-weight:700;color:#ffffff;letter-spacing:.06em;margin-bottom:7px}
+.field label{display:block;font-size:11px;font-weight:700;color:#fff;letter-spacing:.06em;margin-bottom:7px}
 .field-err{font-size:11px;color:#f43f5e;margin-top:4px}
 .opt{width:100%;text-align:left;padding:13px 16px;border-radius:10px;border:1px solid #1e1e1e;background:#0a0a0a;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .16s;display:flex;align-items:center;gap:12px}
 .opt:hover:not(:disabled){border-color:#0ea5e9;background:rgba(14,165,233,.08)}
@@ -53,7 +53,7 @@ input.err{border-color:#f43f5e}
 .opt.correct{border-color:#10b981;background:rgba(16,185,129,.08)}
 .opt.wrong{border-color:#f43f5e;background:rgba(244,63,94,.08)}
 .opt:disabled{cursor:default}
-.letter{width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;border:1px solid #1e1e1e;background:#1a1a1a;color:#ffffff;transition:all .16s}
+.letter{width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;border:1px solid #1e1e1e;background:#1a1a1a;color:#fff;transition:all .16s}
 .opt.chosen .letter{border-color:#0ea5e9;background:#0ea5e9;color:#000}
 .opt.correct .letter{border-color:#10b981;background:#10b981;color:#000}
 .opt.wrong .letter{border-color:#f43f5e;background:#f43f5e;color:#fff}
@@ -63,25 +63,25 @@ input.err{border-color:#f43f5e}
 .chip-sky{background:rgba(14,165,233,.1);color:#0ea5e9;border:1px solid rgba(14,165,233,.2)}
 .chip-em{background:rgba(16,185,129,.1);color:#10b981;border:1px solid rgba(16,185,129,.2)}
 .chip-am{background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2)}
-.chip-dark{background:#1a1a1a;color:#ffffff;border:1px solid #1e1e1e}
+.chip-dark{background:#1a1a1a;color:#fff;border:1px solid #1e1e1e}
 .tog-group{display:flex;background:#0a0a0a;border:1px solid #1e1e1e;border-radius:10px;padding:3px;gap:3px}
-.tog-item{flex:1;padding:9px 10px;border-radius:7px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#ffffff;cursor:pointer;transition:all .18s;text-align:center}
+.tog-item{flex:1;padding:9px 10px;border-radius:7px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#a1a1aa;cursor:pointer;transition:all .18s;text-align:center}
 .tog-item.on{background:#0ea5e9;color:#000;box-shadow:0 0 14px rgba(14,165,233,.2)}
 .spinner{width:20px;height:20px;border:2px solid #1e1e1e;border-top-color:#0ea5e9;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
 .drop{border:1.5px dashed #1e1e1e;border-radius:12px;padding:40px 20px;text-align:center;cursor:pointer;background:#0a0a0a;transition:all .18s}
 .drop:hover,.drop.over{border-color:#0ea5e9;background:rgba(14,165,233,.06)}
-.upload-fab{position:absolute;bottom:10px;right:10px;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:8px;border:1px solid #1e1e1e;background:#111;color:#ffffff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;z-index:2}
+.upload-fab{position:absolute;bottom:10px;right:10px;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:8px;border:1px solid #1e1e1e;background:#111;color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;z-index:2}
 .upload-fab:hover{border-color:#0ea5e9;color:#0ea5e9;background:rgba(14,165,233,.08)}
 .textarea-wrap{position:relative}
-.file-pill{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;border:1px solid rgba(14,165,233,.25);background:rgba(14,165,233,.08);margin-bottom:10px;font-size:13px}
+.file-pill{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;border:1px solid rgba(14,165,233,.25);background:rgba(14,165,233,.08);margin-bottom:10px;font-size:13px;color:#fff}
 .topbar{position:sticky;top:0;z-index:100;background:rgba(0,0,0,.9);backdrop-filter:blur(16px);border-bottom:1px solid #1e1e1e;padding:0 20px}
 .topbar-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;height:58px;gap:12px}
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;z-index:300;padding:16px;animation:fadeIn .2s ease}
 .modal{background:#111;border:1px solid #1e1e1e;border-radius:20px;padding:28px;max-width:480px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,.7);animation:slideUp .3s cubic-bezier(.22,1,.36,1)}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#111;border:1px solid #1e1e1e;border-radius:12px;padding:12px 20px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.5);animation:fadeUp .3s ease;white-space:nowrap}
 .stat-box{background:#0a0a0a;border:1px solid #1e1e1e;border-radius:12px;padding:18px}
-.nav-btn{background:transparent;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;padding:6px 12px;border-radius:7px;transition:all .18s}
-.res-row{background:#111;border:1px solid #1e1e1e;border-radius:12px;padding:13px 15px;display:flex;align-items:flex-start;gap:11px;cursor:pointer;width:100%;text-align:left;font-family:'DM Sans',sans-serif}
+.nav-btn{background:transparent;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;padding:6px 12px;border-radius:7px;transition:all .18s;color:#fff}
+.res-row{background:#111;border:1px solid #1e1e1e;border-radius:12px;padding:13px 15px;display:flex;align-items:flex-start;gap:11px;cursor:pointer;width:100%;text-align:left;font-family:'DM Sans',sans-serif;color:#fff}
 .r-link{display:block;padding:12px 14px;border-radius:10px;border:1px solid #1e1e1e;background:#0a0a0a;text-decoration:none;transition:all .16s}
 .r-link:hover{border-color:#0ea5e9;background:rgba(14,165,233,.06)}
 input[type=range]{-webkit-appearance:none;width:100%;height:3px;border-radius:2px;background:#1e1e1e;outline:none}
@@ -102,11 +102,10 @@ const logout = () => LS.del(SK.user);
 const getResults = () => LS.get(SK.results) || [];
 const addResult = r => { const arr = [r, ...getResults()].slice(0,100); LS.set(SK.results, arr); };
 
-// API Key desde variable de entorno o hardcoded como respaldo
-const API_KEY = import.meta.env.VITE_ANTHROPIC_KEY || "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";
+const API_KEY = import.meta.env.VITE_ANTHROPIC_KEY;
 
 async function callClaude(messages, system, tools=null) {
-  const body = { model:"claude-sonnet-4-20250514", max_tokens:4000, system, messages };
+  const body = { model:"claude-haiku-4-5-20251001", max_tokens:4000, system, messages };
   if (tools) body.tools = tools;
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method:"POST",
@@ -143,7 +142,7 @@ function useToast() {
   const Toast = t ? (
     <div className="toast" style={{color: t.type==="ok"?D.em:t.type==="err"?D.ro:D.sky}}>
       <span style={{fontWeight:800}}>{t.type==="ok"?"✓":t.type==="err"?"✕":"ℹ"}</span>
-      <span style={{color:D.text}}>{t.msg}</span>
+      <span style={{color:"#fff"}}>{t.msg}</span>
     </div>
   ) : null;
   return {Toast, show};
@@ -156,7 +155,7 @@ function Logo({size=34}) {
         <span style={{color:"#000",fontWeight:700,fontSize:size*.4,fontFamily:"'DM Mono'"}}>EQ</span>
       </div>
       <div>
-        <div style={{fontWeight:700,fontSize:14,lineHeight:1}}>EduQuiz<span style={{color:D.sky}}>Pro</span></div>
+        <div style={{fontWeight:700,fontSize:14,lineHeight:1,color:"#fff"}}>EduQuiz<span style={{color:D.sky}}>Pro</span> <span style={{color:D.em}}>AI</span></div>
         <div style={{fontSize:9,color:D.muted,fontWeight:600,letterSpacing:".1em"}}>Creado por Manu</div>
       </div>
     </div>
@@ -171,11 +170,11 @@ function StepBar({step}) {
         <div key={i} style={{display:"flex",alignItems:"center",flex:i<labels.length-1?1:"none"}}>
           <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:4}}>
             <div style={{width:26,height:26,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,
-              background:i<step?D.em:i===step?D.sky:D.line,color:i<=step?"#000":D.muted,transition:"all .3s",
+              background:i<step?D.em:i===step?D.sky:D.line,color:i<=step?"#000":"#fff",transition:"all .3s",
               boxShadow:i===step?`0 0 12px ${D.skyglow}`:"none"}}>
               {i<step?"✓":i+1}
             </div>
-            <span style={{fontSize:10,fontWeight:600,color:i===step?D.sky:D.muted,whiteSpace:"nowrap"}}>{l}</span>
+            <span style={{fontSize:10,fontWeight:600,color:i===step?D.sky:"#a1a1aa",whiteSpace:"nowrap"}}>{l}</span>
           </div>
           {i<labels.length-1&&<div style={{flex:1,height:1,background:i<step?D.em:D.border,margin:"0 7px",marginBottom:15,transition:"background .3s"}}/>}
         </div>
@@ -234,30 +233,10 @@ function Auth({onLogin, showToast}) {
             <button className={`tab ${tab==="login"?"on":""}`} onClick={()=>setTab("login")}>Iniciar sesion</button>
             <button className={`tab ${tab==="register"?"on":""}`} onClick={()=>setTab("register")}>Registro gratis</button>
           </div>
-          {tab==="register"&&(
-            <div className="field">
-              <label>NOMBRE COMPLETO</label>
-              <input type="text" className={errs.name?"err":""} placeholder="Tu nombre" value={f.name} onChange={e=>set("name",e.target.value)}/>
-              {errs.name&&<div className="field-err">! {errs.name}</div>}
-            </div>
-          )}
-          <div className="field">
-            <label>EMAIL</label>
-            <input type="email" className={errs.email?"err":""} placeholder="tu@email.com" value={f.email} onChange={e=>set("email",e.target.value)}/>
-            {errs.email&&<div className="field-err">! {errs.email}</div>}
-          </div>
-          <div className="field">
-            <label>CONTRASENA</label>
-            <input type="password" className={errs.pass?"err":""} placeholder="Minimo 6 caracteres" value={f.pass} onChange={e=>set("pass",e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>
-            {errs.pass&&<div className="field-err">! {errs.pass}</div>}
-          </div>
-          {tab==="register"&&(
-            <div className="field">
-              <label>CONFIRMAR CONTRASENA</label>
-              <input type="password" className={errs.confirm?"err":""} placeholder="Repite tu contrasena" value={f.confirm} onChange={e=>set("confirm",e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>
-              {errs.confirm&&<div className="field-err">! {errs.confirm}</div>}
-            </div>
-          )}
+          {tab==="register"&&(<div className="field"><label>NOMBRE COMPLETO</label><input type="text" className={errs.name?"err":""} placeholder="Tu nombre" value={f.name} onChange={e=>set("name",e.target.value)}/>{errs.name&&<div className="field-err">! {errs.name}</div>}</div>)}
+          <div className="field"><label>EMAIL</label><input type="email" className={errs.email?"err":""} placeholder="tu@email.com" value={f.email} onChange={e=>set("email",e.target.value)}/>{errs.email&&<div className="field-err">! {errs.email}</div>}</div>
+          <div className="field"><label>CONTRASENA</label><input type="password" className={errs.pass?"err":""} placeholder="Minimo 6 caracteres" value={f.pass} onChange={e=>set("pass",e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>{errs.pass&&<div className="field-err">! {errs.pass}</div>}</div>
+          {tab==="register"&&(<div className="field"><label>CONFIRMAR CONTRASENA</label><input type="password" className={errs.confirm?"err":""} placeholder="Repite tu contrasena" value={f.confirm} onChange={e=>set("confirm",e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>{errs.confirm&&<div className="field-err">! {errs.confirm}</div>}</div>)}
           <button className="btn btn-sky btn-full" onClick={submit} disabled={loading} style={{marginTop:4}}>
             {loading?<><div className="spinner" style={{borderTopColor:"#000"}}/>Procesando...</>:tab==="login"?"Ingresar ->":"Crear cuenta gratis ->"}
           </button>
@@ -276,14 +255,10 @@ function TopBar({user,page,onNav,onLogout}) {
       <div className="topbar-inner">
         <Logo size={28}/>
         <div style={{display:"flex",gap:2,marginLeft:"auto"}}>
-          {pages.map(p=>(
-            <button key={p.id} className="nav-btn" style={{color:page===p.id?D.sky:D.muted,background:page===p.id?D.skydim:"transparent",border:page===p.id?`1px solid rgba(14,165,233,.15)`:"1px solid transparent"}} onClick={()=>onNav(p.id)}>{p.label}</button>
-          ))}
+          {pages.map(p=>(<button key={p.id} className="nav-btn" style={{color:page===p.id?D.sky:"#a1a1aa",background:page===p.id?D.skydim:"transparent",border:page===p.id?`1px solid rgba(14,165,233,.15)`:"1px solid transparent"}} onClick={()=>onNav(p.id)}>{p.label}</button>))}
         </div>
         <div style={{display:"flex",alignItems:"center",gap:8}}>
-          <div style={{width:30,height:30,borderRadius:8,background:D.skydim,border:`1px solid rgba(14,165,233,.2)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:800,color:D.sky,cursor:"pointer"}} onClick={()=>onNav("profile")}>
-            {user.name.charAt(0).toUpperCase()}
-          </div>
+          <div style={{width:30,height:30,borderRadius:8,background:D.skydim,border:`1px solid rgba(14,165,233,.2)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:800,color:D.sky,cursor:"pointer"}} onClick={()=>onNav("profile")}>{user.name.charAt(0).toUpperCase()}</div>
           <button className="btn-ghost" onClick={onLogout} style={{fontSize:12}}>Salir</button>
         </div>
       </div>
@@ -293,42 +268,29 @@ function TopBar({user,page,onNav,onLogout}) {
 
 function Home({user,onNav}) {
   const results = getResults();
-  const stats = {
-    total: results.length,
-    avgPct: results.length ? Math.round(results.reduce((a,r)=>a+r.pct,0)/results.length) : 0,
-    best: results.length ? Math.max(...results.map(r=>r.pct)) : 0,
-  };
+  const stats = { total:results.length, avgPct:results.length?Math.round(results.reduce((a,r)=>a+r.pct,0)/results.length):0, best:results.length?Math.max(...results.map(r=>r.pct)):0 };
   return (
     <div style={{maxWidth:700,margin:"0 auto",padding:"32px 16px 60px"}} className="fu">
       <div style={{marginBottom:28}}>
-        <h1 style={{fontSize:24,fontWeight:800,marginBottom:4}}>Hola, {user.name.split(" ")[0]}</h1>
-        <p style={{color:D.muted,fontSize:14}}>Todo es gratis - sin limites, sin tarjeta.</p>
+        <h1 style={{fontSize:24,fontWeight:800,marginBottom:4,color:"#fff"}}>Hola, {user.name.split(" ")[0]} 👋</h1>
+        <p style={{color:"#a1a1aa",fontSize:14}}>Todo es gratis - sin limites, sin tarjeta.</p>
       </div>
       <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,marginBottom:18}}>
-        {[
-          {label:"Quizzes realizados",val:stats.total,color:D.sky},
-          {label:"Promedio general",val:`${stats.avgPct}%`,color:pctColor(stats.avgPct)},
-          {label:"Mejor puntaje",val:`${stats.best}%`,color:D.em},
-        ].map((s,i)=>(
+        {[{label:"Quizzes realizados",val:stats.total,color:D.sky},{label:"Promedio general",val:`${stats.avgPct}%`,color:pctColor(stats.avgPct)},{label:"Mejor puntaje",val:`${stats.best}%`,color:D.em}].map((s,i)=>(
           <div key={i} className="stat-box">
             <div style={{fontFamily:"'DM Mono'",fontSize:26,fontWeight:500,color:s.color,lineHeight:1}}>{s.val||"0"}</div>
-            <div style={{fontSize:10,color:D.muted,marginTop:4,fontWeight:600}}>{s.label.toUpperCase()}</div>
+            <div style={{fontSize:10,color:"#a1a1aa",marginTop:4,fontWeight:600}}>{s.label.toUpperCase()}</div>
           </div>
         ))}
       </div>
-      <button className="btn btn-sky btn-full" style={{fontSize:16,padding:"16px",borderRadius:12,marginBottom:14}} onClick={()=>onNav("quiz")}>
-        Generar nuevo cuestionario
-      </button>
+      <button className="btn btn-sky btn-full" style={{fontSize:16,padding:"16px",borderRadius:12,marginBottom:14}} onClick={()=>onNav("quiz")}>✨ Generar nuevo cuestionario</button>
       <div className="card">
-        <h3 style={{fontWeight:700,fontSize:14,marginBottom:14,color:D.muted,letterSpacing:".04em"}}>ACCESO RAPIDO</h3>
-        {[
-          {label:"Nuevo cuestionario",sub:"Desde texto, PDF, Word o foto",action:"quiz",color:D.sky},
-          {label:"Mi historial",sub:`${stats.total} evaluaciones guardadas`,action:"history",color:D.am},
-        ].map((a,i)=>(
+        <h3 style={{fontWeight:700,fontSize:14,marginBottom:14,color:"#a1a1aa",letterSpacing:".04em"}}>ACCESO RAPIDO</h3>
+        {[{label:"Nuevo cuestionario",sub:"Desde texto, PDF, Word o foto",action:"quiz",color:D.sky},{label:"Mi historial",sub:`${stats.total} evaluaciones guardadas`,action:"history",color:D.am}].map((a,i)=>(
           <button key={i} onClick={()=>onNav(a.action)} style={{all:"unset",cursor:"pointer",width:"100%",display:"block",marginBottom:i===0?10:0}}>
             <div style={{display:"flex",alignItems:"center",gap:12,padding:"13px 15px",borderRadius:11,background:D.s1,border:`1px solid ${D.border}`,transition:"all .16s"}}>
-              <div style={{flex:1}}><div style={{fontWeight:600,fontSize:14}}>{a.label}</div><div style={{fontSize:12,color:D.muted}}>{a.sub}</div></div>
-              <span style={{color:D.muted}}>-&gt;</span>
+              <div style={{flex:1}}><div style={{fontWeight:600,fontSize:14,color:"#fff"}}>{a.label}</div><div style={{fontSize:12,color:"#a1a1aa"}}>{a.sub}</div></div>
+              <span style={{color:"#a1a1aa"}}>→</span>
             </div>
           </button>
         ))}
@@ -370,37 +332,22 @@ function QuizInput({onGenerate}) {
   return (
     <div className="fu" style={{maxWidth:640,margin:"0 auto"}}>
       <div style={{textAlign:"center",marginBottom:28}}>
-        <h1 style={{fontSize:26,fontWeight:800,marginBottom:6}}>Nuevo cuestionario</h1>
-        <p style={{color:D.sub,fontSize:14}}>Ingresa el contenido y configura las preguntas</p>
+        <h1 style={{fontSize:26,fontWeight:800,marginBottom:6,color:"#fff"}}>Nuevo cuestionario</h1>
+        <p style={{color:"#a1a1aa",fontSize:14}}>Ingresa el contenido y configura las preguntas</p>
       </div>
       <div className="card">
         <div className="tog-group" style={{marginBottom:20}}>
-          <button className={`tog-item ${mode==="text"?"on":""}`} onClick={()=>setMode("text")}>Texto / Archivo</button>
-          <button className={`tog-item ${mode==="image"?"on":""}`} onClick={()=>setMode("image")}>Foto del cuaderno</button>
+          <button className={`tog-item ${mode==="text"?"on":""}`} onClick={()=>setMode("text")}>✍️ Texto / Archivo</button>
+          <button className={`tog-item ${mode==="image"?"on":""}`} onClick={()=>setMode("image")}>📷 Foto del cuaderno</button>
         </div>
         {mode==="text"&&(
           <div>
-            {file&&(
-              <div className="file-pill">
-                <span style={{color:D.sky,fontWeight:600,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{file.name}</span>
-                <span style={{fontSize:11,color:D.em,fontWeight:700,flexShrink:0}}>Listo</span>
-                <button onClick={()=>setFile(null)} style={{background:"none",border:"none",color:D.muted,cursor:"pointer",fontSize:16,lineHeight:1}}>x</button>
-              </div>
-            )}
-            {extracting&&<div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",borderRadius:9,background:D.s1,border:`1px solid ${D.border}`,fontSize:13,color:D.muted,marginBottom:10}}><div className="spinner" style={{width:16,height:16}}/> Leyendo archivo...</div>}
-            {extractErr&&<div style={{padding:"10px 14px",borderRadius:9,background:D.rodim,border:`1px solid rgba(244,63,94,.2)`,color:D.ro,fontSize:13,marginBottom:10}}>! {extractErr}</div>}
-            {!file&&(
-              <div className="textarea-wrap">
-                <textarea rows={7} placeholder="Pega aqui el texto de tu libro, apuntes, publicacion o cualquier contenido educativo..." value={text} onChange={e=>setText(e.target.value)} style={{paddingBottom:48}}/>
-                <button className="upload-fab" onClick={()=>uploadRef.current.click()}>
-                  Subir archivo
-                </button>
-              </div>
-            )}
+            {file&&(<div className="file-pill"><span style={{color:D.sky,fontWeight:600,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{file.name}</span><span style={{fontSize:11,color:D.em,fontWeight:700,flexShrink:0}}>✓ Listo</span><button onClick={()=>setFile(null)} style={{background:"none",border:"none",color:"#a1a1aa",cursor:"pointer",fontSize:16,lineHeight:1}}>×</button></div>)}
+            {extracting&&<div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",borderRadius:9,background:D.s1,border:`1px solid ${D.border}`,fontSize:13,color:"#fff",marginBottom:10}}><div className="spinner" style={{width:16,height:16}}/> Leyendo archivo...</div>}
+            {extractErr&&<div style={{padding:"10px 14px",borderRadius:9,background:D.rodim,border:`1px solid rgba(244,63,94,.2)`,color:D.ro,fontSize:13,marginBottom:10}}>⚠ {extractErr}</div>}
+            {!file&&(<div className="textarea-wrap"><textarea rows={7} placeholder="Pega aqui el texto de tu libro, apuntes o cualquier contenido educativo..." value={text} onChange={e=>setText(e.target.value)} style={{paddingBottom:48}}/><button className="upload-fab" onClick={()=>uploadRef.current.click()}>📎 Subir archivo</button></div>)}
             <div style={{display:"flex",gap:6,flexWrap:"wrap",marginTop:8}}>
-              {["PDF","Word","TXT","MD"].map(f=>(
-                <span key={f} style={{fontSize:10,fontWeight:600,color:D.muted,padding:"2px 7px",borderRadius:4,border:`1px solid ${D.border}`,background:D.s1}}>{f}</span>
-              ))}
+              {["PDF","Word","TXT","MD"].map(f=>(<span key={f} style={{fontSize:10,fontWeight:600,color:"#a1a1aa",padding:"2px 7px",borderRadius:4,border:`1px solid ${D.border}`,background:D.s1}}>{f}</span>))}
             </div>
             <input ref={uploadRef} type="file" accept=".pdf,.doc,.docx,.txt,.md,.csv" style={{display:"none"}} onChange={e=>handleDoc(e.target.files[0])}/>
           </div>
@@ -408,15 +355,16 @@ function QuizInput({onGenerate}) {
         {mode==="image"&&(imgPrev?(
           <div style={{position:"relative"}}>
             <img src={imgPrev} alt="prev" style={{width:"100%",borderRadius:10,maxHeight:230,objectFit:"cover"}}/>
-            <button className="btn btn-outline" onClick={()=>{setImgData(null);setImgPrev(null);}} style={{position:"absolute",top:8,right:8,fontSize:12,padding:"6px 12px",background:D.card}}>Cambiar</button>
+            <button className="btn btn-outline" onClick={()=>{setImgData(null);setImgPrev(null);}} style={{position:"absolute",top:8,right:8,fontSize:12,padding:"6px 12px",background:D.card}}>✕ Cambiar</button>
           </div>
         ):(
           <div className={`drop ${drag?"over":""}`} onDragOver={e=>{e.preventDefault();setDrag(true);}} onDragLeave={()=>setDrag(false)} onDrop={onDrop} onClick={()=>fileRef.current.click()}>
-            <p style={{fontWeight:600,marginBottom:4}}>Arrastra la foto o haz clic</p>
-            <p style={{fontSize:13,color:D.muted,marginBottom:16}}>Cuaderno, pizarra, libro, apunte...</p>
+            <div style={{fontSize:36,marginBottom:10}}>📷</div>
+            <p style={{fontWeight:600,marginBottom:4,color:"#fff"}}>Arrastra la foto o haz clic</p>
+            <p style={{fontSize:13,color:"#a1a1aa",marginBottom:16}}>Cuaderno, pizarra, libro, apunte...</p>
             <div style={{display:"flex",gap:8,justifyContent:"center"}}>
-              <button onClick={e=>{e.stopPropagation();fileRef.current.click();}} className="btn btn-outline" style={{fontSize:12,padding:"8px 13px"}}>Galeria</button>
-              <button onClick={e=>{e.stopPropagation();camRef.current.click();}} className="btn btn-outline" style={{fontSize:12,padding:"8px 13px"}}>Camara</button>
+              <button onClick={e=>{e.stopPropagation();fileRef.current.click();}} className="btn btn-outline" style={{fontSize:12,padding:"8px 13px"}}>🗂 Galeria</button>
+              <button onClick={e=>{e.stopPropagation();camRef.current.click();}} className="btn btn-outline" style={{fontSize:12,padding:"8px 13px"}}>📸 Camara</button>
             </div>
           </div>
         ))}
@@ -424,22 +372,22 @@ function QuizInput({onGenerate}) {
         <input ref={camRef} type="file" accept="image/*" capture="environment" style={{display:"none"}} onChange={e=>handleImg(e.target.files[0])}/>
         <div style={{marginTop:24,borderTop:`1px solid ${D.line}`,paddingTop:22}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:18}}>
-            <span style={{fontWeight:700,fontSize:15}}>Tipo de preguntas</span>
-            <span style={{fontFamily:"'DM Mono'",fontSize:24,fontWeight:500,color:total>0?D.sky:D.muted}}>{total}<span style={{fontSize:12,color:D.muted,fontWeight:400}}>/100</span></span>
+            <span style={{fontWeight:700,fontSize:15,color:"#fff"}}>Tipo de preguntas</span>
+            <span style={{fontFamily:"'DM Mono'",fontSize:24,fontWeight:500,color:total>0?D.sky:"#a1a1aa"}}>{total}<span style={{fontSize:12,color:"#a1a1aa",fontWeight:400}}>/100</span></span>
           </div>
           {sliders.map((s,i)=>(
             <div key={i} style={{marginBottom:14,padding:"13px 15px",borderRadius:12,border:`1px solid ${D.line}`,background:D.s1}}>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
-                <div style={{fontWeight:600,fontSize:13}}>{s.label}<div style={{fontSize:11,color:D.muted}}>{s.sub}</div></div>
+                <div style={{fontWeight:600,fontSize:13,color:"#fff"}}>{s.label}<div style={{fontSize:11,color:"#a1a1aa"}}>{s.sub}</div></div>
                 <span style={{fontFamily:"'DM Mono'",fontSize:20,fontWeight:500,color:s.color}}>{s.val}</span>
               </div>
               <input type="range" min={0} max={s.max} value={s.val} style={{accentColor:s.color}} onChange={e=>{const v=+e.target.value;if(total-s.val+v<=100)s.set(v);}}/>
-              <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:D.muted,marginTop:2}}><span>0</span><span>{s.max}</span></div>
+              <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#a1a1aa",marginTop:2}}><span>0</span><span>{s.max}</span></div>
             </div>
           ))}
         </div>
         <button className="btn btn-sky btn-full" disabled={!canGo||total===0||extracting} onClick={()=>onGenerate({mode,text:effectiveText,imgData,numMC,numTF,numDev})} style={{marginTop:18,fontSize:15,padding:"14px",borderRadius:11}}>
-          Generar cuestionario
+          Generar cuestionario →
         </button>
       </div>
     </div>
@@ -450,9 +398,9 @@ function Loading({phase}) {
   const phases=["Leyendo el contenido...","Generando preguntas con IA...","Buscando recursos relacionados..."];
   return (
     <div style={{maxWidth:360,margin:"80px auto",textAlign:"center"}}>
-      <div style={{width:68,height:68,borderRadius:16,background:D.skydim,border:`1px solid rgba(14,165,233,.2)`,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 22px",fontSize:28,color:D.sky,animation:"pulse 1.5s infinite"}}>...</div>
-      <h2 style={{fontSize:19,fontWeight:700,marginBottom:6}}>{phases[phase]}</h2>
-      <p style={{color:D.muted,fontSize:14}}>Unos segundos...</p>
+      <div style={{width:68,height:68,borderRadius:16,background:D.skydim,border:`1px solid rgba(14,165,233,.2)`,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 22px",fontSize:28,color:D.sky,animation:"pulse 1.5s infinite"}}>⟳</div>
+      <h2 style={{fontSize:19,fontWeight:700,marginBottom:6,color:"#fff"}}>{phases[phase]}</h2>
+      <p style={{color:"#a1a1aa",fontSize:14}}>Unos segundos...</p>
     </div>
   );
 }
@@ -476,74 +424,74 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
   const goNext=()=>{setCur(c=>c+1);setDevText("");};
   const goPrev=()=>{setCur(c=>c-1);setDevText("");};
   const typeMap={multiple:{label:"Seleccion Unica",cls:"chip-sky"},true_false:{label:"V / F",cls:"chip-em"},development:{label:"Desarrollo",cls:"chip-am"}};
-  const fbInfo=fb?(fb.correct===true?{bg:D.emdim,bc:"rgba(16,185,129,.2)",color:D.em,label:"Correcto"}:fb.correct===false?{bg:D.rodim,bc:"rgba(244,63,94,.2)",color:D.ro,label:"Incorrecto"}:{bg:D.skydim,bc:"rgba(14,165,233,.2)",color:D.sky,label:"Retroalimentacion"}):null;
+  const fbInfo=fb?(fb.correct===true?{bg:D.emdim,bc:"rgba(16,185,129,.2)",color:D.em,label:"✓ Correcto"}:fb.correct===false?{bg:D.rodim,bc:"rgba(244,63,94,.2)",color:D.ro,label:"✕ Incorrecto"}:{bg:D.skydim,bc:"rgba(14,165,233,.2)",color:D.sky,label:"◎ Retroalimentacion"}):null;
   return (
     <div style={{maxWidth:700,margin:"0 auto"}}>
       <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
-        <button className="btn-ghost" onClick={onRestart} style={{padding:"6px 10px",fontSize:13}}>Salir</button>
+        <button className="btn-ghost" onClick={onRestart} style={{padding:"6px 10px",fontSize:13}}>← Salir</button>
         <div style={{flex:1}}>
           <div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:5}}>
-            <span style={{color:D.muted,fontWeight:600}}>{cur+1} / {quiz.length}</span>
+            <span style={{color:"#a1a1aa",fontWeight:600}}>{cur+1} / {quiz.length}</span>
             <span style={{color:D.em,fontWeight:700}}>{correctCount} correctas</span>
           </div>
           <div className="prog-track"><div className="prog-fill" style={{width:`${((cur+1)/quiz.length)*100}%`}}/></div>
         </div>
-        {resources?.length>0&&<button className="btn btn-outline" style={{fontSize:11,padding:"6px 11px"}} onClick={()=>setShowRes(true)}>Recursos</button>}
+        {resources?.length>0&&<button className="btn btn-outline" style={{fontSize:11,padding:"6px 11px"}} onClick={()=>setShowRes(true)}>🌐</button>}
       </div>
       <div className="card sr" key={cur} style={{marginBottom:11}}>
         <div style={{display:"flex",gap:7,flexWrap:"wrap",marginBottom:15}}>
           <span className={`chip ${typeMap[q.type]?.cls}`}>{typeMap[q.type]?.label}</span>
-          {q.topic&&<span className="chip chip-dark">{q.topic}</span>}
+          {q.topic&&<span className="chip chip-dark">📚 {q.topic}</span>}
         </div>
-        <h2 style={{fontSize:17,fontWeight:600,lineHeight:1.65,marginBottom:22}}>{q.question}</h2>
+        <h2 style={{fontSize:17,fontWeight:600,lineHeight:1.65,marginBottom:22,color:"#fff"}}>{q.question}</h2>
         {q.type==="multiple"&&(
           <div style={{display:"flex",flexDirection:"column",gap:8}}>
             {(q.options||[]).map((opt,i)=>{const isSel=answers[cur]===i,isOk=fb&&i===q.answer,isBad=fb&&isSel&&i!==q.answer;return(
               <button key={i} className={`opt ${isOk?"correct":isBad?"wrong":isSel?"chosen":""}`} onClick={()=>handleMC(i)} disabled={answered}>
                 <span className="letter">{["A","B","C","D"][i]}</span>
-                <span style={{flex:1,textAlign:"left"}}>{opt}</span>
-                {isOk&&<span style={{color:D.em,fontWeight:700}}>OK</span>}
-                {isBad&&<span style={{color:D.ro,fontWeight:700}}>X</span>}
+                <span style={{flex:1,textAlign:"left",color:"#fff"}}>{opt}</span>
+                {isOk&&<span style={{color:D.em,fontWeight:700}}>✓</span>}
+                {isBad&&<span style={{color:D.ro,fontWeight:700}}>✕</span>}
               </button>
             );})}
           </div>
         )}
         {q.type==="true_false"&&(
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-            {[["true","Verdadero",D.em],["false","Falso",D.ro]].map(([val,label,clr])=>{const isSel=answers[cur]===val,isOk=fb&&val===q.answer,isBad=fb&&isSel&&val!==q.answer;return(
-              <button key={val} className={`opt ${isOk?"correct":isBad?"wrong":isSel?"chosen":""}`} onClick={()=>handleTF(val)} disabled={answered} style={{justifyContent:"center",fontWeight:600,fontSize:15,color:isSel?clr:#fff}}>{label}</button>
+            {[["true","✓ Verdadero",D.em],["false","✕ Falso",D.ro]].map(([val,label,clr])=>{const isSel=answers[cur]===val,isOk=fb&&val===q.answer,isBad=fb&&isSel&&val!==q.answer;return(
+              <button key={val} className={`opt ${isOk?"correct":isBad?"wrong":isSel?"chosen":""}`} onClick={()=>handleTF(val)} disabled={answered} style={{justifyContent:"center",fontWeight:600,fontSize:15,color:"#fff"}}>{label}</button>
             );})}
           </div>
         )}
         {q.type==="development"&&(
           <div>
             <textarea rows={4} placeholder="Escribe tu respuesta aqui..." value={devText} onChange={e=>setDevText(e.target.value)} disabled={answered} style={{marginBottom:11}}/>
-            {!answered&&<button className="btn btn-sky" onClick={handleDev} disabled={!devText.trim()||checking}>{checking?<><div className="spinner" style={{borderTopColor:"#000"}}/>Evaluando...</>:"Verificar respuesta"}</button>}
+            {!answered&&<button className="btn btn-sky" onClick={handleDev} disabled={!devText.trim()||checking}>{checking?<><div className="spinner" style={{borderTopColor:"#000"}}/>Evaluando...</>:"Verificar respuesta →"}</button>}
           </div>
         )}
         {fbInfo&&(
           <div className="fu" style={{marginTop:16,padding:"13px 15px",borderRadius:10,background:fbInfo.bg,border:`1px solid ${fbInfo.bc}`}}>
             <p style={{fontSize:11,fontWeight:700,color:fbInfo.color,marginBottom:5}}>{fbInfo.label}</p>
-            <p style={{fontSize:14,color:D.sub,lineHeight:1.65}}>{fb.explanation}</p>
+            <p style={{fontSize:14,color:"#fff",lineHeight:1.65}}>{fb.explanation}</p>
           </div>
         )}
       </div>
       <div style={{display:"flex",justifyContent:"space-between"}}>
-        <div>{cur>0&&<button className="btn btn-outline" onClick={goPrev}>Anterior</button>}</div>
-        <div>{!isLast?<button className="btn btn-sky" onClick={goNext} disabled={!answered}>Siguiente</button>:<button className="btn btn-sky" onClick={()=>onFinish({feedback,correctCount})} disabled={!answered}>Ver resultados</button>}</div>
+        <div>{cur>0&&<button className="btn btn-outline" onClick={goPrev}>← Anterior</button>}</div>
+        <div>{!isLast?<button className="btn btn-sky" onClick={goNext} disabled={!answered}>Siguiente →</button>:<button className="btn btn-sky" onClick={()=>onFinish({feedback,correctCount})} disabled={!answered}>Ver resultados →</button>}</div>
       </div>
       {showRes&&(
         <div className="modal-bg" onClick={()=>setShowRes(false)}>
           <div className="modal" onClick={e=>e.stopPropagation()}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18}}>
-              <h2 style={{fontSize:16,fontWeight:700}}>Recursos relacionados</h2>
-              <button className="btn-ghost" onClick={()=>setShowRes(false)}>X</button>
+              <h2 style={{fontSize:16,fontWeight:700,color:"#fff"}}>🌐 Recursos relacionados</h2>
+              <button className="btn-ghost" onClick={()=>setShowRes(false)}>✕</button>
             </div>
             <div style={{display:"flex",flexDirection:"column",gap:8}}>
               {resources.slice(0,5).map((r,i)=>(
                 <a key={i} href={r.url} target="_blank" rel="noreferrer" className="r-link">
-                  <div style={{fontWeight:600,fontSize:13,color:D.text,marginBottom:2}}>{r.title}</div>
-                  <div style={{fontSize:12,color:D.muted}}>{r.snippet}</div>
+                  <div style={{fontWeight:600,fontSize:13,color:"#fff",marginBottom:2}}>{r.title}</div>
+                  <div style={{fontSize:12,color:"#a1a1aa"}}>{r.snippet}</div>
                 </a>
               ))}
             </div>
@@ -565,29 +513,29 @@ function Results({quiz,result,onRestart,onHome}) {
       <div className="card" style={{textAlign:"center",marginBottom:12}}>
         <div className="pop" style={{width:104,height:104,borderRadius:"50%",border:`2.5px solid ${clr}`,margin:"16px auto",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",background:`${clr}08`}}>
           <span style={{fontFamily:"'DM Mono'",fontSize:28,fontWeight:500,color:clr,lineHeight:1}}>{pct}%</span>
-          <span style={{fontSize:11,color:D.muted,marginTop:2}}>{result.correctCount}/{total}</span>
+          <span style={{fontSize:11,color:"#a1a1aa",marginTop:2}}>{result.correctCount}/{total}</span>
         </div>
         <h2 style={{fontSize:22,fontWeight:800,color:clr,marginBottom:4}}>{grade}</h2>
-        <p style={{color:D.sub,fontSize:14}}>{result.correctCount} de {total} preguntas correctas</p>
+        <p style={{color:"#fff",fontSize:14}}>{result.correctCount} de {total} preguntas correctas</p>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(100px,1fr))",gap:8,marginTop:18}}>
           {[{type:"multiple",label:"Seleccion",color:D.sky},{type:"true_false",label:"V / F",color:D.em},{type:"development",label:"Desarrollo",color:D.am}].filter(s=>typeCount(s.type)>0).map(s=>(
-            <div key={s.type} className="stat-box"><span style={{fontFamily:"'DM Mono'",fontSize:18,fontWeight:500,color:s.color}}>{typeOk(s.type)}/{typeCount(s.type)}</span><span style={{fontSize:10,color:D.muted,marginTop:3,display:"block"}}>{s.label}</span></div>
+            <div key={s.type} className="stat-box"><span style={{fontFamily:"'DM Mono'",fontSize:18,fontWeight:500,color:s.color}}>{typeOk(s.type)}/{typeCount(s.type)}</span><span style={{fontSize:10,color:"#a1a1aa",marginTop:3,display:"block"}}>{s.label}</span></div>
           ))}
         </div>
         <div style={{display:"flex",gap:9,justifyContent:"center",marginTop:20,flexWrap:"wrap"}}>
-          <button className="btn btn-sky" style={{flex:1,maxWidth:200}} onClick={onRestart}>Nuevo quiz</button>
+          <button className="btn btn-sky" style={{flex:1,maxWidth:200}} onClick={onRestart}>Nuevo quiz →</button>
           <button className="btn btn-outline" style={{flex:1,maxWidth:200}} onClick={onHome}>Ir al inicio</button>
         </div>
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:6}}>
         {quiz.map((q,i)=>{const fb=result.feedback[i],ok=fb?.correct===true,bad=fb?.correct===false;return(
           <button key={i} className="res-row" onClick={()=>setOpen(open===i?null:i)}>
-            <div style={{width:22,height:22,borderRadius:"50%",flexShrink:0,background:ok?D.em:bad?D.ro:D.line,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:ok||bad?"#000":D.muted,marginTop:1}}>{ok?"V":bad?"X":"~"}</div>
+            <div style={{width:22,height:22,borderRadius:"50%",flexShrink:0,background:ok?D.em:bad?D.ro:D.line,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:ok||bad?"#000":"#fff",marginTop:1}}>{ok?"✓":bad?"✕":"~"}</div>
             <div style={{flex:1,minWidth:0}}>
-              <div style={{fontSize:13,fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:open===i?"normal":"nowrap"}}>{i+1}. {q.question}</div>
-              {open===i&&fb?.explanation&&<div className="fu" style={{fontSize:12,color:D.sub,marginTop:6,lineHeight:1.65}}>{fb.explanation}</div>}
+              <div style={{fontSize:13,fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:open===i?"normal":"nowrap",color:"#fff"}}>{i+1}. {q.question}</div>
+              {open===i&&fb?.explanation&&<div className="fu" style={{fontSize:12,color:"#a1a1aa",marginTop:6,lineHeight:1.65}}>{fb.explanation}</div>}
             </div>
-            <span style={{fontSize:10,color:D.muted,flexShrink:0,marginTop:2}}>{open===i?"^":"v"}</span>
+            <span style={{fontSize:10,color:"#a1a1aa",flexShrink:0,marginTop:2}}>{open===i?"▲":"▼"}</span>
           </button>
         );})}
       </div>
@@ -599,12 +547,12 @@ function History() {
   const results = getResults();
   return (
     <div style={{maxWidth:660,margin:"0 auto",padding:"32px 16px 60px"}} className="fu">
-      <h1 style={{fontSize:22,fontWeight:800,marginBottom:6}}>Mi historial</h1>
-      <p style={{color:D.muted,fontSize:13,marginBottom:24}}>{results.length} evaluaciones guardadas</p>
+      <h1 style={{fontSize:22,fontWeight:800,marginBottom:6,color:"#fff"}}>Mi historial</h1>
+      <p style={{color:"#a1a1aa",fontSize:13,marginBottom:24}}>{results.length} evaluaciones guardadas</p>
       {results.length===0?(
         <div className="card" style={{textAlign:"center",padding:"48px 24px"}}>
-          <p style={{fontWeight:700,marginBottom:4}}>Sin evaluaciones aun</p>
-          <p style={{color:D.muted,fontSize:13}}>Genera tu primer cuestionario para ver tu historial aqui.</p>
+          <p style={{fontWeight:700,marginBottom:4,color:"#fff"}}>Sin evaluaciones aun</p>
+          <p style={{color:"#a1a1aa",fontSize:13}}>Genera tu primer cuestionario para ver tu historial aqui.</p>
         </div>
       ):(
         <div style={{display:"flex",flexDirection:"column",gap:8}}>
@@ -614,8 +562,8 @@ function History() {
                 <span style={{fontFamily:"'DM Mono'",fontSize:13,fontWeight:500,color:pctColor(r.pct),lineHeight:1}}>{r.pct}%</span>
               </div>
               <div style={{flex:1,minWidth:0}}>
-                <div style={{fontWeight:700,fontSize:14,marginBottom:2,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{r.topic}</div>
-                <div style={{fontSize:12,color:D.muted}}>{r.correct}/{r.total} correctas - {fmtDate(r.ts)}</div>
+                <div style={{fontWeight:700,fontSize:14,marginBottom:2,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",color:"#fff"}}>{r.topic}</div>
+                <div style={{fontSize:12,color:"#a1a1aa"}}>{r.correct}/{r.total} correctas - {fmtDate(r.ts)}</div>
               </div>
               <span className={`chip ${r.pct>=75?"chip-em":r.pct>=50?"chip-am":"chip-dark"}`}>{r.pct>=75?"Excelente":r.pct>=50?"Regular":"A repasar"}</span>
             </div>
@@ -682,7 +630,7 @@ Total exacto: ${numMC+numTF+numDev} preguntas.`;
   const handleFinish = r => {
     setResult(r);
     addResult({ts:Date.now(),topic,pct:Math.round((r.correctCount/quiz.length)*100),correct:r.correctCount,total:quiz.length});
-    show("Resultado guardado","ok");
+    show("Resultado guardado ✓","ok");
     setScreen(SCREEN.RESULTS);
   };
 
@@ -718,9 +666,6 @@ Total exacto: ${numMC+numTF+numDev} preguntas.`;
     </>
   );
 }
-
-
-
 
 
 
