@@ -279,11 +279,7 @@ function Auth({onLogin, showToast}) {
       <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${D.sky},#8b5cf6,transparent)`}}/>
       <div className="fu" style={{width:"100%",maxWidth:420,position:"relative",zIndex:1}}>
         <div style={{textAlign:"center",marginBottom:32}}><Logo size={48}/></div>
-        <div style={{textAlign:"center",marginBottom:24}}>
-          <span style={{display:"inline-flex",alignItems:"center",gap:8,padding:"7px 18px",borderRadius:999,background:"rgba(16,185,129,.1)",border:`1px solid rgba(16,185,129,.2)`,fontSize:12,fontWeight:600,color:"#34d399"}}>
-            ✦ 100% Gratuito — Sin tarjeta de credito
-          </span>
-        </div>
+
         <div className="glass">
           <div className="tab-bar">
             <button className={`tab ${tab==="login"?"on":""}`} onClick={()=>setTab("login")}>Iniciar sesion</button>
@@ -315,13 +311,7 @@ function TopBar({user,page,onNav,onLogout}) {
         <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${D.sky},#8b5cf6,transparent)`}}/>
         <div className="topbar-inner">
           <Logo size={28} compact={isMobile}/>
-          {/* Desktop nav */}
-          <div style={{display:"flex",gap:2,marginLeft:"auto"}} className="desktop-nav">
-            {pages.map(p=>(<button key={p.id} className={`nav-btn ${page===p.id?"active":""}`} onClick={()=>onNav(p.id)}>{p.label}</button>))}
-          </div>
-          <div style={{display:"flex",alignItems:"center",gap:6,marginLeft:"auto"}} className="mobile-nav">
-            <button className="btn-ghost" onClick={()=>setMenuOpen(!menuOpen)} style={{fontSize:20,padding:"6px 8px"}}>☰</button>
-          </div>
+          <div style={{marginLeft:"auto"}}/>
           <div style={{display:"flex",alignItems:"center",gap:4,flexShrink:0}}>
             <div style={{width:26,height:26,borderRadius:8,background:"linear-gradient(135deg,rgba(14,165,233,.2),rgba(139,92,246,.2))",border:"1px solid rgba(14,165,233,.15)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:"#38bdf8",cursor:"pointer",flexShrink:0}} onClick={()=>onNav("profile")}>{user.name.charAt(0).toUpperCase()}</div>
             <button className="btn-ghost" onClick={onLogout} style={{fontSize:10,padding:"4px 6px",flexShrink:0,color:"#475569"}}>↪</button>
@@ -359,7 +349,7 @@ function Home({user,onNav}) {
         </div>
       </div>
 
-      <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12,marginBottom:20}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,marginBottom:20}}>
         {[
           {label:"Evaluaciones",val:stats.total||"0",color:"#38bdf8",icon:"📊"},
           {label:"Promedio",val:stats.total?`${stats.avgPct}%`:"—",color:pctColor(stats.avgPct),icon:"📈"},
