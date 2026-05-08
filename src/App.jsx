@@ -521,7 +521,7 @@ function FeedbackCard({fb}) {
       {parsed.recommendations?.length>0&&(
         <div className="fb-section fb-reco">
           <div className="fb-title" style={{color:"#38bdf8"}}>💡 Recomendaciones</div>
-          {parsed.recommendations.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0:4:0}}>• {cleanText(s)}</p>)}
+          {parsed.recommendations.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>• {cleanText(s)}</p>)}
         </div>
       )}
       {parsed.expected&&(
@@ -854,4 +854,5 @@ REGLAS: Total exacto de ${numMC+numDev} preguntas. Solo tipos: multiple y develo
     </>
   );
 }
+
 
