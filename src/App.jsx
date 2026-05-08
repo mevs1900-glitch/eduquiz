@@ -802,7 +802,7 @@ Devuelve SOLO un JSON valido con esta estructura exacta (sin texto adicional):
 
 REGLAS: Total exacto de ${numMC+numDev} preguntas. Solo tipos: multiple y development. Preguntas claras, sin ambiguedad. Opciones plausibles para las de seleccion multiple.`;
 
-      const raw=await callClaude([{role:"user",content:prompt}],"Eres un experto en evaluacion educativa. Genera preguntas de calidad academica. Responde SOLO con JSON valido.");
+      const raw=await callClaude([{role:"user",content:prompt}],"Eres un asistente academico especializado en generar cuestionarios educativos confiables. Prioriza SIEMPRE la precision y veracidad. Cada pregunta debe tener una unica respuesta claramente correcta y verificable academicamente. Evita preguntas ambiguas o discutibles. Las explicaciones deben ser breves, claras y pedagogicas. NO inventes informacion. Verifica coherencia conceptual antes de cada respuesta. Responde SOLO con JSON valido.");
       const parsed=parseJSON(raw);
       if(!parsed?.questions?.length) throw new Error("Error al generar");
       setTopic(parsed.topic||"Cuestionario"); setQuiz(parsed.questions);
@@ -854,5 +854,6 @@ REGLAS: Total exacto de ${numMC+numDev} preguntas. Solo tipos: multiple y develo
     </>
   );
 }
+
 
 
