@@ -301,33 +301,22 @@ function Auth({onLogin, showToast}) {
 }
 
 function TopBar({user,page,onNav,onLogout}) {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth<=640);
   useEffect(()=>{ const h=()=>setIsMobile(window.innerWidth<=640); window.addEventListener('resize',h); return()=>window.removeEventListener('resize',h); },[]);
-  const pages=[{id:"home",label:"Inicio",icon:"🏠"},{id:"quiz",label:Quiz",icon:"✦"},{id:"history",label:"Historial",icon:"📋"}];
   return (
     <>
       <div className="topbar">
         <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${D.sky},#8b5cf6,transparent)`}}/>
         <div className="topbar-inner">
           <Logo size={28} compact={isMobile}/>
-          <div style={{marginLeft:"auto"}}/>
-          <div style={{display:"flex",alignItems:"center",gap:4,flexShrink:0}}>
-            <div style={{width:26,height:26,borderRadius:8,background:"linear-gradient(135deg,rgba(14,165,233,.2),rgba(139,92,246,.2))",border:"1px solid rgba(14,165,233,.15)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:"#38bdf8",cursor:"pointer",flexShrink:0}} onClick={()=>onNav("profile")}>{user.name.charAt(0).toUpperCase()}</div>
-            <button className="btn-ghost" onClick={onLogout} style={{fontSize:10,padding:"4px 6px",flexShrink:0,color:"#475569"}}>↪</button>
+          <div style={{flex:1}}/>
+          <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <div style={{width:30,height:30,borderRadius:9,background:"linear-gradient(135deg,rgba(14,165,233,.2),rgba(139,92,246,.2))",border:"1px solid rgba(14,165,233,.15)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:"#38bdf8",cursor:"pointer"}} onClick={()=>onNav("profile")}>{user.name.charAt(0).toUpperCase()}</div>
+            <button className="btn-ghost" onClick={onLogout} style={{fontSize:12,padding:"5px 10px",color:"#64748b"}}>Salir</button>
           </div>
         </div>
       </div>
-      {/* Mobile menu */}
-      {menuOpen&&(
-        <div style={{position:"fixed",top:56,left:0,right:0,background:"rgba(0,0,0,.97)",backdropFilter:"blur(20px)",borderBottom:"1px solid #1e1e2e",zIndex:99,padding:"12px 16px"}}>
-          {pages.map(p=>(
-            <button key={p.id} onClick={()=>{onNav(p.id);setMenuOpen(false);}} style={{display:"flex",alignItems:"center",gap:12,width:"100%",padding:"14px 16px",borderRadius:12,border:"none",background:page===p.id?"rgba(14,165,233,.1)":"transparent",color:page===p.id?"#0ea5e9":"#94a3b8",fontFamily:"'Inter',sans-serif",fontSize:14,fontWeight:600,cursor:"pointer",marginBottom:4,textAlign:"left"}}>
-              <span>{p.icon}</span> {p.label}
-            </button>
-          ))}
-        </div>
-      )}
+
     </>
   );
 }
@@ -869,8 +858,3 @@ REGLAS: Total exacto de ${numMC+numDev} preguntas. Solo tipos: multiple y develo
     </>
   );
 }
-
-
-
-
-
