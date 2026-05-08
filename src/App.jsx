@@ -60,7 +60,6 @@ input.err{border-color:#f43f5e}
 .prog-fill{height:100%;border-radius:2px;background:#0ea5e9;transition:width .5s ease}
 .chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.04em}
 .chip-sky{background:rgba(14,165,233,.1);color:#0ea5e9;border:1px solid rgba(14,165,233,.2)}
-.chip-em{background:rgba(16,185,129,.1);color:#10b981;border:1px solid rgba(16,185,129,.2)}
 .chip-am{background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.2)}
 .chip-dark{background:#1a1a1a;color:#fff;border:1px solid #1e1e1e}
 .tog-group{display:flex;background:#0a0a0a;border:1px solid #1e1e1e;border-radius:10px;padding:3px;gap:3px}
@@ -289,17 +288,15 @@ function QuizInput({onGenerate}) {
   const [imgData,setImgData] = useState(null);
   const [imgPrev,setImgPrev] = useState(null);
   const [numMC,setNumMC] = useState(10);
-  const [numTF,setNumTF] = useState(5);
   const [numDev,setNumDev] = useState(3);
   const [drag,setDrag] = useState(false);
   const fileRef=useRef(); const camRef=useRef();
-  const total=numMC+numTF+numDev;
+  const total=numMC+numDev;
   const canGo = mode==="text"?text.trim().length>20:!!imgData;
   const handleImg = f => { if(!f) return; const r=new FileReader(); r.onload=e=>{setImgPrev(e.target.result);setImgData(e.target.result.split(",")[1]);}; r.readAsDataURL(f); };
   const onDrop = useCallback(e=>{ e.preventDefault();setDrag(false); const f=e.dataTransfer.files[0]; if(f?.type.startsWith("image/")) handleImg(f); },[]);
   const sliders = [
-    {label:"Seleccion Unica",sub:"A B C D",val:numMC,set:setNumMC,max:80,color:D.sky},
-    {label:"Verdadero / Falso",sub:"Verificacion inmediata",val:numTF,set:setNumTF,max:60,color:D.em},
+    {label:"Seleccion Multiple",sub:"A B C D",val:numMC,set:setNumMC,max:80,color:D.sky},
     {label:"Desarrollo",sub:"Evaluacion con IA",val:numDev,set:setNumDev,max:40,color:D.am},
   ];
   return (
@@ -313,13 +310,9 @@ function QuizInput({onGenerate}) {
           <button className={`tog-item ${mode==="text"?"on":""}`} onClick={()=>setMode("text")}>✍️ Escribe el contenido</button>
           <button className={`tog-item ${mode==="image"?"on":""}`} onClick={()=>setMode("image")}>📷 Foto del cuaderno</button>
         </div>
-
         {mode==="text"&&(
-          <div>
-            <textarea rows={8} placeholder="Escribe o pega aqui el contenido educativo... (texto de tu libro, apuntes, clase, etc.)" value={text} onChange={e=>setText(e.target.value)}/>
-          </div>
+          <textarea rows={8} placeholder="Escribe o pega aqui el contenido educativo... (texto de tu libro, apuntes, clase, etc.)" value={text} onChange={e=>setText(e.target.value)}/>
         )}
-
         {mode==="image"&&(imgPrev?(
           <div style={{position:"relative"}}>
             <img src={imgPrev} alt="prev" style={{width:"100%",borderRadius:10,maxHeight:230,objectFit:"cover"}}/>
@@ -338,7 +331,6 @@ function QuizInput({onGenerate}) {
         ))}
         <input ref={fileRef} type="file" accept="image/*" style={{display:"none"}} onChange={e=>handleImg(e.target.files[0])}/>
         <input ref={camRef} type="file" accept="image/*" capture="environment" style={{display:"none"}} onChange={e=>handleImg(e.target.files[0])}/>
-
         <div style={{marginTop:24,borderTop:`1px solid ${D.line}`,paddingTop:22}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:18}}>
             <span style={{fontWeight:700,fontSize:15,color:"#fff"}}>Tipo de preguntas</span>
@@ -355,7 +347,7 @@ function QuizInput({onGenerate}) {
             </div>
           ))}
         </div>
-        <button className="btn btn-sky btn-full" disabled={!canGo||total===0} onClick={()=>onGenerate({mode,text,imgData,numMC,numTF,numDev})} style={{marginTop:18,fontSize:15,padding:"14px",borderRadius:11}}>
+        <button className="btn btn-sky btn-full" disabled={!canGo||total===0} onClick={()=>onGenerate({mode,text,imgData,numMC,numDev})} style={{marginTop:18,fontSize:15,padding:"14px",borderRadius:11}}>
           Generar cuestionario →
         </button>
       </div>
@@ -364,7 +356,7 @@ function QuizInput({onGenerate}) {
 }
 
 function Loading({phase}) {
-  const phases=["Leyendo el contenido...","Generando preguntas con IA...","Buscando recursos relacionados..."];
+  const phases=["Leyendo el contenido...","Generando preguntas con IA...","Buscando recursos..."];
   return (
     <div style={{maxWidth:360,margin:"80px auto",textAlign:"center"}}>
       <div style={{width:68,height:68,borderRadius:16,background:D.skydim,border:`1px solid rgba(14,165,233,.2)`,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 22px",fontSize:28,color:D.sky,animation:"pulse 1.5s infinite"}}>⟳</div>
@@ -382,17 +374,16 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
   const setAns=(i,v)=>setAnswers(p=>({...p,[i]:v}));
   const setFB=(i,v)=>setFeedback(p=>({...p,[i]:v}));
   const handleMC=idx=>{if(answered)return;setAns(cur,idx);setFB(cur,{correct:idx===q.answer,explanation:q.explanation});};
-  const handleTF=val=>{if(answered)return;setAns(cur,val);setFB(cur,{correct:val===q.answer,explanation:q.explanation});};
   const handleDev=async()=>{
     if(!devText.trim()||checking)return;
     setChecking(true);setAns(cur,devText);
-    try{const res=await callClaude([{role:"user",content:`Pregunta: "${q.question}" Respuesta: "${devText}" Criterios: "${q.answer}" Evalua en 3 oraciones.`}],"Profesor evaluador. Responde en español.");setFB(cur,{correct:null,explanation:res});}
+    try{const res=await callClaude([{role:"user",content:`Pregunta: "${q.question}" Respuesta del estudiante: "${devText}" Respuesta correcta: "${q.answer}" Evalua si es correcto, parcialmente correcto o incorrecto. Se breve y pedagogico.`}],"Eres un profesor evaluador. Responde en español. Se claro y breve.");setFB(cur,{correct:null,explanation:res});}
     catch{setFB(cur,{correct:null,explanation:q.explanation});}
     setChecking(false);
   };
   const goNext=()=>{setCur(c=>c+1);setDevText("");};
   const goPrev=()=>{setCur(c=>c-1);setDevText("");};
-  const typeMap={multiple:{label:"Seleccion Unica",cls:"chip-sky"},true_false:{label:"V / F",cls:"chip-em"},development:{label:"Desarrollo",cls:"chip-am"}};
+  const typeMap={multiple:{label:"Seleccion Multiple",cls:"chip-sky"},development:{label:"Desarrollo",cls:"chip-am"}};
   const fbInfo=fb?(fb.correct===true?{bg:D.emdim,bc:"rgba(16,185,129,.2)",color:D.em,label:"✓ Correcto"}:fb.correct===false?{bg:D.rodim,bc:"rgba(244,63,94,.2)",color:D.ro,label:"✕ Incorrecto"}:{bg:D.skydim,bc:"rgba(14,165,233,.2)",color:D.sky,label:"◎ Retroalimentacion"}):null;
   return (
     <div style={{maxWidth:700,margin:"0 auto"}}>
@@ -422,13 +413,6 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
                 {isOk&&<span style={{color:D.em,fontWeight:700}}>✓</span>}
                 {isBad&&<span style={{color:D.ro,fontWeight:700}}>✕</span>}
               </button>
-            );})}
-          </div>
-        )}
-        {q.type==="true_false"&&(
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-            {[["true","✓ Verdadero",D.em],["false","✕ Falso",D.ro]].map(([val,label,clr])=>{const isSel=answers[cur]===val,isOk=fb&&val===q.answer,isBad=fb&&isSel&&val!==q.answer;return(
-              <button key={val} className={`opt ${isOk?"correct":isBad?"wrong":isSel?"chosen":""}`} onClick={()=>handleTF(val)} disabled={answered} style={{justifyContent:"center",fontWeight:600,fontSize:15,color:"#fff"}}>{label}</button>
             );})}
           </div>
         )}
@@ -487,7 +471,7 @@ function Results({quiz,result,onRestart,onHome}) {
         <h2 style={{fontSize:22,fontWeight:800,color:clr,marginBottom:4}}>{grade}</h2>
         <p style={{color:"#fff",fontSize:14}}>{result.correctCount} de {total} preguntas correctas</p>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(100px,1fr))",gap:8,marginTop:18}}>
-          {[{type:"multiple",label:"Seleccion",color:D.sky},{type:"true_false",label:"V / F",color:D.em},{type:"development",label:"Desarrollo",color:D.am}].filter(s=>typeCount(s.type)>0).map(s=>(
+          {[{type:"multiple",label:"Seleccion",color:D.sky},{type:"development",label:"Desarrollo",color:D.am}].filter(s=>typeCount(s.type)>0).map(s=>(
             <div key={s.type} className="stat-box"><span style={{fontFamily:"'DM Mono'",fontSize:18,fontWeight:500,color:s.color}}>{typeOk(s.type)}/{typeCount(s.type)}</span><span style={{fontSize:10,color:"#a1a1aa",marginTop:3,display:"block"}}>{s.label}</span></div>
           ))}
         </div>
@@ -566,7 +550,7 @@ export default function App() {
     else if(p==="history") setScreen(SCREEN.HISTORY);
   };
 
-  const handleGenerate = async ({mode,text,imgData,numMC,numTF,numDev}) => {
+  const handleGenerate = async ({mode,text,imgData,numMC,numDev}) => {
     setScreen(SCREEN.QUIZ_LOADING); setPhase(0);
     try {
       let content=text;
@@ -574,16 +558,15 @@ export default function App() {
         content=await callClaude([{role:"user",content:[{type:"image",source:{type:"base64",media_type:"image/jpeg",data:imgData}},{type:"text",text:"Transcribe y resume todo el contenido educativo visible."}]}],"Extraes contenido de imagenes. Responde en español.");
       }
       setPhase(1);
-      const prompt=`Genera exactamente: ${numMC} preguntas seleccion unica, ${numTF} verdadero/falso, ${numDev} desarrollo.
+      const prompt=`Genera exactamente: ${numMC} preguntas de seleccion multiple y ${numDev} preguntas de desarrollo.
 Contenido:\n${content}
 JSON UNICO sin texto fuera:
 {"topic":"tema","questions":[
 {"type":"multiple","question":"...","options":["A","B","C","D"],"answer":0,"explanation":"...","topic":"subtema"},
-{"type":"true_false","question":"...","answer":"true","explanation":"...","topic":"subtema"},
-{"type":"development","question":"...","answer":"respuesta modelo","explanation":"criterios","topic":"subtema"}
+{"type":"development","question":"...","answer":"respuesta modelo","explanation":"criterios de evaluacion","topic":"subtema"}
 ]}
-Total exacto: ${numMC+numTF+numDev} preguntas.`;
-      const raw=await callClaude([{role:"user",content:prompt}],"Experto evaluacion educativa. SOLO JSON valido.");
+Total exacto: ${numMC+numDev} preguntas. SOLO seleccion multiple y desarrollo, NO verdadero/falso.`;
+      const raw=await callClaude([{role:"user",content:prompt}],"Experto en evaluacion educativa. SOLO JSON valido. Genera preguntas de seleccion multiple y desarrollo unicamente.");
       const parsed=parseJSON(raw);
       if(!parsed?.questions?.length) throw new Error("Error al generar");
       setTopic(parsed.topic||"Quiz"); setQuiz(parsed.questions);
@@ -635,9 +618,3 @@ Total exacto: ${numMC+numTF+numDev} preguntas.`;
     </>
   );
 }
-
-
-
-
-
-
