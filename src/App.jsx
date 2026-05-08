@@ -525,7 +525,7 @@ function FeedbackCard({fb}) {
       {parsed.recommendations?.length>0&&(
         <div className="fb-section fb-reco">
           <div className="fb-title" style={{color:"#38bdf8"}}>💡 Recomendaciones</div>
-          {parsed.recommendations.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>• {cleanText(s)}</p>)}
+          {parsed.recommendations.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0:4:0}}>• {cleanText(s)}</p>)}
         </div>
       )}
       {parsed.expected&&(
@@ -676,7 +676,11 @@ function Results({quiz,result,onRestart,onHome}) {
         </div>
         <h2 style={{fontSize:24,fontWeight:800,color:clr,marginBottom:8,letterSpacing:"-.02em"}}>{grade}</h2>
         <p style={{color:"#94a3b8",fontSize:14,marginBottom:4}}>{result.correctCount} de {total} preguntas correctas</p>
-        <p style={{color:"#64748b",fontSize:13,fontStyle:"italic"}}>{motivational}</p>
+        <p style={{color:"#64748b",fontSize:13,fontStyle:"italic",marginBottom:20}}>{motivational}</p>
+        <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
+          <button className="btn btn-sky" onClick={onRestart} style={{flex:"1 1 140px",maxWidth:200,height:44,fontSize:14}}>✦ Nuevo Quiz</button>
+          <button className="btn btn-outline" onClick={onHome} style={{flex:"1 1 140px",maxWidth:200,height:44,fontSize:14}}>← Volver al Inicio</button>
+        </div>
 
         {(weakTopics.length>0||strongTopics.length>0)&&(
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginTop:24,textAlign:"left"}}>
