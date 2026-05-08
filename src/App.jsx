@@ -131,11 +131,17 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 
 @media(max-width:640px){
-  .card,.glass{padding:20px;border-radius:16px}
+  .card,.glass{padding:18px;border-radius:16px}
   .modal{margin:0;border-radius:20px 20px 0 0;position:fixed;bottom:0;left:0;right:0;max-width:100%;max-height:90vh;overflow-y:auto}
   .modal-bg{align-items:flex-end;padding:0}
-  .topbar{padding:0 16px}
-  .topbar-inner{height:56px}
+  .topbar{padding:0 12px}
+  .topbar-inner{height:54px;gap:6px}
+  .desktop-nav{display:none !important}
+  .mobile-nav{display:flex !important}
+}
+@media(min-width:641px){
+  .desktop-nav{display:flex !important}
+  .mobile-nav{display:none !important}
 }
 `;
 
@@ -299,21 +305,38 @@ function Auth({onLogin, showToast}) {
 }
 
 function TopBar({user,page,onNav,onLogout}) {
-  const pages=[{id:"home",label:"Inicio"},{id:"quiz",label:"Nuevo Quiz"},{id:"history",label:"Historial"}];
+  const [menuOpen, setMenuOpen] = useState(false);
+  const pages=[{id:"home",label:"Inicio",icon:"🏠"},{id:"quiz",label:"Nuevo Quiz",icon:"✦"},{id:"history",label:"Historial",icon:"📋"}];
   return (
-    <div className="topbar">
-      <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${D.sky},#8b5cf6,transparent)`}}/>
-      <div className="topbar-inner">
-        <Logo size={30}/>
-        <div style={{display:"flex",gap:2,marginLeft:"auto"}}>
-          {pages.map(p=>(<button key={p.id} className={`nav-btn ${page===p.id?"active":""}`} onClick={()=>onNav(p.id)}>{p.label}</button>))}
-        </div>
-        <div style={{display:"flex",alignItems:"center",gap:8,marginLeft:8}}>
-          <div style={{width:32,height:32,borderRadius:10,background:"linear-gradient(135deg,rgba(14,165,233,.2),rgba(139,92,246,.2))",border:`1px solid rgba(14,165,233,.2)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,color:"#38bdf8",cursor:"pointer"}} onClick={()=>onNav("profile")}>{user.name.charAt(0).toUpperCase()}</div>
-          <button className="btn-ghost" onClick={onLogout} style={{fontSize:12,padding:"6px 10px"}}>Salir</button>
+    <>
+      <div className="topbar">
+        <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${D.sky},#8b5cf6,transparent)`}}/>
+        <div className="topbar-inner">
+          <Logo size={28}/>
+          {/* Desktop nav */}
+          <div style={{display:"flex",gap:2,marginLeft:"auto"}} className="desktop-nav">
+            {pages.map(p=>(<button key={p.id} className={`nav-btn ${page===p.id?"active":""}`} onClick={()=>onNav(p.id)}>{p.label}</button>))}
+          </div>
+          <div style={{display:"flex",alignItems:"center",gap:6,marginLeft:"auto"}} className="mobile-nav">
+            <button className="btn-ghost" onClick={()=>setMenuOpen(!menuOpen)} style={{fontSize:20,padding:"6px 8px"}}>☰</button>
+          </div>
+          <div style={{display:"flex",alignItems:"center",gap:6,marginLeft:8}}>
+            <div style={{width:30,height:30,borderRadius:9,background:"linear-gradient(135deg,rgba(14,165,233,.2),rgba(139,92,246,.2))",border:`1px solid rgba(14,165,233,.2)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:"#38bdf8",cursor:"pointer",flexShrink:0}} onClick={()=>onNav("profile")}>{user.name.charAt(0).toUpperCase()}</div>
+            <button className="btn-ghost" onClick={onLogout} style={{fontSize:12,padding:"6px 8px",flexShrink:0}}>Salir</button>
+          </div>
         </div>
       </div>
-    </div>
+      {/* Mobile menu */}
+      {menuOpen&&(
+        <div style={{position:"fixed",top:56,left:0,right:0,background:"rgba(0,0,0,.97)",backdropFilter:"blur(20px)",borderBottom:"1px solid #1e1e2e",zIndex:99,padding:"12px 16px"}}>
+          {pages.map(p=>(
+            <button key={p.id} onClick={()=>{onNav(p.id);setMenuOpen(false);}} style={{display:"flex",alignItems:"center",gap:12,width:"100%",padding:"14px 16px",borderRadius:12,border:"none",background:page===p.id?"rgba(14,165,233,.1)":"transparent",color:page===p.id?"#0ea5e9":"#94a3b8",fontFamily:"'Inter',sans-serif",fontSize:14,fontWeight:600,cursor:"pointer",marginBottom:4,textAlign:"left"}}>
+              <span>{p.icon}</span> {p.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </>
   );
 }
 
@@ -521,7 +544,7 @@ function FeedbackCard({fb}) {
       {parsed.recommendations?.length>0&&(
         <div className="fb-section fb-reco">
           <div className="fb-title" style={{color:"#38bdf8"}}>💡 Recomendaciones</div>
-          {parsed.recommendations.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>• {cleanText(s)}</p>)}
+          {parsed.recommendations.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0:4:0}}>• {cleanText(s)}</p>)}
         </div>
       )}
       {parsed.expected&&(
@@ -802,7 +825,7 @@ Devuelve SOLO un JSON valido con esta estructura exacta (sin texto adicional):
 
 REGLAS: Total exacto de ${numMC+numDev} preguntas. Solo tipos: multiple y development. Preguntas claras, sin ambiguedad. Opciones plausibles para las de seleccion multiple.`;
 
-      const raw=await callClaude([{role:"user",content:prompt}],"Eres un asistente academico especializado en generar cuestionarios educativos confiables. Prioriza SIEMPRE la precision y veracidad. Cada pregunta debe tener una unica respuesta claramente correcta y verificable academicamente. Evita preguntas ambiguas o discutibles. Las explicaciones deben ser breves, claras y pedagogicas. NO inventes informacion. Verifica coherencia conceptual antes de cada respuesta. Responde SOLO con JSON valido.");
+      const raw=await callClaude([{role:"user",content:prompt}],"Eres un experto en evaluacion educativa. Genera preguntas de calidad academica. Responde SOLO con JSON valido.");
       const parsed=parseJSON(raw);
       if(!parsed?.questions?.length) throw new Error("Error al generar");
       setTopic(parsed.topic||"Cuestionario"); setQuiz(parsed.questions);
