@@ -1,5 +1,4 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import * as mammoth from "mammoth";
 
 const D = {
   bg:"#000",s1:"#0a0a0a",card:"#111",border:"#1e1e1e",
@@ -70,10 +69,6 @@ input.err{border-color:#f43f5e}
 .spinner{width:20px;height:20px;border:2px solid #1e1e1e;border-top-color:#0ea5e9;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
 .drop{border:1.5px dashed #1e1e1e;border-radius:12px;padding:40px 20px;text-align:center;cursor:pointer;background:#0a0a0a;transition:all .18s}
 .drop:hover,.drop.over{border-color:#0ea5e9;background:rgba(14,165,233,.06)}
-.upload-fab{position:absolute;bottom:10px;right:10px;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:8px;border:1px solid #1e1e1e;background:#111;color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;z-index:2}
-.upload-fab:hover{border-color:#0ea5e9;color:#0ea5e9;background:rgba(14,165,233,.08)}
-.textarea-wrap{position:relative}
-.file-pill{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;border:1px solid rgba(14,165,233,.25);background:rgba(14,165,233,.08);margin-bottom:10px;font-size:13px;color:#fff}
 .topbar{position:sticky;top:0;z-index:100;background:rgba(0,0,0,.9);backdrop-filter:blur(16px);border-bottom:1px solid #1e1e1e;padding:0 20px}
 .topbar-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;height:58px;gap:12px}
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;z-index:300;padding:16px;animation:fadeIn .2s ease}
@@ -124,17 +119,6 @@ async function callClaude(messages, system, tools=null) {
 function parseJSON(raw) { try { return JSON.parse(raw.replace(/```json|```/g,"").trim()); } catch { return null; } }
 function pctColor(p) { return p>=75?D.em:p>=50?D.am:D.ro; }
 function fmtDate(ts) { return new Date(ts).toLocaleDateString("es-CL",{day:"2-digit",month:"short",year:"numeric"}); }
-
-async function extractFile(file) {
-  const ext = file.name.split(".").pop().toLowerCase();
-  if (["txt","md","csv"].includes(ext)) return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; r.readAsText(file,"UTF-8"); });
-  if (["doc","docx"].includes(ext)) { const buf=await file.arrayBuffer(); const result=await mammoth.extractRawText({arrayBuffer:buf}); return result.value; }
-  if (ext==="pdf") {
-    const b64=await new Promise((res,rej)=>{ const r=new FileReader(); r.onload=e=>res(e.target.result.split(",")[1]); r.onerror=rej; r.readAsDataURL(file); });
-    return callClaude([{role:"user",content:[{type:"document",source:{type:"base64",media_type:"application/pdf",data:b64}},{type:"text",text:"Extrae todo el contenido educativo de este PDF."}]}],"Extraes texto de PDFs. Responde en español.");
-  }
-  throw new Error(`Formato .${ext} no soportado. Usa PDF, Word o TXT.`);
-}
 
 function useToast() {
   const [t,setT] = useState(null);
@@ -286,7 +270,7 @@ function Home({user,onNav}) {
       <button className="btn btn-sky btn-full" style={{fontSize:16,padding:"16px",borderRadius:12,marginBottom:14}} onClick={()=>onNav("quiz")}>✨ Generar nuevo cuestionario</button>
       <div className="card">
         <h3 style={{fontWeight:700,fontSize:14,marginBottom:14,color:"#a1a1aa",letterSpacing:".04em"}}>ACCESO RAPIDO</h3>
-        {[{label:"Nuevo cuestionario",sub:"Desde texto, PDF, Word o foto",action:"quiz",color:D.sky},{label:"Mi historial",sub:`${stats.total} evaluaciones guardadas`,action:"history",color:D.am}].map((a,i)=>(
+        {[{label:"Nuevo cuestionario",sub:"Escribe o pega tu contenido educativo",action:"quiz",color:D.sky},{label:"Mi historial",sub:`${stats.total} evaluaciones guardadas`,action:"history",color:D.am}].map((a,i)=>(
           <button key={i} onClick={()=>onNav(a.action)} style={{all:"unset",cursor:"pointer",width:"100%",display:"block",marginBottom:i===0?10:0}}>
             <div style={{display:"flex",alignItems:"center",gap:12,padding:"13px 15px",borderRadius:11,background:D.s1,border:`1px solid ${D.border}`,transition:"all .16s"}}>
               <div style={{flex:1}}><div style={{fontWeight:600,fontSize:14,color:"#fff"}}>{a.label}</div><div style={{fontSize:12,color:"#a1a1aa"}}>{a.sub}</div></div>
@@ -308,22 +292,11 @@ function QuizInput({onGenerate}) {
   const [numTF,setNumTF] = useState(5);
   const [numDev,setNumDev] = useState(3);
   const [drag,setDrag] = useState(false);
-  const [file,setFile] = useState(null);
-  const [extracting,setExtracting] = useState(false);
-  const [extractErr,setExtractErr] = useState("");
-  const fileRef=useRef(); const camRef=useRef(); const uploadRef=useRef();
+  const fileRef=useRef(); const camRef=useRef();
   const total=numMC+numTF+numDev;
-  const effectiveText = file?file.text:text;
-  const canGo = mode==="text"?effectiveText.trim().length>20:!!imgData;
+  const canGo = mode==="text"?text.trim().length>20:!!imgData;
   const handleImg = f => { if(!f) return; const r=new FileReader(); r.onload=e=>{setImgPrev(e.target.result);setImgData(e.target.result.split(",")[1]);}; r.readAsDataURL(f); };
   const onDrop = useCallback(e=>{ e.preventDefault();setDrag(false); const f=e.dataTransfer.files[0]; if(f?.type.startsWith("image/")) handleImg(f); },[]);
-  const handleDoc = async f => {
-    if(!f) return;
-    setExtractErr(""); setFile(null); setExtracting(true);
-    try { const t=await extractFile(f); if(!t?.trim()) throw new Error("No se pudo extraer texto."); setFile({name:f.name,text:t}); setText(""); }
-    catch(e) { setExtractErr(e.message); }
-    setExtracting(false);
-  };
   const sliders = [
     {label:"Seleccion Unica",sub:"A B C D",val:numMC,set:setNumMC,max:80,color:D.sky},
     {label:"Verdadero / Falso",sub:"Verificacion inmediata",val:numTF,set:setNumTF,max:60,color:D.em},
@@ -337,21 +310,16 @@ function QuizInput({onGenerate}) {
       </div>
       <div className="card">
         <div className="tog-group" style={{marginBottom:20}}>
-          <button className={`tog-item ${mode==="text"?"on":""}`} onClick={()=>setMode("text")}>✍️ Texto / Archivo</button>
+          <button className={`tog-item ${mode==="text"?"on":""}`} onClick={()=>setMode("text")}>✍️ Escribe el contenido</button>
           <button className={`tog-item ${mode==="image"?"on":""}`} onClick={()=>setMode("image")}>📷 Foto del cuaderno</button>
         </div>
+
         {mode==="text"&&(
           <div>
-            {file&&(<div className="file-pill"><span style={{color:D.sky,fontWeight:600,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{file.name}</span><span style={{fontSize:11,color:D.em,fontWeight:700,flexShrink:0}}>✓ Listo</span><button onClick={()=>setFile(null)} style={{background:"none",border:"none",color:"#a1a1aa",cursor:"pointer",fontSize:16,lineHeight:1}}>×</button></div>)}
-            {extracting&&<div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",borderRadius:9,background:D.s1,border:`1px solid ${D.border}`,fontSize:13,color:"#fff",marginBottom:10}}><div className="spinner" style={{width:16,height:16}}/> Leyendo archivo...</div>}
-            {extractErr&&<div style={{padding:"10px 14px",borderRadius:9,background:D.rodim,border:`1px solid rgba(244,63,94,.2)`,color:D.ro,fontSize:13,marginBottom:10}}>⚠ {extractErr}</div>}
-            {!file&&(<div className="textarea-wrap"><textarea rows={7} placeholder="Pega aqui el texto de tu libro, apuntes o cualquier contenido educativo..." value={text} onChange={e=>setText(e.target.value)} style={{paddingBottom:48}}/><button className="upload-fab" onClick={()=>uploadRef.current.click()}>📎 Subir archivo</button></div>)}
-            <div style={{display:"flex",gap:6,flexWrap:"wrap",marginTop:8}}>
-              {["PDF","Word","TXT","MD"].map(f=>(<span key={f} style={{fontSize:10,fontWeight:600,color:"#a1a1aa",padding:"2px 7px",borderRadius:4,border:`1px solid ${D.border}`,background:D.s1}}>{f}</span>))}
-            </div>
-            <input ref={uploadRef} type="file" accept=".pdf,.doc,.docx,.txt,.md,.csv" style={{display:"none"}} onChange={e=>handleDoc(e.target.files[0])}/>
+            <textarea rows={8} placeholder="Escribe o pega aqui el contenido educativo... (texto de tu libro, apuntes, clase, etc.)" value={text} onChange={e=>setText(e.target.value)}/>
           </div>
         )}
+
         {mode==="image"&&(imgPrev?(
           <div style={{position:"relative"}}>
             <img src={imgPrev} alt="prev" style={{width:"100%",borderRadius:10,maxHeight:230,objectFit:"cover"}}/>
@@ -370,6 +338,7 @@ function QuizInput({onGenerate}) {
         ))}
         <input ref={fileRef} type="file" accept="image/*" style={{display:"none"}} onChange={e=>handleImg(e.target.files[0])}/>
         <input ref={camRef} type="file" accept="image/*" capture="environment" style={{display:"none"}} onChange={e=>handleImg(e.target.files[0])}/>
+
         <div style={{marginTop:24,borderTop:`1px solid ${D.line}`,paddingTop:22}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:18}}>
             <span style={{fontWeight:700,fontSize:15,color:"#fff"}}>Tipo de preguntas</span>
@@ -386,7 +355,7 @@ function QuizInput({onGenerate}) {
             </div>
           ))}
         </div>
-        <button className="btn btn-sky btn-full" disabled={!canGo||total===0||extracting} onClick={()=>onGenerate({mode,text:effectiveText,imgData,numMC,numTF,numDev})} style={{marginTop:18,fontSize:15,padding:"14px",borderRadius:11}}>
+        <button className="btn btn-sky btn-full" disabled={!canGo||total===0} onClick={()=>onGenerate({mode,text,imgData,numMC,numTF,numDev})} style={{marginTop:18,fontSize:15,padding:"14px",borderRadius:11}}>
           Generar cuestionario →
         </button>
       </div>
@@ -666,6 +635,7 @@ Total exacto: ${numMC+numTF+numDev} preguntas.`;
     </>
   );
 }
+
 
 
 
