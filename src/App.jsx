@@ -304,7 +304,7 @@ function TopBar({user,page,onNav,onLogout}) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth<=640);
   useEffect(()=>{ const h=()=>setIsMobile(window.innerWidth<=640); window.addEventListener('resize',h); return()=>window.removeEventListener('resize',h); },[]);
-  const pages=[{id:"home",label:"Inicio",icon:"🏠"},{id:"quiz",label:"Nuevo Quiz",icon:"✦"},{id:"history",label:"Historial",icon:"📋"}];
+  const pages=[{id:"home",label:"Inicio",icon:"🏠"},{id:"quiz",label:Quiz",icon:"✦"},{id:"history",label:"Historial",icon:"📋"}];
   return (
     <>
       <div className="topbar">
@@ -869,6 +869,8 @@ REGLAS: Total exacto de ${numMC+numDev} preguntas. Solo tipos: multiple y develo
     </>
   );
 }
+
+
 
 
 
