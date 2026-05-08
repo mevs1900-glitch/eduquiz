@@ -320,9 +320,9 @@ function TopBar({user,page,onNav,onLogout}) {
           <div style={{display:"flex",alignItems:"center",gap:6,marginLeft:"auto"}} className="mobile-nav">
             <button className="btn-ghost" onClick={()=>setMenuOpen(!menuOpen)} style={{fontSize:20,padding:"6px 8px"}}>☰</button>
           </div>
-          <div style={{display:"flex",alignItems:"center",gap:6,marginLeft:8}}>
-            <div style={{width:30,height:30,borderRadius:9,background:"linear-gradient(135deg,rgba(14,165,233,.2),rgba(139,92,246,.2))",border:`1px solid rgba(14,165,233,.2)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:"#38bdf8",cursor:"pointer",flexShrink:0}} onClick={()=>onNav("profile")}>{user.name.charAt(0).toUpperCase()}</div>
-            <button className="btn-ghost" onClick={onLogout} style={{fontSize:12,padding:"6px 8px",flexShrink:0}}>Salir</button>
+          <div style={{display:"flex",alignItems:"center",gap:4,flexShrink:0}}>
+            <div style={{width:26,height:26,borderRadius:8,background:"linear-gradient(135deg,rgba(14,165,233,.2),rgba(139,92,246,.2))",border:"1px solid rgba(14,165,233,.15)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:"#38bdf8",cursor:"pointer",flexShrink:0}} onClick={()=>onNav("profile")}>{user.name.charAt(0).toUpperCase()}</div>
+            <button className="btn-ghost" onClick={onLogout} style={{fontSize:10,padding:"4px 6px",flexShrink:0,color:"#475569"}}>↪</button>
           </div>
         </div>
       </div>
