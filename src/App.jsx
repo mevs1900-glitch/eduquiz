@@ -1,4 +1,4 @@
-﻿import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
 
@@ -299,7 +299,7 @@ function Auth({onLogin}) {
             {loadingGuest?<><div className="spinner"/>Entrando...</>:"Entrar como Invitado"}
           </button>
 
-          <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:16}}>Sin registro. Sin contrasena.</p>
+          <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:16}}>El invitado puede hacer quizzes pero sin guardar historial</p>
 
           {error&&<p style={{textAlign:"center",color:D.ro,fontSize:12,marginTop:12}}>{error}</p>}
         </div>
@@ -570,12 +570,8 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
     if(!devText.trim()||checking)return;
     setChecking(true);setAns(cur,devText);
     try{
-      const res=await callClaude([{role:"user",content:"Pregunta: \""+q.question+"\"
-Respuesta del estudiante: \""+devText+"\"
-Respuesta esperada: \""+q.answer+"\"
-
-Evalua con escala 0-5:\n0=incorrecta, 1=muy incompleta, 2=parcialmente correcta, 3=correcta basica, 4=correcta y explicada, 5=excelente\n\nDevuelve SOLO JSON:\n{\"score\":0,\"level\":\"Insuficiente\",\"strengths\":[\"...\"],\"improve\":[\"...\"],\"expected\":\"...\",\"recommendation\":\"...\"}
-Niveles: 0-1=Insuficiente, 2=Basico, 3-4=Bueno, 5=Excelente. Max 2 items por campo."}],"Profesor evaluador experto. Evalua con criterio pedagogico justo. Responde SOLO con JSON valido.",null,SONNET);
+      const evalPrompt = "Pregunta: \""+q.question+"\"\nRespuesta del estudiante: \""+devText+"\"\nRespuesta esperada: \""+q.answer+"\"\n\nEvalua con escala 0-5:\n0=incorrecta, 1=muy incompleta, 2=parcialmente correcta, 3=correcta basica, 4=correcta y explicada, 5=excelente\n\nDevuelve SOLO JSON:\n{\"score\":0,\"level\":\"Insuficiente\",\"strengths\":[\"...\"],\"improve\":[\"...\"],\"expected\":\"...\",\"recommendation\":\"...\"}\nNiveles: 0-1=Insuficiente, 2=Basico, 3-4=Bueno, 5=Excelente. Max 2 items por campo.";
+      const res=await callClaude([{role:"user",content:evalPrompt}],"Profesor evaluador experto. Evalua con criterio pedagogico justo. Responde SOLO con JSON valido.",null,SONNET);
       const parsed=parseFeedback(res);
       setFB(cur,{correct:null,explanation:res,parsed,isScored:true});
     }
@@ -863,6 +859,3 @@ export default function App() {
     </>
   );
 }
-
-
-
