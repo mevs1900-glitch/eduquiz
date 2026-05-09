@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+﻿import { useState, useRef, useCallback, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
 
@@ -299,7 +299,7 @@ function Auth({onLogin}) {
             {loadingGuest?<><div className="spinner"/>Entrando...</>:"Entrar como Invitado"}
           </button>
 
-          <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:16}}>El invitado puede hacer quizzes pero sin guardar historial</p>
+          <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:16}}>Sin registro. Sin contrasena.</p>
 
           {error&&<p style={{textAlign:"center",color:D.ro,fontSize:12,marginTop:12}}>{error}</p>}
         </div>
@@ -863,5 +863,6 @@ export default function App() {
     </>
   );
 }
+
 
 
