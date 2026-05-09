@@ -1,12 +1,12 @@
-﻿import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 
 const D = {
   bg:"#000",s1:"#0a0a0a",card:"#111",border:"#1e1e1e",
   sky:"#0ea5e9",skydim:"rgba(14,165,233,.1)",skyglow:"rgba(14,165,233,.25)",
-  em:"#10b981",emdim:"rgba(16,185,129,.1)",emglow:"rgba(16,185,129,.2)",
+  em:"#10b981",emdim:"rgba(16,185,129,.1)",
   ro:"#f43f5e",rodim:"rgba(244,63,94,.1)",
   am:"#f59e0b",amdim:"rgba(245,158,11,.1)",
-  pu:"#8b5cf6",pudim:"rgba(139,92,246,.1)",
+  pu:"#8b5cf6",
   text:"#fff",sub:"#e2e8f0",muted:"#94a3b8",line:"#1e1e2e",
 };
 
@@ -14,9 +14,8 @@ const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:#000;color:#fff;font-family:'Inter',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{background:#000;color:#fff;font-family:'Inter',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:#000}::-webkit-scrollbar-thumb{background:linear-gradient(#0ea5e9,#8b5cf6);border-radius:4px}
-
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideR{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
@@ -24,50 +23,34 @@ body{background:#000;color:#fff;font-family:'Inter',sans-serif;min-height:100vh;
 @keyframes pop{0%{transform:scale(.85);opacity:0}60%{transform:scale(1.03)}100%{transform:scale(1);opacity:1}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(14,165,233,.3)}50%{box-shadow:0 0 40px rgba(14,165,233,.6)}}
-@keyframes progressFill{from{width:0}to{width:var(--w)}}
-
 .fu{animation:fadeUp .45s cubic-bezier(.22,1,.36,1) both}
 .fi{animation:fadeIn .3s ease both}
 .sr{animation:slideR .35s cubic-bezier(.22,1,.36,1) both}
 .pop{animation:pop .5s cubic-bezier(.22,1,.36,1) both}
-
-input[type=text],input[type=email],input[type=password],textarea{
-  width:100%;background:#0d0d0d;border:1.5px solid #1e1e2e;border-radius:12px;
-  color:#fff;font-family:'Inter',sans-serif;font-size:14px;padding:14px 16px;
-  outline:none;transition:all .2s;
-}
+input[type=text],input[type=email],input[type=password],textarea{width:100%;background:#0d0d0d;border:1.5px solid #1e1e2e;border-radius:12px;color:#fff;font-family:'Inter',sans-serif;font-size:14px;padding:14px 16px;outline:none;transition:all .2s}
 textarea{resize:vertical;min-height:120px}
 input::placeholder,textarea::placeholder{color:#475569}
-input:focus,textarea:focus{border-color:#0ea5e9;box-shadow:0 0 0 3px rgba(14,165,233,.12),0 0 20px rgba(14,165,233,.08)}
-input.err{border-color:#f43f5e;box-shadow:0 0 0 3px rgba(244,63,94,.1)}
-
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 24px;border-radius:12px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;transition:all .2s;white-space:nowrap;position:relative;overflow:hidden}
-.btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0);transition:background .2s}
-.btn:hover::after{background:rgba(255,255,255,.06)}
+input:focus,textarea:focus{border-color:#0ea5e9;box-shadow:0 0 0 3px rgba(14,165,233,.12)}
+input.err{border-color:#f43f5e}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 24px;border-radius:12px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;transition:all .2s;white-space:nowrap}
 .btn-sky{background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;box-shadow:0 4px 24px rgba(14,165,233,.35)}
 .btn-sky:hover{transform:translateY(-1px);box-shadow:0 8px 32px rgba(14,165,233,.45)}
-.btn-sky:active{transform:translateY(0)}
 .btn-sky:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
 .btn-outline{background:transparent;color:#e2e8f0;border:1.5px solid #1e1e2e}
 .btn-outline:hover{border-color:#0ea5e9;color:#0ea5e9;background:rgba(14,165,233,.06)}
 .btn-ghost{background:transparent;color:#94a3b8;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;font-size:13px;padding:8px;transition:all .2s;border-radius:8px}
 .btn-ghost:hover{color:#0ea5e9;background:rgba(14,165,233,.08)}
 .btn-full{width:100%}
-
 .card{background:#0d0d0d;border:1.5px solid #1e1e2e;border-radius:20px;padding:28px;transition:border-color .2s}
 .card:hover{border-color:#2d2d3e}
 .glass{background:rgba(10,10,15,.95);backdrop-filter:blur(24px);border:1.5px solid rgba(255,255,255,.06);border-radius:20px;padding:32px}
-
 .tab-bar{display:flex;background:#0a0a0f;border:1.5px solid #1e1e2e;border-radius:14px;padding:4px;gap:4px;margin-bottom:28px}
 .tab{flex:1;padding:10px;border-radius:10px;border:none;background:transparent;color:#64748b;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;text-align:center}
 .tab.on{background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;box-shadow:0 4px 16px rgba(14,165,233,.3)}
-
 .field{margin-bottom:18px}
 .field label{display:block;font-size:11px;font-weight:700;color:#64748b;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
-.field-err{font-size:12px;color:#f43f5e;margin-top:6px;display:flex;align-items:center;gap:4px}
-
+.field-err{font-size:12px;color:#f43f5e;margin-top:6px}
 .opt{width:100%;text-align:left;padding:15px 18px;border-radius:14px;border:1.5px solid #1e1e2e;background:#0a0a0f;color:#e2e8f0;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px}
 .opt:hover:not(:disabled){border-color:#0ea5e9;background:rgba(14,165,233,.06);transform:translateX(2px)}
 .opt.chosen{border-color:#0ea5e9;background:rgba(14,165,233,.08)}
@@ -78,70 +61,48 @@ input.err{border-color:#f43f5e;box-shadow:0 0 0 3px rgba(244,63,94,.1)}
 .opt.chosen .letter{border-color:#0ea5e9;background:rgba(14,165,233,.15);color:#0ea5e9}
 .opt.correct .letter{border-color:#10b981;background:rgba(16,185,129,.15);color:#10b981}
 .opt.wrong .letter{border-color:#f43f5e;background:rgba(244,63,94,.15);color:#f43f5e}
-
 .prog-track{height:6px;border-radius:6px;background:#1e1e2e;overflow:hidden}
 .prog-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#0ea5e9,#8b5cf6);transition:width .6s cubic-bezier(.22,1,.36,1)}
-
 .chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:.04em}
 .chip-sky{background:rgba(14,165,233,.12);color:#38bdf8;border:1px solid rgba(14,165,233,.2)}
 .chip-am{background:rgba(245,158,11,.12);color:#fbbf24;border:1px solid rgba(245,158,11,.2)}
 .chip-em{background:rgba(16,185,129,.12);color:#34d399;border:1px solid rgba(16,185,129,.2)}
 .chip-dark{background:rgba(255,255,255,.05);color:#94a3b8;border:1px solid rgba(255,255,255,.08)}
-.chip-pu{background:rgba(139,92,246,.12);color:#a78bfa;border:1px solid rgba(139,92,246,.2)}
-
 .tog-group{display:flex;background:#0a0a0f;border:1.5px solid #1e1e2e;border-radius:14px;padding:4px;gap:4px}
 .tog-item{flex:1;padding:10px 12px;border-radius:10px;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#64748b;cursor:pointer;transition:all .2s;text-align:center}
 .tog-item.on{background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;box-shadow:0 4px 16px rgba(14,165,233,.3)}
-
 .spinner{width:20px;height:20px;border:2px solid #1e1e2e;border-top-color:#0ea5e9;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
-
 .drop{border:2px dashed #1e1e2e;border-radius:16px;padding:48px 24px;text-align:center;cursor:pointer;background:#0a0a0f;transition:all .2s}
 .drop:hover,.drop.over{border-color:#0ea5e9;background:rgba(14,165,233,.04)}
-
 .topbar{position:sticky;top:0;z-index:100;background:rgba(0,0,0,.92);backdrop-filter:blur(20px);border-bottom:1px solid #0f0f1a;padding:0 24px}
 .topbar-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;height:62px;gap:12px}
-
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:300;padding:20px;animation:fadeIn .2s ease}
 .modal{background:#0d0d0d;border:1.5px solid #1e1e2e;border-radius:24px;padding:32px;max-width:500px;width:100%;box-shadow:0 40px 100px rgba(0,0,0,.8);animation:slideUp .35s cubic-bezier(.22,1,.36,1)}
-
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#0d0d0d;border:1.5px solid #1e1e2e;border-radius:14px;padding:14px 22px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;z-index:999;box-shadow:0 16px 48px rgba(0,0,0,.6);animation:fadeUp .35s ease;white-space:nowrap}
-
 .stat-box{background:#0a0a0f;border:1.5px solid #1e1e2e;border-radius:16px;padding:20px;transition:all .2s}
 .stat-box:hover{border-color:#2d2d3e}
-
 .nav-btn{background:transparent;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;font-size:13px;padding:8px 14px;border-radius:10px;transition:all .2s;color:#94a3b8}
 .nav-btn:hover{color:#fff;background:rgba(255,255,255,.06)}
 .nav-btn.active{color:#0ea5e9;background:rgba(14,165,233,.1)}
-
 .res-row{background:#0d0d0d;border:1.5px solid #1e1e2e;border-radius:14px;padding:15px 18px;display:flex;align-items:flex-start;gap:13px;cursor:pointer;transition:all .2s;width:100%;text-align:left;font-family:'Inter',sans-serif}
 .res-row:hover{border-color:#2d2d3e;background:#111}
-
 .fb-section{border-radius:14px;padding:16px 18px;margin-bottom:10px}
 .fb-strengths{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2)}
 .fb-improve{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2)}
 .fb-reco{background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.2)}
 .fb-answer{background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.2)}
-.fb-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.fb-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
 .fb-text{font-size:13px;line-height:1.7;color:#e2e8f0}
-
 .sticky-nav{position:sticky;bottom:0;background:linear-gradient(transparent,rgba(0,0,0,.95) 30%);padding:20px 0 24px;margin-top:16px}
-
 input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:4px;background:#1e1e2e;outline:none}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#0ea5e9,#0284c7);box-shadow:0 0 12px rgba(14,165,233,.4);cursor:pointer;transition:transform .2s}
-input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
-
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#0ea5e9,#0284c7);box-shadow:0 0 12px rgba(14,165,233,.4);cursor:pointer}
+.footer{text-align:center;padding:20px 16px;border-top:1px solid #0f0f1a}
 @media(max-width:640px){
   .card,.glass{padding:18px;border-radius:16px}
   .modal{margin:0;border-radius:20px 20px 0 0;position:fixed;bottom:0;left:0;right:0;max-width:100%;max-height:90vh;overflow-y:auto}
   .modal-bg{align-items:flex-end;padding:0}
   .topbar{padding:0 12px}
   .topbar-inner{height:54px;gap:6px}
-  .desktop-nav{display:none !important}
-  .mobile-nav{display:flex !important}
-}
-@media(min-width:641px){
-  .desktop-nav{display:flex !important}
-  .mobile-nav{display:none !important}
 }
 `;
 
@@ -179,12 +140,8 @@ async function callClaude(messages, system, tools=null) {
 
 function parseJSON(raw) { try { return JSON.parse(raw.replace(/```json|```/g,"").trim()); } catch { return null; } }
 function parseFeedback(raw) {
-  try {
-    const clean = raw.replace(/```json|```/g,"").trim();
-    return JSON.parse(clean);
-  } catch {
-    return { strengths: [], improve: [], recommendations: [], expected: raw.replace(/[#*`]/g,"").trim() };
-  }
+  try { return JSON.parse(raw.replace(/```json|```/g,"").trim()); }
+  catch { return { strengths:[], improve:[], recommendations:[], expected: raw.replace(/[#*`]/g,"").trim() }; }
 }
 function pctColor(p) { return p>=75?D.em:p>=50?D.am:D.ro; }
 function fmtDate(ts) { return new Date(ts).toLocaleDateString("es-CL",{day:"2-digit",month:"short",year:"numeric"}); }
@@ -195,7 +152,6 @@ function useToast() {
   const show = (msg,type="ok") => { setT({msg,type}); setTimeout(()=>setT(null),3000); };
   const Toast = t ? (
     <div className="toast">
-      <span style={{fontSize:16}}>{t.type==="ok"?"âœ“":t.type==="err"?"âœ•":"â„¹"}</span>
       <span style={{color: t.type==="ok"?D.em:t.type==="err"?D.ro:D.sky,fontWeight:700}}>{t.msg}</span>
     </div>
   ) : null;
@@ -216,6 +172,14 @@ function Logo({size=36, compact=false}) {
   );
 }
 
+function Footer() {
+  return (
+    <div className="footer">
+      <p style={{fontSize:11,color:"#334155",fontWeight:500}}>&copy; 2026 EduQuiz IA. Todos los derechos reservados.</p>
+    </div>
+  );
+}
+
 function StepBar({step}) {
   const labels = ["Contenido","Cuestionario","Resultados"];
   return (
@@ -226,8 +190,8 @@ function StepBar({step}) {
             <div style={{width:28,height:28,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,
               background:i<step?"linear-gradient(135deg,#10b981,#059669)":i===step?"linear-gradient(135deg,#0ea5e9,#0284c7)":"#1e1e2e",
               color:i<=step?"#fff":"#475569",transition:"all .4s",
-              boxShadow:i===step?`0 0 16px rgba(14,165,233,.4)`:"none"}}>
-              {i<step?"âœ“":i+1}
+              boxShadow:i===step?"0 0 16px rgba(14,165,233,.4)":"none"}}>
+              {i<step?"ok":i+1}
             </div>
             <span style={{fontSize:10,fontWeight:600,color:i===step?"#0ea5e9":"#475569",whiteSpace:"nowrap"}}>{l}</span>
           </div>
@@ -261,40 +225,39 @@ function Auth({onLogin, showToast}) {
       if(users[f.email.toLowerCase()]) { setErrs({email:"Email ya registrado"}); setLoading(false); return; }
       const u={name:f.name.trim(),email:f.email.toLowerCase(),pass:f.pass,joinedAt:Date.now()};
       users[f.email.toLowerCase()]=u; LS.set(SK.users,users); setMe(u);
-      showToast(`Bienvenido/a, ${u.name}!`,"ok"); onLogin(u);
+      showToast("Bienvenido/a, "+u.name+"!","ok"); onLogin(u);
     } else {
       const u=users[f.email.toLowerCase()];
       if(!u||u.pass!==f.pass) { setErrs({pass:"Email o contrasena incorrectos"}); setLoading(false); return; }
-      setMe(u); showToast(`Hola de nuevo, ${u.name}!`,"ok"); onLogin(u);
+      setMe(u); showToast("Hola de nuevo, "+u.name+"!","ok"); onLogin(u);
     }
     setLoading(false);
   };
   return (
-    <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:20,position:"relative",overflow:"hidden"}}>
+    <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:20,position:"relative",overflow:"hidden"}}>
       <div style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:0}}>
         <div style={{position:"absolute",top:"-20%",right:"-10%",width:600,height:600,borderRadius:"50%",background:"radial-gradient(circle,rgba(14,165,233,.07),transparent 65%)"}}/>
         <div style={{position:"absolute",bottom:"-10%",left:"-10%",width:500,height:500,borderRadius:"50%",background:"radial-gradient(circle,rgba(139,92,246,.06),transparent 65%)"}}/>
-        <div style={{position:"absolute",top:"40%",left:"30%",width:300,height:300,borderRadius:"50%",background:"radial-gradient(circle,rgba(16,185,129,.04),transparent 65%)"}}/>
       </div>
-      <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${D.sky},#8b5cf6,transparent)`}}/>
+      <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:"linear-gradient(90deg,transparent,#0ea5e9,#8b5cf6,transparent)"}}/>
       <div className="fu" style={{width:"100%",maxWidth:420,position:"relative",zIndex:1}}>
         <div style={{textAlign:"center",marginBottom:32}}><Logo size={48}/></div>
-
         <div className="glass">
           <div className="tab-bar">
-            <button className={`tab ${tab==="login"?"on":""}`} onClick={()=>setTab("login")}>Iniciar sesion</button>
-            <button className={`tab ${tab==="register"?"on":""}`} onClick={()=>setTab("register")}>Crear cuenta</button>
+            <button className={"tab "+(tab==="login"?"on":"")} onClick={()=>setTab("login")}>Iniciar sesion</button>
+            <button className={"tab "+(tab==="register"?"on":"")} onClick={()=>setTab("register")}>Crear cuenta</button>
           </div>
-          {tab==="register"&&(<div className="field"><label>Nombre completo</label><input type="text" className={errs.name?"err":""} placeholder="Tu nombre" value={f.name} onChange={e=>set("name",e.target.value)}/>{errs.name&&<div className="field-err">âš  {errs.name}</div>}</div>)}
-          <div className="field"><label>Correo electronico</label><input type="email" className={errs.email?"err":""} placeholder="tu@email.com" value={f.email} onChange={e=>set("email",e.target.value)}/>{errs.email&&<div className="field-err">âš  {errs.email}</div>}</div>
-          <div className="field"><label>Contrasena</label><input type="password" className={errs.pass?"err":""} placeholder="Minimo 6 caracteres" value={f.pass} onChange={e=>set("pass",e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>{errs.pass&&<div className="field-err">âš  {errs.pass}</div>}</div>
-          {tab==="register"&&(<div className="field"><label>Confirmar contrasena</label><input type="password" className={errs.confirm?"err":""} placeholder="Repite tu contrasena" value={f.confirm} onChange={e=>set("confirm",e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>{errs.confirm&&<div className="field-err">âš  {errs.confirm}</div>}</div>)}
+          {tab==="register"&&(<div className="field"><label>Nombre completo</label><input type="text" className={errs.name?"err":""} placeholder="Tu nombre" value={f.name} onChange={e=>set("name",e.target.value)}/>{errs.name&&<div className="field-err">{errs.name}</div>}</div>)}
+          <div className="field"><label>Correo electronico</label><input type="email" className={errs.email?"err":""} placeholder="tu@email.com" value={f.email} onChange={e=>set("email",e.target.value)}/>{errs.email&&<div className="field-err">{errs.email}</div>}</div>
+          <div className="field"><label>Contrasena</label><input type="password" className={errs.pass?"err":""} placeholder="Minimo 6 caracteres" value={f.pass} onChange={e=>set("pass",e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>{errs.pass&&<div className="field-err">{errs.pass}</div>}</div>
+          {tab==="register"&&(<div className="field"><label>Confirmar contrasena</label><input type="password" className={errs.confirm?"err":""} placeholder="Repite tu contrasena" value={f.confirm} onChange={e=>set("confirm",e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>{errs.confirm&&<div className="field-err">{errs.confirm}</div>}</div>)}
           <button className="btn btn-sky btn-full" onClick={submit} disabled={loading} style={{marginTop:6,height:48}}>
             {loading?<><div className="spinner" style={{borderTopColor:"#fff"}}/>Procesando...</>:tab==="login"?"Ingresar a EduQuiz IA":"Crear mi cuenta gratis"}
           </button>
           {tab==="login"&&<div style={{textAlign:"center",marginTop:16}}><button className="btn-ghost" style={{fontSize:13}} onClick={()=>setTab("register")}>No tienes cuenta? Registrate gratis</button></div>}
         </div>
-        <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:20}}>EduQuiz IA - Plataforma educativa con inteligencia artificial</p><p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:8}}>© 2026 EduQuiz IA. Todos los derechos reservados.</p>
+        <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:16}}>EduQuiz IA - Plataforma educativa con inteligencia artificial</p>
+        <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:6}}>&copy; 2026 EduQuiz IA. Todos los derechos reservados.</p>
       </div>
     </div>
   );
@@ -302,22 +265,19 @@ function Auth({onLogin, showToast}) {
 
 function TopBar({user,page,onNav,onLogout}) {
   const [isMobile, setIsMobile] = useState(window.innerWidth<=640);
-  useEffect(()=>{ const h=()=>setIsMobile(window.innerWidth<=640); window.addEventListener('resize',h); return()=>window.removeEventListener('resize',h); },[]);
+  useEffect(()=>{ const h=()=>setIsMobile(window.innerWidth<=640); window.addEventListener("resize",h); return()=>window.removeEventListener("resize",h); },[]);
   return (
-    <>
-      <div className="topbar">
-        <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${D.sky},#8b5cf6,transparent)`}}/>
-        <div className="topbar-inner">
-          <Logo size={28} compact={isMobile}/>
-          <div style={{flex:1}}/>
-          <div style={{display:"flex",alignItems:"center",gap:8}}>
-            <div style={{width:30,height:30,borderRadius:9,background:"linear-gradient(135deg,rgba(14,165,233,.2),rgba(139,92,246,.2))",border:"1px solid rgba(14,165,233,.15)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:"#38bdf8",cursor:"pointer"}} onClick={()=>onNav("profile")}>{user.name.charAt(0).toUpperCase()}</div>
-            <button className="btn-ghost" onClick={onLogout} style={{fontSize:12,padding:"5px 10px",color:"#64748b"}}>Salir</button>
-          </div>
+    <div className="topbar">
+      <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:"linear-gradient(90deg,transparent,#0ea5e9,#8b5cf6,transparent)"}}/>
+      <div className="topbar-inner">
+        <Logo size={28} compact={isMobile}/>
+        <div style={{flex:1}}/>
+        <div style={{display:"flex",alignItems:"center",gap:8}}>
+          <div style={{width:30,height:30,borderRadius:9,background:"linear-gradient(135deg,rgba(14,165,233,.2),rgba(139,92,246,.2))",border:"1px solid rgba(14,165,233,.15)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:"#38bdf8",cursor:"pointer"}} onClick={()=>onNav("profile")}>{user.name.charAt(0).toUpperCase()}</div>
+          <button className="btn-ghost" onClick={onLogout} style={{fontSize:12,padding:"5px 10px",color:"#64748b"}}>Salir</button>
         </div>
       </div>
-
-    </>
+    </div>
   );
 }
 
@@ -325,50 +285,40 @@ function Home({user,onNav}) {
   const results = getResults();
   const stats = { total:results.length, avgPct:results.length?Math.round(results.reduce((a,r)=>a+r.pct,0)/results.length):0, best:results.length?Math.max(...results.map(r=>r.pct)):0 };
   const hour = new Date().getHours();
-  const greeting = hour<12?"Buenos dias":"hour"<18?"Buenas tardes":"Buenas noches";
+  const greeting = hour<12?"Buenos dias":hour<18?"Buenas tardes":"Buenas noches";
   return (
-    <div style={{maxWidth:720,margin:"0 auto",padding:"36px 16px 80px"}} className="fu">
+    <div style={{maxWidth:720,margin:"0 auto",padding:"36px 16px 40px"}} className="fu">
       <div style={{marginBottom:32}}>
-        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}}>
-          <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,rgba(14,165,233,.15),rgba(139,92,246,.15))",border:"1px solid rgba(14,165,233,.2)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>ðŸ‘‹</div>
-          <div>
-            <h1 style={{fontSize:22,fontWeight:800,color:"#fff",letterSpacing:"-.02em"}}>{greeting}, {user.name.split(" ")[0]}</h1>
-            <p style={{color:"#475569",fontSize:13,marginTop:2}}>Listo para aprender hoy?</p>
-          </div>
-        </div>
+        <h1 style={{fontSize:22,fontWeight:800,color:"#fff",letterSpacing:"-.02em"}}>{greeting}, {user.name.split(" ")[0]}</h1>
+        <p style={{color:"#475569",fontSize:13,marginTop:4}}>Listo para aprender hoy?</p>
       </div>
-
       <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,marginBottom:20}}>
         {[
-          {label:"Evaluaciones",val:stats.total||"0",color:"#38bdf8",icon:"ðŸ“Š"},
-          {label:"Promedio",val:stats.total?`${stats.avgPct}%`:"â€”",color:pctColor(stats.avgPct),icon:"ðŸ“ˆ"},
-          {label:"Mejor nota",val:stats.total?`${stats.best}%`:"â€”",color:"#34d399",icon:"ðŸ†"},
+          {label:"Evaluaciones",val:stats.total||"0",color:"#38bdf8"},
+          {label:"Promedio",val:stats.total?(stats.avgPct+"%"):"--",color:pctColor(stats.avgPct)},
+          {label:"Mejor nota",val:stats.total?(stats.best+"%"):"--",color:"#34d399"},
         ].map((s,i)=>(
           <div key={i} className="stat-box">
-            <div style={{fontSize:20,marginBottom:8}}>{s.icon}</div>
             <div style={{fontFamily:"'JetBrains Mono'",fontSize:24,fontWeight:600,color:s.color,lineHeight:1}}>{s.val}</div>
             <div style={{fontSize:10,color:"#475569",marginTop:5,fontWeight:600,letterSpacing:".06em"}}>{s.label.toUpperCase()}</div>
           </div>
         ))}
       </div>
-
-      <button className="btn btn-sky btn-full" style={{fontSize:15,height:54,borderRadius:14,marginBottom:16,letterSpacing:"-.01em"}} onClick={()=>onNav("quiz")}>
-        âœ¦ Generar nuevo cuestionario con IA
+      <button className="btn btn-sky btn-full" style={{fontSize:15,height:54,borderRadius:14,marginBottom:16}} onClick={()=>onNav("quiz")}>
+        Generar nuevo cuestionario con IA
       </button>
-
       <div className="card">
         <h3 style={{fontWeight:700,fontSize:12,marginBottom:16,color:"#334155",letterSpacing:".08em"}}>ACCESO RAPIDO</h3>
         {[
-          {icon:"âœï¸",label:"Nuevo cuestionario",sub:"Escribe o pega tu contenido educativo",action:"quiz",color:"#0ea5e9"},
-          {icon:"ðŸ“‹",label:"Mi historial",sub:`${stats.total} evaluaciones completadas`,action:"history",color:"#f59e0b"},
+          {label:"Nuevo cuestionario",sub:"Escribe o pega tu contenido educativo",action:"quiz",color:"#0ea5e9"},
+          {label:"Mi historial",sub:stats.total+" evaluaciones completadas",action:"history",color:"#f59e0b"},
         ].map((a,i)=>(
           <button key={i} onClick={()=>onNav(a.action)} style={{all:"unset",cursor:"pointer",width:"100%",display:"block",marginBottom:i===0?10:0}}>
             <div style={{display:"flex",alignItems:"center",gap:14,padding:"15px 16px",borderRadius:14,background:"#0a0a0f",border:"1.5px solid #1e1e2e",transition:"all .2s"}}
-              onMouseEnter={e=>{e.currentTarget.style.borderColor=a.color;e.currentTarget.style.background="rgba(14,165,233,.04)"}}
-              onMouseLeave={e=>{e.currentTarget.style.borderColor="#1e1e2e";e.currentTarget.style.background="#0a0a0f"}}>
-              <div style={{width:40,height:40,borderRadius:11,background:`${a.color}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{a.icon}</div>
+              onMouseEnter={e=>{e.currentTarget.style.borderColor=a.color;}}
+              onMouseLeave={e=>{e.currentTarget.style.borderColor="#1e1e2e";}}>
               <div style={{flex:1}}><div style={{fontWeight:600,fontSize:14,color:"#e2e8f0"}}>{a.label}</div><div style={{fontSize:12,color:"#475569",marginTop:2}}>{a.sub}</div></div>
-              <span style={{color:"#334155",fontSize:18}}>â€º</span>
+              <span style={{color:"#334155",fontSize:18}}>{">"}</span>
             </div>
           </button>
         ))}
@@ -402,39 +352,35 @@ function QuizInput({onGenerate}) {
       </div>
       <div className="card">
         <div className="tog-group" style={{marginBottom:24}}>
-          <button className={`tog-item ${mode==="text"?"on":""}`} onClick={()=>setMode("text")}>âœï¸ Escribe el contenido</button>
-          <button className={`tog-item ${mode==="image"?"on":""}`} onClick={()=>setMode("image")}>ðŸ“· Foto del cuaderno</button>
+          <button className={"tog-item "+(mode==="text"?"on":"")} onClick={()=>setMode("text")}>Escribe el contenido</button>
+          <button className={"tog-item "+(mode==="image"?"on":"")} onClick={()=>setMode("image")}>Foto del cuaderno</button>
         </div>
-
         {mode==="text"&&(
           <div>
-            <textarea rows={9} placeholder="Escribe o pega aqui el contenido educativo&#10;&#10;Puede ser texto de tu libro, apuntes de clase, resumen de un tema, etc." value={text} onChange={e=>setText(e.target.value)} style={{fontSize:14,lineHeight:1.7}}/>
+            <textarea rows={9} placeholder="Escribe o pega aqui el contenido educativo..." value={text} onChange={e=>setText(e.target.value)} style={{fontSize:14,lineHeight:1.7}}/>
             <div style={{display:"flex",justifyContent:"flex-end",marginTop:6}}>
               <span style={{fontSize:11,color:"#334155"}}>{text.length} caracteres</span>
             </div>
           </div>
         )}
-
         {mode==="image"&&(imgPrev?(
           <div style={{position:"relative"}}>
             <img src={imgPrev} alt="prev" style={{width:"100%",borderRadius:14,maxHeight:240,objectFit:"cover"}}/>
-            <button className="btn btn-outline" onClick={()=>{setImgData(null);setImgPrev(null);}} style={{position:"absolute",top:10,right:10,fontSize:12,padding:"7px 14px",background:"rgba(0,0,0,.8)"}}>âœ• Cambiar</button>
+            <button className="btn btn-outline" onClick={()=>{setImgData(null);setImgPrev(null);}} style={{position:"absolute",top:10,right:10,fontSize:12,padding:"7px 14px",background:"rgba(0,0,0,.8)"}}>Cambiar</button>
           </div>
         ):(
-          <div className={`drop ${drag?"over":""}`} onDragOver={e=>{e.preventDefault();setDrag(true);}} onDragLeave={()=>setDrag(false)} onDrop={onDrop} onClick={()=>fileRef.current.click()}>
-            <div style={{fontSize:40,marginBottom:12}}>ðŸ“·</div>
+          <div className={"drop "+(drag?"over":"")} onDragOver={e=>{e.preventDefault();setDrag(true);}} onDragLeave={()=>setDrag(false)} onDrop={onDrop} onClick={()=>fileRef.current.click()}>
             <p style={{fontWeight:700,marginBottom:6,color:"#e2e8f0",fontSize:15}}>Arrastra la foto o haz clic aqui</p>
             <p style={{fontSize:13,color:"#475569",marginBottom:20}}>Cuaderno, pizarra, libro, apunte fotografiado</p>
             <div style={{display:"flex",gap:10,justifyContent:"center"}}>
-              <button onClick={e=>{e.stopPropagation();fileRef.current.click();}} className="btn btn-outline" style={{fontSize:13,padding:"9px 16px"}}>ðŸ—‚ Galeria</button>
-              <button onClick={e=>{e.stopPropagation();camRef.current.click();}} className="btn btn-outline" style={{fontSize:13,padding:"9px 16px"}}>ðŸ“¸ Camara</button>
+              <button onClick={e=>{e.stopPropagation();fileRef.current.click();}} className="btn btn-outline" style={{fontSize:13,padding:"9px 16px"}}>Galeria</button>
+              <button onClick={e=>{e.stopPropagation();camRef.current.click();}} className="btn btn-outline" style={{fontSize:13,padding:"9px 16px"}}>Camara</button>
             </div>
           </div>
         ))}
         <input ref={fileRef} type="file" accept="image/*" style={{display:"none"}} onChange={e=>handleImg(e.target.files[0])}/>
         <input ref={camRef} type="file" accept="image/*" capture="environment" style={{display:"none"}} onChange={e=>handleImg(e.target.files[0])}/>
-
-        <div style={{marginTop:28,borderTop:`1px solid #1e1e2e`,paddingTop:24}}>
+        <div style={{marginTop:28,borderTop:"1px solid #1e1e2e",paddingTop:24}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
             <div>
               <span style={{fontWeight:700,fontSize:15,color:"#e2e8f0"}}>Configurar preguntas</span>
@@ -446,7 +392,7 @@ function QuizInput({onGenerate}) {
             </div>
           </div>
           {sliders.map((s,i)=>(
-            <div key={i} style={{marginBottom:16,padding:"16px 18px",borderRadius:14,border:`1.5px solid #1e1e2e`,background:"#0a0a0f"}}>
+            <div key={i} style={{marginBottom:16,padding:"16px 18px",borderRadius:14,border:"1.5px solid #1e1e2e",background:"#0a0a0f"}}>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
                 <div>
                   <div style={{fontWeight:600,fontSize:13,color:"#e2e8f0"}}>{s.label}</div>
@@ -455,13 +401,12 @@ function QuizInput({onGenerate}) {
                 <span style={{fontFamily:"'JetBrains Mono'",fontSize:22,fontWeight:600,color:s.color}}>{s.val}</span>
               </div>
               <input type="range" min={0} max={s.max} value={s.val} style={{accentColor:s.color}} onChange={e=>{const v=+e.target.value;if(total-s.val+v<=100)s.set(v);}}/>
-              <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#334155",marginTop:4,fontFamily:"'JetBrains Mono'"}}><span>0</span><span>{s.max}</span></div>
+              <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#334155",marginTop:4}}><span>0</span><span>{s.max}</span></div>
             </div>
           ))}
         </div>
-
         <button className="btn btn-sky btn-full" disabled={!canGo||total===0} onClick={()=>onGenerate({mode,text,imgData,numMC,numDev})} style={{marginTop:20,height:52,fontSize:15,borderRadius:14}}>
-          âœ¦ Generar cuestionario con IA
+          Generar cuestionario con IA
         </button>
       </div>
     </div>
@@ -472,16 +417,16 @@ function Loading({phase}) {
   const phases=["Analizando el contenido...","Generando preguntas con IA...","Preparando tu cuestionario..."];
   return (
     <div style={{maxWidth:380,margin:"80px auto",textAlign:"center"}} className="fi">
-      <div style={{width:72,height:72,borderRadius:20,background:"linear-gradient(135deg,rgba(14,165,233,.15),rgba(139,92,246,.15))",border:`1px solid rgba(14,165,233,.2)`,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 24px",fontSize:30,animation:"pulse 1.8s infinite,glow 2s infinite"}}>ðŸ§ </div>
+      <div style={{width:72,height:72,borderRadius:20,background:"linear-gradient(135deg,rgba(14,165,233,.15),rgba(139,92,246,.15))",border:"1px solid rgba(14,165,233,.2)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 24px",fontSize:30,animation:"pulse 1.8s infinite"}}>IA</div>
       <h2 style={{fontSize:20,fontWeight:700,marginBottom:8,color:"#fff"}}>{phases[phase]}</h2>
       <p style={{color:"#475569",fontSize:14,marginBottom:40}}>La IA esta trabajando para ti...</p>
       <div style={{display:"flex",flexDirection:"column",gap:14,textAlign:"left"}}>
         {phases.map((p,i)=>(
-          <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 16px",borderRadius:12,background:i<=phase?"rgba(14,165,233,.06)":"#0a0a0f",border:`1px solid ${i<=phase?"rgba(14,165,233,.15)":"#1e1e2e"}`,transition:"all .4s"}}>
-            <div style={{width:24,height:24,borderRadius:"50%",background:i<phase?"linear-gradient(135deg,#10b981,#059669)":i===phase?"rgba(14,165,233,.2)":"#1e1e2e",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:i<phase?"#fff":i===phase?"#0ea5e9":"#334155",flexShrink:0,transition:"all .3s"}}>
-              {i<phase?"âœ“":i===phase?<div className="spinner" style={{width:12,height:12,borderWidth:2}}/>:i+1}
+          <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 16px",borderRadius:12,background:i<=phase?"rgba(14,165,233,.06)":"#0a0a0f",border:"1px solid "+(i<=phase?"rgba(14,165,233,.15)":"#1e1e2e"),transition:"all .4s"}}>
+            <div style={{width:24,height:24,borderRadius:"50%",background:i<phase?"linear-gradient(135deg,#10b981,#059669)":i===phase?"rgba(14,165,233,.2)":"#1e1e2e",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:i<phase?"#fff":i===phase?"#0ea5e9":"#334155",flexShrink:0}}>
+              {i<phase?"ok":i===phase?<div className="spinner" style={{width:12,height:12,borderWidth:2}}/>:i+1}
             </div>
-            <span style={{fontSize:13,color:i<=phase?"#e2e8f0":"#334155",fontWeight:i===phase?600:400,transition:"color .3s"}}>{p}</span>
+            <span style={{fontSize:13,color:i<=phase?"#e2e8f0":"#334155",fontWeight:i===phase?600:400}}>{p}</span>
           </div>
         ))}
       </div>
@@ -494,7 +439,7 @@ function FeedbackCard({fb}) {
   if(fb.correct===true) return (
     <div className="fu" style={{marginTop:16}}>
       <div className="fb-section fb-strengths">
-        <div className="fb-title" style={{color:"#34d399"}}>âœ… Respuesta Correcta</div>
+        <div className="fb-title" style={{color:"#34d399"}}>Respuesta Correcta</div>
         <p className="fb-text">{cleanText(fb.explanation)}</p>
       </div>
     </div>
@@ -502,7 +447,7 @@ function FeedbackCard({fb}) {
   if(fb.correct===false) return (
     <div className="fu" style={{marginTop:16}}>
       <div className="fb-section fb-improve" style={{marginBottom:0}}>
-        <div className="fb-title" style={{color:"#fbbf24"}}>â„¹ï¸ Respuesta Incorrecta</div>
+        <div className="fb-title" style={{color:"#fbbf24"}}>Respuesta Incorrecta</div>
         <p className="fb-text">{cleanText(fb.explanation)}</p>
       </div>
     </div>
@@ -512,31 +457,31 @@ function FeedbackCard({fb}) {
     <div className="fu" style={{marginTop:16,display:"flex",flexDirection:"column",gap:8}}>
       {parsed.strengths?.length>0&&(
         <div className="fb-section fb-strengths">
-          <div className="fb-title" style={{color:"#34d399"}}>âœ… Fortalezas</div>
-          {parsed.strengths.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>â€¢ {cleanText(s)}</p>)}
+          <div className="fb-title" style={{color:"#34d399"}}>Fortalezas</div>
+          {parsed.strengths.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>{cleanText(s)}</p>)}
         </div>
       )}
       {parsed.improve?.length>0&&(
         <div className="fb-section fb-improve">
-          <div className="fb-title" style={{color:"#fbbf24"}}>âš ï¸ Aspectos a mejorar</div>
-          {parsed.improve.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>â€¢ {cleanText(s)}</p>)}
+          <div className="fb-title" style={{color:"#fbbf24"}}>Aspectos a mejorar</div>
+          {parsed.improve.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>{cleanText(s)}</p>)}
         </div>
       )}
       {parsed.recommendations?.length>0&&(
         <div className="fb-section fb-reco">
-          <div className="fb-title" style={{color:"#38bdf8"}}>ðŸ’¡ Recomendaciones</div>
-          {parsed.recommendations.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>â€¢ {cleanText(s)}</p>)}
+          <div className="fb-title" style={{color:"#38bdf8"}}>Recomendaciones</div>
+          {parsed.recommendations.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>{cleanText(s)}</p>)}
         </div>
       )}
       {parsed.expected&&(
         <div className="fb-section fb-answer">
-          <div className="fb-title" style={{color:"#a78bfa"}}>ðŸ“˜ Respuesta esperada</div>
+          <div className="fb-title" style={{color:"#a78bfa"}}>Respuesta esperada</div>
           <p className="fb-text">{cleanText(parsed.expected)}</p>
         </div>
       )}
       {!parsed.strengths&&!parsed.improve&&!parsed.recommendations&&!parsed.expected&&(
         <div className="fb-section fb-reco">
-          <div className="fb-title" style={{color:"#38bdf8"}}>ðŸ“˜ Retroalimentacion</div>
+          <div className="fb-title" style={{color:"#38bdf8"}}>Retroalimentacion</div>
           <p className="fb-text">{cleanText(fb.explanation)}</p>
         </div>
       )}
@@ -557,7 +502,7 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
     if(!devText.trim()||checking)return;
     setChecking(true);setAns(cur,devText);
     try{
-      const res=await callClaude([{role:"user",content:`Pregunta: "${q.question}"\nRespuesta del estudiante: "${devText}"\nRespuesta esperada: "${q.answer}"\n\nEvalua la respuesta y devuelve SOLO un JSON con esta estructura exacta:\n{"strengths":["..."],"improve":["..."],"recommendations":["..."],"expected":"..."}\nSe breve, pedagogico y en espaÃ±ol. Maximo 2 items por campo.`}],"Eres un profesor evaluador experto. Responde SOLO con JSON valido, sin texto adicional.");
+      const res=await callClaude([{role:"user",content:"Pregunta: \""+q.question+"\"\nRespuesta del estudiante: \""+devText+"\"\nRespuesta esperada: \""+q.answer+"\"\n\nEvalua la respuesta y devuelve SOLO un JSON con esta estructura exacta:\n{\"strengths\":[\"...\"],\"improve\":[\"...\"],\"recommendations\":[\"...\"],\"expected\":\"...\"}\nSe breve, pedagogico y en espanol. Maximo 2 items por campo."}],"Eres un profesor evaluador experto. Responde SOLO con JSON valido, sin texto adicional.");
       const parsed=parseFeedback(res);
       setFB(cur,{correct:null,explanation:res,parsed});
     }
@@ -572,78 +517,70 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
       <div style={{marginBottom:20}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
-            <button className="btn-ghost" onClick={onRestart} style={{padding:"6px 12px",fontSize:13}}>â† Salir</button>
+            <button className="btn-ghost" onClick={onRestart} style={{padding:"6px 12px",fontSize:13}}>Salir</button>
             <span style={{color:"#475569",fontSize:13,fontWeight:500}}>Pregunta <span style={{color:"#e2e8f0",fontWeight:700}}>{cur+1}</span> de <span style={{color:"#e2e8f0",fontWeight:700}}>{quiz.length}</span></span>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:12}}>
             <span style={{color:"#34d399",fontWeight:700,fontSize:13}}>{correctCount} correctas</span>
-            {resources?.length>0&&<button className="btn btn-outline" style={{fontSize:11,padding:"6px 12px",height:32}} onClick={()=>setShowRes(true)}>ðŸŒ Recursos</button>}
+            {resources?.length>0&&<button className="btn btn-outline" style={{fontSize:11,padding:"6px 12px",height:32}} onClick={()=>setShowRes(true)}>Recursos</button>}
           </div>
         </div>
-        <div className="prog-track">
-          <div className="prog-fill" style={{width:`${pct}%`}}/>
-        </div>
+        <div className="prog-track"><div className="prog-fill" style={{width:pct+"%"}}/></div>
         <div style={{display:"flex",justifyContent:"space-between",marginTop:5}}>
           <span style={{fontSize:10,color:"#334155"}}>{pct}% completado</span>
           <span style={{fontSize:10,color:"#334155"}}>{quiz.length-cur-1} restantes</span>
         </div>
       </div>
-
       <div className="card sr" key={cur} style={{marginBottom:16}}>
         <div style={{display:"flex",gap:7,flexWrap:"wrap",marginBottom:18}}>
-          <span className={`chip ${typeMap[q.type]?.cls||"chip-dark"}`}>{typeMap[q.type]?.label||q.type}</span>
-          {q.topic&&<span className="chip chip-dark">ðŸ“š {q.topic}</span>}
+          <span className={"chip "+(typeMap[q.type]?.cls||"chip-dark")}>{typeMap[q.type]?.label||q.type}</span>
+          {q.topic&&<span className="chip chip-dark">{q.topic}</span>}
         </div>
         <h2 style={{fontSize:18,fontWeight:600,lineHeight:1.6,marginBottom:24,color:"#f1f5f9"}}>{q.question}</h2>
-
         {q.type==="multiple"&&(
           <div style={{display:"flex",flexDirection:"column",gap:10}}>
             {(q.options||[]).map((opt,i)=>{const isSel=answers[cur]===i,isOk=fb&&i===q.answer,isBad=fb&&isSel&&i!==q.answer;return(
-              <button key={i} className={`opt ${isOk?"correct":isBad?"wrong":isSel?"chosen":""}`} onClick={()=>handleMC(i)} disabled={answered}>
+              <button key={i} className={"opt "+(isOk?"correct":isBad?"wrong":isSel?"chosen":"")} onClick={()=>handleMC(i)} disabled={answered}>
                 <span className="letter">{["A","B","C","D"][i]}</span>
                 <span style={{flex:1,textAlign:"left",color:"#e2e8f0",lineHeight:1.5}}>{opt}</span>
-                {isOk&&<span style={{color:"#34d399",fontWeight:700,fontSize:16}}>âœ“</span>}
-                {isBad&&<span style={{color:"#f87171",fontWeight:700,fontSize:16}}>âœ•</span>}
+                {isOk&&<span style={{color:"#34d399",fontWeight:700}}>OK</span>}
+                {isBad&&<span style={{color:"#f87171",fontWeight:700}}>X</span>}
               </button>
             );})}
           </div>
         )}
-
         {q.type==="development"&&(
           <div>
             <textarea rows={5} placeholder="Escribe aqui tu respuesta de manera detallada..." value={devText} onChange={e=>setDevText(e.target.value)} disabled={answered} style={{marginBottom:12,lineHeight:1.7}}/>
             {!answered&&<button className="btn btn-sky" onClick={handleDev} disabled={!devText.trim()||checking} style={{height:44}}>
-              {checking?<><div className="spinner" style={{borderTopColor:"#fff"}}/>Evaluando con IA...</>:"Verificar mi respuesta â†’"}
+              {checking?<><div className="spinner" style={{borderTopColor:"#fff"}}/>Evaluando con IA...</>:"Verificar mi respuesta"}
             </button>}
           </div>
         )}
-
         <FeedbackCard fb={fb}/>
       </div>
-
       <div className="sticky-nav">
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",maxWidth:720,margin:"0 auto"}}>
-          <div>{cur>0&&<button className="btn btn-outline" onClick={goPrev} style={{height:46}}>â† Anterior</button>}</div>
+          <div>{cur>0&&<button className="btn btn-outline" onClick={goPrev} style={{height:46}}>Anterior</button>}</div>
           <div>
             {!isLast
-              ?<button className="btn btn-sky" onClick={goNext} disabled={!answered} style={{height:46,minWidth:140}}>Siguiente â†’</button>
-              :<button className="btn btn-sky" onClick={()=>onFinish({feedback,correctCount})} disabled={!answered} style={{height:46,minWidth:160,background:"linear-gradient(135deg,#10b981,#059669)"}}>Ver resultados â†’</button>
+              ?<button className="btn btn-sky" onClick={goNext} disabled={!answered} style={{height:46,minWidth:140}}>Siguiente</button>
+              :<button className="btn btn-sky" onClick={()=>onFinish({feedback,correctCount})} disabled={!answered} style={{height:46,minWidth:160,background:"linear-gradient(135deg,#10b981,#059669)"}}>Ver resultados</button>
             }
           </div>
         </div>
       </div>
-
       {showRes&&(
         <div className="modal-bg" onClick={()=>setShowRes(false)}>
           <div className="modal" onClick={e=>e.stopPropagation()}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
-              <h2 style={{fontSize:17,fontWeight:700,color:"#fff"}}>ðŸŒ Recursos relacionados</h2>
-              <button className="btn-ghost" onClick={()=>setShowRes(false)}>âœ•</button>
+              <h2 style={{fontSize:17,fontWeight:700,color:"#fff"}}>Recursos relacionados</h2>
+              <button className="btn-ghost" onClick={()=>setShowRes(false)}>X</button>
             </div>
             <div style={{display:"flex",flexDirection:"column",gap:10}}>
               {resources.slice(0,5).map((r,i)=>(
                 <a key={i} href={r.url} target="_blank" rel="noreferrer" style={{display:"block",padding:"14px 16px",borderRadius:12,border:"1.5px solid #1e1e2e",background:"#0a0a0f",textDecoration:"none",transition:"all .2s"}}
-                  onMouseEnter={e=>{e.currentTarget.style.borderColor="#0ea5e9"}} onMouseLeave={e=>{e.currentTarget.style.borderColor="#1e1e2e"}}>
+                  onMouseEnter={e=>{e.currentTarget.style.borderColor="#0ea5e9";}} onMouseLeave={e=>{e.currentTarget.style.borderColor="#1e1e2e";}}>
                   <div style={{fontWeight:600,fontSize:13,color:"#e2e8f0",marginBottom:4}}>{r.title}</div>
                   <div style={{fontSize:12,color:"#475569",lineHeight:1.5}}>{r.snippet}</div>
                 </a>
@@ -660,45 +597,41 @@ function Results({quiz,result,onRestart,onHome}) {
   const [open,setOpen]=useState(null);
   const total=quiz.length, pct=Math.round((result.correctCount/total)*100), clr=pctColor(pct);
   const grade=pct>=90?"Sobresaliente":pct>=80?"Excelente":pct>=65?"Muy bien":pct>=50?"Regular":"A repasar";
-  const emoji=pct>=80?"ðŸ†":pct>=65?"ðŸŽ¯":pct>=50?"ðŸ“š":"ðŸ’ª";
   const motivational=pct>=80?"Excelente desempeno! Dominas muy bien este tema.":pct>=65?"Buen trabajo! Sigue practicando para mejorar.":pct>=50?"Vas por buen camino. Repasa los temas marcados.":"No te rindas. Revisa el contenido y vuelve a intentarlo.";
   const typeCount=t=>quiz.filter(q=>q.type===t).length;
   const typeOk=t=>quiz.reduce((a,q,i)=>q.type===t&&result.feedback[i]?.correct===true?a+1:a,0);
   const weakTopics=[...new Set(quiz.filter((q,i)=>result.feedback[i]?.correct===false).map(q=>q.topic).filter(Boolean))].slice(0,3);
   const strongTopics=[...new Set(quiz.filter((q,i)=>result.feedback[i]?.correct===true).map(q=>q.topic).filter(Boolean))].slice(0,3);
   return (
-    <div className="fu" style={{maxWidth:680,margin:"0 auto",paddingBottom:60}}>
+    <div className="fu" style={{maxWidth:680,margin:"0 auto",paddingBottom:40}}>
       <div className="card" style={{textAlign:"center",marginBottom:16}}>
-        <div style={{fontSize:48,marginBottom:16}}>{emoji}</div>
-        <div className="pop" style={{width:120,height:120,borderRadius:"50%",border:`3px solid ${clr}`,margin:"0 auto 20px",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",background:`${clr}10`,boxShadow:`0 0 30px ${clr}30`}}>
+        <div className="pop" style={{width:120,height:120,borderRadius:"50%",border:"3px solid "+clr,margin:"16px auto 20px",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",background:clr+"10",boxShadow:"0 0 30px "+clr+"30"}}>
           <span style={{fontFamily:"'JetBrains Mono'",fontSize:32,fontWeight:700,color:clr,lineHeight:1}}>{pct}%</span>
           <span style={{fontSize:11,color:"#475569",marginTop:4}}>{result.correctCount}/{total}</span>
         </div>
         <h2 style={{fontSize:24,fontWeight:800,color:clr,marginBottom:8,letterSpacing:"-.02em"}}>{grade}</h2>
         <p style={{color:"#94a3b8",fontSize:14,marginBottom:4}}>{result.correctCount} de {total} preguntas correctas</p>
         <p style={{color:"#64748b",fontSize:13,fontStyle:"italic",marginBottom:20}}>{motivational}</p>
-        <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
-          <button className="btn btn-sky" onClick={onRestart} style={{flex:"1 1 140px",maxWidth:200,height:44,fontSize:14}}>âœ¦ Nuevo Quiz</button>
-          <button className="btn btn-outline" onClick={onHome} style={{flex:"1 1 140px",maxWidth:200,height:44,fontSize:14}}>â† Volver al Inicio</button>
+        <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap",marginBottom:20}}>
+          <button className="btn btn-sky" onClick={onRestart} style={{flex:"1 1 140px",maxWidth:200,height:44,fontSize:14}}>Nuevo Quiz</button>
+          <button className="btn btn-outline" onClick={onHome} style={{flex:"1 1 140px",maxWidth:200,height:44,fontSize:14}}>Volver al Inicio</button>
         </div>
-
         {(weakTopics.length>0||strongTopics.length>0)&&(
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginTop:24,textAlign:"left"}}>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,textAlign:"left"}}>
             {strongTopics.length>0&&(
               <div style={{padding:"14px 16px",borderRadius:14,background:"rgba(16,185,129,.08)",border:"1px solid rgba(16,185,129,.2)"}}>
-                <div style={{fontSize:11,fontWeight:700,color:"#34d399",letterSpacing:".06em",marginBottom:8}}>âœ… FORTALEZAS</div>
-                {strongTopics.map((t,i)=><div key={i} style={{fontSize:12,color:"#86efac",marginTop:i>0?4:0}}>â€¢ {t}</div>)}
+                <div style={{fontSize:11,fontWeight:700,color:"#34d399",letterSpacing:".06em",marginBottom:8}}>FORTALEZAS</div>
+                {strongTopics.map((t,i)=><div key={i} style={{fontSize:12,color:"#86efac",marginTop:i>0?4:0}}>{t}</div>)}
               </div>
             )}
             {weakTopics.length>0&&(
               <div style={{padding:"14px 16px",borderRadius:14,background:"rgba(245,158,11,.08)",border:"1px solid rgba(245,158,11,.2)"}}>
-                <div style={{fontSize:11,fontWeight:700,color:"#fbbf24",letterSpacing:".06em",marginBottom:8}}>âš ï¸ REFORZAR</div>
-                {weakTopics.map((t,i)=><div key={i} style={{fontSize:12,color:"#fde68a",marginTop:i>0?4:0}}>â€¢ {t}</div>)}
+                <div style={{fontSize:11,fontWeight:700,color:"#fbbf24",letterSpacing:".06em",marginBottom:8}}>REFORZAR</div>
+                {weakTopics.map((t,i)=><div key={i} style={{fontSize:12,color:"#fde68a",marginTop:i>0?4:0}}>{t}</div>)}
               </div>
             )}
           </div>
         )}
-
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(110px,1fr))",gap:10,marginTop:20}}>
           {[{type:"multiple",label:"Seleccion",color:"#38bdf8"},{type:"development",label:"Desarrollo",color:"#fbbf24"}].filter(s=>typeCount(s.type)>0).map(s=>(
             <div key={s.type} className="stat-box" style={{textAlign:"center"}}>
@@ -707,23 +640,17 @@ function Results({quiz,result,onRestart,onHome}) {
             </div>
           ))}
         </div>
-
-        <div style={{display:"flex",gap:10,justifyContent:"center",marginTop:24,flexWrap:"wrap"}}>
-          <button className="btn btn-sky" style={{flex:1,maxWidth:200,height:46}} onClick={onRestart}>Nuevo quiz â†’</button>
-          <button className="btn btn-outline" style={{flex:1,maxWidth:200,height:46}} onClick={onHome}>Ir al inicio</button>
-        </div>
       </div>
-
       <h3 style={{fontSize:13,fontWeight:700,color:"#334155",letterSpacing:".06em",marginBottom:12,paddingLeft:4}}>DETALLE DE RESPUESTAS</h3>
       <div style={{display:"flex",flexDirection:"column",gap:8}}>
         {quiz.map((q,i)=>{const fb=result.feedback[i],ok=fb?.correct===true,bad=fb?.correct===false;return(
           <button key={i} className="res-row" onClick={()=>setOpen(open===i?null:i)}>
-            <div style={{width:26,height:26,borderRadius:"50%",flexShrink:0,background:ok?"rgba(16,185,129,.2)":bad?"rgba(244,63,94,.2)":"rgba(255,255,255,.05)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:ok?"#34d399":bad?"#f87171":"#475569",marginTop:1}}>{ok?"âœ“":bad?"âœ•":"~"}</div>
+            <div style={{width:26,height:26,borderRadius:"50%",flexShrink:0,background:ok?"rgba(16,185,129,.2)":bad?"rgba(244,63,94,.2)":"rgba(255,255,255,.05)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:ok?"#34d399":bad?"#f87171":"#475569",marginTop:1}}>{ok?"V":bad?"X":"~"}</div>
             <div style={{flex:1,minWidth:0}}>
               <div style={{fontSize:13,fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:open===i?"normal":"nowrap",color:"#e2e8f0",lineHeight:1.5}}>{i+1}. {q.question}</div>
               {open===i&&fb?.explanation&&<div className="fu" style={{fontSize:12,color:"#94a3b8",marginTop:8,lineHeight:1.7}}>{cleanText(fb.explanation)}</div>}
             </div>
-            <span style={{fontSize:12,color:"#334155",flexShrink:0,marginTop:2}}>{open===i?"â–²":"â–¼"}</span>
+            <span style={{fontSize:12,color:"#334155",flexShrink:0,marginTop:2}}>{open===i?"^":"v"}</span>
           </button>
         );})}
       </div>
@@ -734,14 +661,13 @@ function Results({quiz,result,onRestart,onHome}) {
 function History() {
   const results = getResults();
   return (
-    <div style={{maxWidth:680,margin:"0 auto",padding:"36px 16px 80px"}} className="fu">
+    <div style={{maxWidth:680,margin:"0 auto",padding:"36px 16px 40px"}} className="fu">
       <div style={{marginBottom:28}}>
         <h1 style={{fontSize:24,fontWeight:800,marginBottom:4,color:"#fff",letterSpacing:"-.02em"}}>Mi historial</h1>
         <p style={{color:"#475569",fontSize:13}}>{results.length} evaluaciones completadas</p>
       </div>
       {results.length===0?(
         <div className="card" style={{textAlign:"center",padding:"56px 24px"}}>
-          <div style={{fontSize:48,marginBottom:16}}>ðŸ“‹</div>
           <p style={{fontWeight:700,marginBottom:6,color:"#e2e8f0",fontSize:16}}>Sin evaluaciones aun</p>
           <p style={{color:"#475569",fontSize:13}}>Genera tu primer cuestionario para ver tu historial aqui.</p>
         </div>
@@ -750,14 +676,14 @@ function History() {
           {results.map((r,i)=>(
             <div key={i} style={{background:"#0d0d0d",border:"1.5px solid #1e1e2e",borderRadius:16,padding:"16px 20px",display:"flex",alignItems:"center",gap:16,transition:"border-color .2s"}}
               onMouseEnter={e=>e.currentTarget.style.borderColor="#2d2d3e"} onMouseLeave={e=>e.currentTarget.style.borderColor="#1e1e2e"}>
-              <div style={{width:52,height:52,borderRadius:"50%",border:`2.5px solid ${pctColor(r.pct)}`,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",flexShrink:0,background:`${pctColor(r.pct)}10`}}>
+              <div style={{width:52,height:52,borderRadius:"50%",border:"2.5px solid "+pctColor(r.pct),display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",flexShrink:0,background:pctColor(r.pct)+"10"}}>
                 <span style={{fontFamily:"'JetBrains Mono'",fontSize:14,fontWeight:700,color:pctColor(r.pct),lineHeight:1}}>{r.pct}%</span>
               </div>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{fontWeight:600,fontSize:14,marginBottom:3,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",color:"#e2e8f0"}}>{r.topic}</div>
-                <div style={{fontSize:12,color:"#475569"}}>{r.correct}/{r.total} correctas Â· {fmtDate(r.ts)}</div>
+                <div style={{fontSize:12,color:"#475569"}}>{r.correct}/{r.total} correctas - {fmtDate(r.ts)}</div>
               </div>
-              <span className={`chip ${r.pct>=75?"chip-em":r.pct>=50?"chip-am":"chip-dark"}`}>{r.pct>=75?"Excelente":r.pct>=50?"Regular":"Repasar"}</span>
+              <span className={"chip "+(r.pct>=75?"chip-em":r.pct>=50?"chip-am":"chip-dark")}>{r.pct>=75?"Excelente":r.pct>=50?"Regular":"Repasar"}</span>
             </div>
           ))}
         </div>
@@ -794,29 +720,18 @@ export default function App() {
     try {
       let content=text;
       if(mode==="image"&&imgData){
-        content=await callClaude([{role:"user",content:[{type:"image",source:{type:"base64",media_type:"image/jpeg",data:imgData}},{type:"text",text:"Transcribe y resume todo el contenido educativo visible en la imagen."}]}],"Eres un experto en educacion. Transcribe el contenido de manera clara y estructurada. Responde en espaÃ±ol.");
+        content=await callClaude([{role:"user",content:[{type:"image",source:{type:"base64",media_type:"image/jpeg",data:imgData}},{type:"text",text:"Transcribe y resume todo el contenido educativo visible en la imagen."}]}],"Eres un experto en educacion. Transcribe el contenido de manera clara y estructurada. Responde en espanol.");
       }
       setPhase(1);
-      const prompt=`Genera exactamente ${numMC} preguntas de seleccion multiple y ${numDev} preguntas de desarrollo sobre el siguiente contenido educativo.
+      const prompt="Genera exactamente "+numMC+" preguntas de seleccion multiple y "+numDev+" preguntas de desarrollo sobre el siguiente contenido educativo.\n\nContenido:\n"+content+"\n\nDevuelve SOLO un JSON valido con esta estructura exacta (sin texto adicional):\n{\"topic\":\"tema principal del contenido\",\"questions\":[\n{\"type\":\"multiple\",\"question\":\"pregunta clara y especifica\",\"options\":[\"opcion A\",\"opcion B\",\"opcion C\",\"opcion D\"],\"answer\":0,\"explanation\":\"explicacion breve de por que es correcta\",\"topic\":\"subtema\"},\n{\"type\":\"development\",\"question\":\"pregunta de desarrollo que requiera analisis\",\"answer\":\"respuesta modelo completa\",\"explanation\":\"criterios de evaluacion\",\"topic\":\"subtema\"}\n]}\n\nREGLAS: Total exacto de "+(numMC+numDev)+" preguntas. Solo tipos: multiple y development. Preguntas claras, sin ambiguedad. Opciones plausibles para las de seleccion multiple.";
 
-Contenido:
-${content}
-
-Devuelve SOLO un JSON valido con esta estructura exacta (sin texto adicional):
-{"topic":"tema principal del contenido","questions":[
-{"type":"multiple","question":"pregunta clara y especifica","options":["opcion A","opcion B","opcion C","opcion D"],"answer":0,"explanation":"explicacion breve de por que es correcta","topic":"subtema"},
-{"type":"development","question":"pregunta de desarrollo que requiera analisis","answer":"respuesta modelo completa","explanation":"criterios de evaluacion","topic":"subtema"}
-]}
-
-REGLAS: Total exacto de ${numMC+numDev} preguntas. Solo tipos: multiple y development. Preguntas claras, sin ambiguedad. Opciones plausibles para las de seleccion multiple.`;
-
-      const raw=await callClaude([{role:"user",content:prompt}],"Eres un experto en evaluacion educativa. Genera preguntas de calidad academica. Responde SOLO con JSON valido.");
+      const raw=await callClaude([{role:"user",content:prompt}],"Eres un asistente academico especializado en generar cuestionarios educativos confiables. Prioriza SIEMPRE la precision y veracidad. Cada pregunta debe tener una unica respuesta claramente correcta y verificable academicamente. Evita preguntas ambiguas. Las explicaciones deben ser breves, claras y pedagogicas. NO inventes informacion. Responde SOLO con JSON valido.");
       const parsed=parseJSON(raw);
       if(!parsed?.questions?.length) throw new Error("Error al generar");
       setTopic(parsed.topic||"Cuestionario"); setQuiz(parsed.questions);
       setPhase(2);
       let webRes=[];
-      try{const sr=await callClaude([{role:"user",content:`Busca recursos educativos sobre: "${parsed.topic}"`}],"Investigador educativo. SOLO JSON: [{\"title\":\"...\",\"url\":\"...\",\"snippet\":\"...\"}]",[{type:"web_search_20250305",name:"web_search"}]);const arr=parseJSON(sr);webRes=Array.isArray(arr)?arr:[];}catch{}
+      try{const sr=await callClaude([{role:"user",content:"Busca recursos educativos sobre: \""+parsed.topic+"\""}],"Investigador educativo. SOLO JSON: [{\"title\":\"...\",\"url\":\"...\",\"snippet\":\"...\"}]",[{type:"web_search_20250305",name:"web_search"}]);const arr=parseJSON(sr);webRes=Array.isArray(arr)?arr:[];}catch{}
       setResources(webRes); setScreen(SCREEN.QUIZ_ACTIVE);
     } catch(e) {
       console.error(e); show("Error al generar. Intenta de nuevo.","err"); setScreen(SCREEN.QUIZ_INPUT);
@@ -826,7 +741,7 @@ REGLAS: Total exacto de ${numMC+numDev} preguntas. Solo tipos: multiple y develo
   const handleFinish = r => {
     setResult(r);
     addResult({ts:Date.now(),topic,pct:Math.round((r.correctCount/quiz.length)*100),correct:r.correctCount,total:quiz.length});
-    show("Resultado guardado âœ“","ok");
+    show("Resultado guardado","ok");
     setScreen(SCREEN.RESULTS);
   };
 
@@ -836,12 +751,12 @@ REGLAS: Total exacto de ${numMC+numDev} preguntas. Solo tipos: multiple y develo
   return (
     <>
       <style>{CSS}</style>
-      <div style={{position:"fixed",top:0,left:0,right:0,height:1,background:`linear-gradient(90deg,transparent,${D.sky},#8b5cf6,transparent)`,zIndex:200}}/>
+      <div style={{position:"fixed",top:0,left:0,right:0,height:1,background:"linear-gradient(90deg,transparent,#0ea5e9,#8b5cf6,transparent)",zIndex:200}}/>
       {screen===SCREEN.AUTH && <Auth onLogin={handleLogin} showToast={show}/>}
       {user && screen!==SCREEN.AUTH && (
         <>
           <TopBar user={user} page={screen===SCREEN.HOME?"home":screen===SCREEN.HISTORY?"history":"quiz"} onNav={nav} onLogout={handleLogout}/>
-          <div style={{minHeight:"100vh",paddingTop:62,paddingBottom:40}}>
+          <div style={{minHeight:"100vh",paddingTop:62,paddingBottom:20}}>
             <div style={{maxWidth:960,margin:"0 auto",padding:"0 16px"}}>
               {isQuizScreen && screen!==SCREEN.QUIZ_LOADING && (
                 <div style={{paddingTop:32}}>
@@ -856,18 +771,12 @@ REGLAS: Total exacto de ${numMC+numDev} preguntas. Solo tipos: multiple y develo
               {screen===SCREEN.HISTORY && <History/>}
             </div>
           </div>
+          <Footer/>
         </>
       )}
       {Toast}
-      {user && screen!==SCREEN.AUTH && (
-        <div style={{textAlign:"center",padding:"20px 16px",borderTop:"1px solid #0f0f1a",marginTop:"auto"}}>
-          <p style={{fontSize:11,color:"#334155",fontWeight:500}}>Â© 2025 EduQuiz IA. Todos los derechos reservados.</p>
-        </div>
-      )}
     </>
   );
 }
-
-
 
 
