@@ -294,7 +294,7 @@ function Auth({onLogin, showToast}) {
           </button>
           {tab==="login"&&<div style={{textAlign:"center",marginTop:16}}><button className="btn-ghost" style={{fontSize:13}} onClick={()=>setTab("register")}>No tienes cuenta? Registrate gratis</button></div>}
         </div>
-        <p style={{textAlign:"center,color:#334155,fontSize:11,marginTop:20}}>EduQuiz IA — Plataforma educativa con inteligencia artificial</p><p style={{textAlign:center,color:#334155,fontSize:11,marginTop:8}}>© 2026 EduQuiz IA. Todos los derechos reservados.</p>
+        <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:20}}>EduQuiz IA - Plataforma educativa con inteligencia artificial</p><p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:8}}>© 2026 EduQuiz IA. Todos los derechos reservados.</p>
       </div>
     </div>
   );
@@ -867,6 +867,7 @@ REGLAS: Total exacto de ${numMC+numDev} preguntas. Solo tipos: multiple y develo
     </>
   );
 }
+
 
 
 
