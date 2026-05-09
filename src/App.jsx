@@ -133,8 +133,8 @@ const addResult = r => { const arr = [r, ...getResults()].slice(0,100); LS.set(S
 
 const API_KEY = import.meta.env.VITE_ANTHROPIC_KEY;
 
-async function callClaude(messages, system, tools=null) {
-  const body = { model:"claude-haiku-4-5-20251001", max_tokens:4000, system, messages };
+async function callClaude(messages, system, tools=null, model="claude-haiku-4-5-20251001") {
+  const body = { model, max_tokens:4000, system, messages };
   if (tools) body.tools = tools;
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method:"POST",
@@ -149,6 +149,9 @@ async function callClaude(messages, system, tools=null) {
   const data = await res.json();
   return (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
 }
+
+const HAIKU = "claude-haiku-4-5-20251001";
+const SONNET = "claude-sonnet-4-20250514";
 
 function parseJSON(raw) { try { return JSON.parse(raw.replace(/```json|```/g,"").trim()); } catch { return null; } }
 function parseFeedback(raw) {
@@ -482,14 +485,38 @@ function Loading({phase}) {
   );
 }
 
-function FeedbackCard({fb}) {
+function ScoreBadge({score}) {
+  const level = score<=1?"Insuficiente":score===2?"Basico":score<=4?"Bueno":"Excelente";
+  const color = score<=1?D.ro:score===2?D.am:score<=4?D.sky:D.em;
+  return (
+    <div style={{display:"flex",alignItems:"center",gap:12,padding:"14px 18px",borderRadius:14,background:color+"15",border:"1px solid "+color+"40",marginBottom:10}}>
+      <div style={{textAlign:"center",minWidth:60}}>
+        <div style={{fontFamily:"'JetBrains Mono'",fontSize:28,fontWeight:700,color,lineHeight:1}}>{score}<span style={{fontSize:14,color:"#475569"}}>/5</span></div>
+        <div style={{fontSize:10,color:"#475569",marginTop:2,fontWeight:600}}>PUNTAJE</div>
+      </div>
+      <div style={{flex:1}}>
+        <div style={{fontWeight:700,fontSize:14,color}}>{level}</div>
+        <div style={{fontSize:11,color:"#475569",marginTop:2}}>Evaluacion de desarrollo</div>
+      </div>
+    </div>
+  );
+}
+
+function FeedbackCard({fb, source}) {
   if(!fb) return null;
+  const sourceBlock = source ? (
+    <div style={{padding:"8px 12px",borderRadius:10,background:"rgba(139,92,246,.08)",border:"1px solid rgba(139,92,246,.2)",marginTop:8}}>
+      <span style={{fontSize:10,fontWeight:700,color:"#a78bfa",letterSpacing:".06em"}}>FUENTE SUGERIDA: </span>
+      <span style={{fontSize:11,color:"#94a3b8"}}>{source}</span>
+    </div>
+  ) : null;
   if(fb.correct===true) return (
     <div className="fu" style={{marginTop:16}}>
       <div className="fb-section fb-strengths">
         <div className="fb-title" style={{color:"#34d399"}}>Respuesta Correcta</div>
         <p className="fb-text">{cleanText(fb.explanation)}</p>
       </div>
+      {sourceBlock}
     </div>
   );
   if(fb.correct===false) return (
@@ -498,16 +525,19 @@ function FeedbackCard({fb}) {
         <div className="fb-title" style={{color:"#fbbf24"}}>Respuesta Incorrecta</div>
         <p className="fb-text">{cleanText(fb.explanation)}</p>
       </div>
+      {sourceBlock}
     </div>
   );
   const parsed = fb.parsed || {};
   return (
     <div className="fu" style={{marginTop:16,display:"flex",flexDirection:"column",gap:8}}>
+      {fb.isScored && parsed.score!==undefined && <ScoreBadge score={parsed.score}/>}
       {parsed.strengths?.length>0&&(<div className="fb-section fb-strengths"><div className="fb-title" style={{color:"#34d399"}}>Fortalezas</div>{parsed.strengths.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>{cleanText(s)}</p>)}</div>)}
       {parsed.improve?.length>0&&(<div className="fb-section fb-improve"><div className="fb-title" style={{color:"#fbbf24"}}>Aspectos a mejorar</div>{parsed.improve.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>{cleanText(s)}</p>)}</div>)}
-      {parsed.recommendations?.length>0&&(<div className="fb-section fb-reco"><div className="fb-title" style={{color:"#38bdf8"}}>Recomendaciones</div>{parsed.recommendations.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>{cleanText(s)}</p>)}</div>)}
+      {parsed.recommendation&&(<div className="fb-section fb-reco"><div className="fb-title" style={{color:"#38bdf8"}}>Recomendacion de estudio</div><p className="fb-text">{cleanText(parsed.recommendation)}</p></div>)}
       {parsed.expected&&(<div className="fb-section fb-answer"><div className="fb-title" style={{color:"#a78bfa"}}>Respuesta esperada</div><p className="fb-text">{cleanText(parsed.expected)}</p></div>)}
-      {!parsed.strengths&&!parsed.improve&&!parsed.recommendations&&!parsed.expected&&(<div className="fb-section fb-reco"><div className="fb-title" style={{color:"#38bdf8"}}>Retroalimentacion</div><p className="fb-text">{cleanText(fb.explanation)}</p></div>)}
+      {!parsed.strengths&&!parsed.improve&&!parsed.recommendation&&!parsed.expected&&(<div className="fb-section fb-reco"><div className="fb-title" style={{color:"#38bdf8"}}>Retroalimentacion</div><p className="fb-text">{cleanText(fb.explanation)}</p></div>)}
+      {sourceBlock}
     </div>
   );
 }
@@ -525,9 +555,14 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
     if(!devText.trim()||checking)return;
     setChecking(true);setAns(cur,devText);
     try{
-      const res=await callClaude([{role:"user",content:"Pregunta: \""+q.question+"\"\nRespuesta del estudiante: \""+devText+"\"\nRespuesta esperada: \""+q.answer+"\"\n\nEvalua la respuesta y devuelve SOLO un JSON:\n{\"strengths\":[\"...\"],\"improve\":[\"...\"],\"recommendations\":[\"...\"],\"expected\":\"...\"}\nSe breve y pedagogico en espanol. Maximo 2 items por campo."}],"Eres un profesor evaluador experto. Responde SOLO con JSON valido.");
+      const res=await callClaude([{role:"user",content:"Pregunta: \""+q.question+"\"
+Respuesta del estudiante: \""+devText+"\"
+Respuesta esperada: \""+q.answer+"\"
+
+Evalua con escala 0-5:\n0=incorrecta, 1=muy incompleta, 2=parcialmente correcta, 3=correcta basica, 4=correcta y explicada, 5=excelente\n\nDevuelve SOLO JSON:\n{\"score\":0,\"level\":\"Insuficiente\",\"strengths\":[\"...\"],\"improve\":[\"...\"],\"expected\":\"...\",\"recommendation\":\"...\"}
+Niveles: 0-1=Insuficiente, 2=Basico, 3-4=Bueno, 5=Excelente. Max 2 items por campo."}],"Profesor evaluador experto. Evalua con criterio pedagogico justo. Responde SOLO con JSON valido.",null,SONNET);
       const parsed=parseFeedback(res);
-      setFB(cur,{correct:null,explanation:res,parsed});
+      setFB(cur,{correct:null,explanation:res,parsed,isScored:true});
     }
     catch{setFB(cur,{correct:null,explanation:q.explanation,parsed:{expected:q.explanation}});}
     setChecking(false);
@@ -580,7 +615,7 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
             </button>}
           </div>
         )}
-        <FeedbackCard fb={fb}/>
+        <FeedbackCard fb={fb} source={q.source}/>
       </div>
       <div className="sticky-nav">
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",maxWidth:720,margin:"0 auto"}}>
@@ -749,8 +784,8 @@ export default function App() {
         content=await callClaude([{role:"user",content:[{type:"image",source:{type:"base64",media_type:"image/jpeg",data:imgData}},{type:"text",text:"Transcribe y resume todo el contenido educativo visible en la imagen."}]}],"Eres un experto en educacion. Transcribe el contenido de manera clara. Responde en espanol.");
       }
       setPhase(1);
-      const prompt="Genera exactamente "+numMC+" preguntas de seleccion multiple y "+numDev+" preguntas de desarrollo sobre el siguiente contenido educativo.\n\nContenido:\n"+content+"\n\nDevuelve SOLO un JSON valido:\n{\"topic\":\"tema principal\",\"questions\":[\n{\"type\":\"multiple\",\"question\":\"...\",\"options\":[\"A\",\"B\",\"C\",\"D\"],\"answer\":0,\"explanation\":\"...\",\"topic\":\"subtema\"},\n{\"type\":\"development\",\"question\":\"...\",\"answer\":\"respuesta modelo\",\"explanation\":\"criterios\",\"topic\":\"subtema\"}\n]}\n\nTotal exacto: "+(numMC+numDev)+" preguntas.";
-      const raw=await callClaude([{role:"user",content:prompt}],"Eres un asistente academico especializado. Prioriza precision y veracidad. Cada pregunta debe tener una unica respuesta claramente correcta. No inventes informacion. Responde SOLO con JSON valido.");
+      const prompt="Genera exactamente "+numMC+" preguntas de seleccion multiple y "+numDev+" preguntas de desarrollo sobre el siguiente contenido educativo.\n\nContenido:\n"+content+"\n\nDevuelve SOLO un JSON valido:\n{\"topic\":\"tema principal\",\"questions\":[\n{\"type\":\"multiple\",\"question\":\"pregunta con una sola respuesta correcta\",\"options\":[\"A\",\"B\",\"C\",\"D\"],\"answer\":0,\"explanation\":\"explicacion factualmente correcta\",\"topic\":\"subtema\",\"source\":\"fuente confiable o Fuente no verificada. Revisar con material de estudio.\"},\n{\"type\":\"development\",\"question\":\"pregunta que requiera analisis\",\"answer\":\"respuesta modelo completa\",\"explanation\":\"criterios de evaluacion\",\"topic\":\"subtema\",\"source\":\"fuente confiable o Fuente no verificada. Revisar con material de estudio.\"}\n]}\n\nREGLAS:\n1. Una sola respuesta correcta por pregunta.\n2. NO inventes informacion ni fechas.\n3. Para source usa SOLO: Curriculo Nacional MINEDUC, Khan Academy, Britannica, NASA, NIH, UNESCO, Biblioteca Nacional, o escribe: Fuente no verificada. Revisar con material de estudio.\n4. Total exacto: "+(numMC+numDev)+" preguntas.";
+      const raw=await callClaude([{role:"user",content:prompt}],"Eres un asistente academico especializado en educacion chilena. Prioriza SIEMPRE precision y veracidad factual. Verifica que cada respuesta sea correcta. No inventes informacion. Si una pregunta tiene riesgo de error, simplificala. Responde SOLO con JSON valido.",null,HAIKU);
       const parsed=parseJSON(raw);
       if(!parsed?.questions?.length) throw new Error("Error al generar");
       setTopic(parsed.topic||"Cuestionario"); setQuiz(parsed.questions);
@@ -812,5 +847,6 @@ export default function App() {
     </>
   );
 }
+
 
 
