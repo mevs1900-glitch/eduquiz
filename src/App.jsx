@@ -1,11 +1,26 @@
 import { useState, useRef, useCallback, useEffect } from "react";
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAOSc1f0ZH9BvjHIiy40syoIuIJq6ot7U0",
+  authDomain: "eduquizproia.firebaseapp.com",
+  projectId: "eduquizproia",
+  storageBucket: "eduquizproia.firebasestorage.app",
+  messagingSenderId: "555236721804",
+  appId: "1:555236721804:web:86b955e642738cfcfb27a9"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const googleProvider = new GoogleAuthProvider();
 
 const D = {
   bg:"#000",s1:"#0a0a0a",card:"#111",border:"#1e1e1e",
   sky:"#0ea5e9",skydim:"rgba(14,165,233,.1)",skyglow:"rgba(14,165,233,.25)",
   em:"#10b981",emdim:"rgba(16,185,129,.1)",
   ro:"#f43f5e",rodim:"rgba(244,63,94,.1)",
-  am:"#f59e0b",amdim:"rgba(245,158,11,.1)",
+  am:"#f59e0b",
   pu:"#8b5cf6",
   text:"#fff",sub:"#e2e8f0",muted:"#94a3b8",line:"#1e1e2e",
 };
@@ -37,6 +52,8 @@ input.err{border-color:#f43f5e}
 .btn-sky{background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;box-shadow:0 4px 24px rgba(14,165,233,.35)}
 .btn-sky:hover{transform:translateY(-1px);box-shadow:0 8px 32px rgba(14,165,233,.45)}
 .btn-sky:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-google{background:#fff;color:#1f1f1f;border:none;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.btn-google:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,0,0,.4)}
 .btn-outline{background:transparent;color:#e2e8f0;border:1.5px solid #1e1e2e}
 .btn-outline:hover{border-color:#0ea5e9;color:#0ea5e9;background:rgba(14,165,233,.06)}
 .btn-ghost{background:transparent;color:#94a3b8;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;font-size:13px;padding:8px;transition:all .2s;border-radius:8px}
@@ -81,9 +98,6 @@ input.err{border-color:#f43f5e}
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#0d0d0d;border:1.5px solid #1e1e2e;border-radius:14px;padding:14px 22px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;z-index:999;box-shadow:0 16px 48px rgba(0,0,0,.6);animation:fadeUp .35s ease;white-space:nowrap}
 .stat-box{background:#0a0a0f;border:1.5px solid #1e1e2e;border-radius:16px;padding:20px;transition:all .2s}
 .stat-box:hover{border-color:#2d2d3e}
-.nav-btn{background:transparent;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;font-size:13px;padding:8px 14px;border-radius:10px;transition:all .2s;color:#94a3b8}
-.nav-btn:hover{color:#fff;background:rgba(255,255,255,.06)}
-.nav-btn.active{color:#0ea5e9;background:rgba(14,165,233,.1)}
 .res-row{background:#0d0d0d;border:1.5px solid #1e1e2e;border-radius:14px;padding:15px 18px;display:flex;align-items:flex-start;gap:13px;cursor:pointer;transition:all .2s;width:100%;text-align:left;font-family:'Inter',sans-serif}
 .res-row:hover{border-color:#2d2d3e;background:#111}
 .fb-section{border-radius:14px;padding:16px 18px;margin-bottom:10px}
@@ -97,6 +111,9 @@ input.err{border-color:#f43f5e}
 input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:4px;background:#1e1e2e;outline:none}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#0ea5e9,#0284c7);box-shadow:0 0 12px rgba(14,165,233,.4);cursor:pointer}
 .footer{text-align:center;padding:20px 16px;border-top:1px solid #0f0f1a}
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0}
+.divider-line{flex:1;height:1px;background:#1e1e2e}
+.divider-text{font-size:12px;color:#475569;font-weight:500}
 @media(max-width:640px){
   .card,.glass{padding:18px;border-radius:16px}
   .modal{margin:0;border-radius:20px 20px 0 0;position:fixed;bottom:0;left:0;right:0;max-width:100%;max-height:90vh;overflow-y:auto}
@@ -106,16 +123,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 }
 `;
 
-const SK = { user:"eq:user", users:"eq:users", results:"eq:results" };
+const SK = { results:"eq:results" };
 const LS = {
   get: k => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch { return null; } },
   set: (k,v) => { try { localStorage.setItem(k,JSON.stringify(v)); } catch {} },
-  del: k => { try { localStorage.removeItem(k); } catch {} },
 };
-const getUsers = () => LS.get(SK.users) || {};
-const getMe = () => LS.get(SK.user);
-const setMe = u => LS.set(SK.user, u);
-const logout = () => LS.del(SK.user);
 const getResults = () => LS.get(SK.results) || [];
 const addResult = r => { const arr = [r, ...getResults()].slice(0,100); LS.set(SK.results, arr); };
 
@@ -202,37 +214,29 @@ function StepBar({step}) {
   );
 }
 
-function Auth({onLogin, showToast}) {
-  const [tab,setTab] = useState("login");
-  const [f,setF] = useState({name:"",email:"",pass:"",confirm:""});
-  const [errs,setErrs] = useState({});
+function Auth({onLogin}) {
   const [loading,setLoading] = useState(false);
-  const set = (k,v) => { setF(p=>({...p,[k]:v})); setErrs(p=>({...p,[k]:""})); };
-  const validate = () => {
-    const e={};
-    if(tab==="register"&&!f.name.trim()) e.name="Ingresa tu nombre";
-    if(!f.email.includes("@")) e.email="Email invalido";
-    if(f.pass.length<6) e.pass="Minimo 6 caracteres";
-    if(tab==="register"&&f.pass!==f.confirm) e.confirm="Las contrasenas no coinciden";
-    setErrs(e); return Object.keys(e).length===0;
-  };
-  const submit = async () => {
-    if(!validate()) return;
+  const [error,setError] = useState("");
+
+  const loginWithGoogle = async () => {
     setLoading(true);
-    await new Promise(r=>setTimeout(r,600));
-    const users = getUsers();
-    if(tab==="register") {
-      if(users[f.email.toLowerCase()]) { setErrs({email:"Email ya registrado"}); setLoading(false); return; }
-      const u={name:f.name.trim(),email:f.email.toLowerCase(),pass:f.pass,joinedAt:Date.now()};
-      users[f.email.toLowerCase()]=u; LS.set(SK.users,users); setMe(u);
-      showToast("Bienvenido/a, "+u.name+"!","ok"); onLogin(u);
-    } else {
-      const u=users[f.email.toLowerCase()];
-      if(!u||u.pass!==f.pass) { setErrs({pass:"Email o contrasena incorrectos"}); setLoading(false); return; }
-      setMe(u); showToast("Hola de nuevo, "+u.name+"!","ok"); onLogin(u);
+    setError("");
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const u = result.user;
+      onLogin({
+        name: u.displayName || "Usuario",
+        email: u.email,
+        photo: u.photoURL,
+        uid: u.uid,
+      });
+    } catch(e) {
+      setError("No se pudo iniciar sesion. Intenta de nuevo.");
+      console.error(e);
     }
     setLoading(false);
   };
+
   return (
     <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:20,position:"relative",overflow:"hidden"}}>
       <div style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:0}}>
@@ -241,20 +245,29 @@ function Auth({onLogin, showToast}) {
       </div>
       <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:"linear-gradient(90deg,transparent,#0ea5e9,#8b5cf6,transparent)"}}/>
       <div className="fu" style={{width:"100%",maxWidth:420,position:"relative",zIndex:1}}>
-        <div style={{textAlign:"center",marginBottom:32}}><Logo size={48}/></div>
+        <div style={{textAlign:"center",marginBottom:40}}><Logo size={52}/></div>
         <div className="glass">
-          <div className="tab-bar">
-            <button className={"tab "+(tab==="login"?"on":"")} onClick={()=>setTab("login")}>Iniciar sesion</button>
-            <button className={"tab "+(tab==="register"?"on":"")} onClick={()=>setTab("register")}>Crear cuenta</button>
+          <div style={{textAlign:"center",marginBottom:28}}>
+            <h2 style={{fontSize:20,fontWeight:700,color:"#fff",marginBottom:8}}>Bienvenido a EduQuiz IA</h2>
+            <p style={{fontSize:13,color:"#475569"}}>Genera cuestionarios educativos con inteligencia artificial</p>
           </div>
-          {tab==="register"&&(<div className="field"><label>Nombre completo</label><input type="text" className={errs.name?"err":""} placeholder="Tu nombre" value={f.name} onChange={e=>set("name",e.target.value)}/>{errs.name&&<div className="field-err">{errs.name}</div>}</div>)}
-          <div className="field"><label>Correo electronico</label><input type="email" className={errs.email?"err":""} placeholder="tu@email.com" value={f.email} onChange={e=>set("email",e.target.value)}/>{errs.email&&<div className="field-err">{errs.email}</div>}</div>
-          <div className="field"><label>Contrasena</label><input type="password" className={errs.pass?"err":""} placeholder="Minimo 6 caracteres" value={f.pass} onChange={e=>set("pass",e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>{errs.pass&&<div className="field-err">{errs.pass}</div>}</div>
-          {tab==="register"&&(<div className="field"><label>Confirmar contrasena</label><input type="password" className={errs.confirm?"err":""} placeholder="Repite tu contrasena" value={f.confirm} onChange={e=>set("confirm",e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>{errs.confirm&&<div className="field-err">{errs.confirm}</div>}</div>)}
-          <button className="btn btn-sky btn-full" onClick={submit} disabled={loading} style={{marginTop:6,height:48}}>
-            {loading?<><div className="spinner" style={{borderTopColor:"#fff"}}/>Procesando...</>:tab==="login"?"Ingresar a EduQuiz IA":"Crear mi cuenta gratis"}
+          <button className="btn btn-google btn-full" onClick={loginWithGoogle} disabled={loading} style={{height:52,fontSize:15,borderRadius:14}}>
+            {loading?(
+              <><div className="spinner" style={{borderTopColor:"#1f1f1f",borderColor:"#ddd"}}/>Iniciando sesion...</>
+            ):(
+              <>
+                <svg width="20" height="20" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Continuar con Google
+              </>
+            )}
           </button>
-          {tab==="login"&&<div style={{textAlign:"center",marginTop:16}}><button className="btn-ghost" style={{fontSize:13}} onClick={()=>setTab("register")}>No tienes cuenta? Registrate gratis</button></div>}
+          {error&&<p style={{textAlign:"center",color:D.ro,fontSize:12,marginTop:12}}>{error}</p>}
+          <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:20}}>Sin contrasenas. Sin registro. Solo un clic.</p>
         </div>
         <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:16}}>EduQuiz IA - Plataforma educativa con inteligencia artificial</p>
         <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:6}}>&copy; 2026 EduQuiz IA. Todos los derechos reservados.</p>
@@ -263,7 +276,7 @@ function Auth({onLogin, showToast}) {
   );
 }
 
-function TopBar({user,page,onNav,onLogout}) {
+function TopBar({user,onNav,onLogout}) {
   const [isMobile, setIsMobile] = useState(window.innerWidth<=640);
   useEffect(()=>{ const h=()=>setIsMobile(window.innerWidth<=640); window.addEventListener("resize",h); return()=>window.removeEventListener("resize",h); },[]);
   return (
@@ -273,7 +286,11 @@ function TopBar({user,page,onNav,onLogout}) {
         <Logo size={28} compact={isMobile}/>
         <div style={{flex:1}}/>
         <div style={{display:"flex",alignItems:"center",gap:8}}>
-          <div style={{width:30,height:30,borderRadius:9,background:"linear-gradient(135deg,rgba(14,165,233,.2),rgba(139,92,246,.2))",border:"1px solid rgba(14,165,233,.15)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:"#38bdf8",cursor:"pointer"}} onClick={()=>onNav("profile")}>{user.name.charAt(0).toUpperCase()}</div>
+          {user.photo?(
+            <img src={user.photo} alt={user.name} style={{width:30,height:30,borderRadius:9,objectFit:"cover",border:"1px solid rgba(14,165,233,.3)",cursor:"pointer"}} onClick={()=>onNav("profile")}/>
+          ):(
+            <div style={{width:30,height:30,borderRadius:9,background:"linear-gradient(135deg,rgba(14,165,233,.2),rgba(139,92,246,.2))",border:"1px solid rgba(14,165,233,.15)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:"#38bdf8",cursor:"pointer"}} onClick={()=>onNav("profile")}>{user.name.charAt(0).toUpperCase()}</div>
+          )}
           <button className="btn-ghost" onClick={onLogout} style={{fontSize:12,padding:"5px 10px",color:"#64748b"}}>Salir</button>
         </div>
       </div>
@@ -417,7 +434,7 @@ function Loading({phase}) {
   const phases=["Analizando el contenido...","Generando preguntas con IA...","Preparando tu cuestionario..."];
   return (
     <div style={{maxWidth:380,margin:"80px auto",textAlign:"center"}} className="fi">
-      <div style={{width:72,height:72,borderRadius:20,background:"linear-gradient(135deg,rgba(14,165,233,.15),rgba(139,92,246,.15))",border:"1px solid rgba(14,165,233,.2)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 24px",fontSize:30,animation:"pulse 1.8s infinite"}}>IA</div>
+      <div style={{width:72,height:72,borderRadius:20,background:"linear-gradient(135deg,rgba(14,165,233,.15),rgba(139,92,246,.15))",border:"1px solid rgba(14,165,233,.2)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 24px",fontSize:24,fontWeight:800,color:"#0ea5e9",animation:"pulse 1.8s infinite"}}>IA</div>
       <h2 style={{fontSize:20,fontWeight:700,marginBottom:8,color:"#fff"}}>{phases[phase]}</h2>
       <p style={{color:"#475569",fontSize:14,marginBottom:40}}>La IA esta trabajando para ti...</p>
       <div style={{display:"flex",flexDirection:"column",gap:14,textAlign:"left"}}>
@@ -455,36 +472,11 @@ function FeedbackCard({fb}) {
   const parsed = fb.parsed || {};
   return (
     <div className="fu" style={{marginTop:16,display:"flex",flexDirection:"column",gap:8}}>
-      {parsed.strengths?.length>0&&(
-        <div className="fb-section fb-strengths">
-          <div className="fb-title" style={{color:"#34d399"}}>Fortalezas</div>
-          {parsed.strengths.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>{cleanText(s)}</p>)}
-        </div>
-      )}
-      {parsed.improve?.length>0&&(
-        <div className="fb-section fb-improve">
-          <div className="fb-title" style={{color:"#fbbf24"}}>Aspectos a mejorar</div>
-          {parsed.improve.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>{cleanText(s)}</p>)}
-        </div>
-      )}
-      {parsed.recommendations?.length>0&&(
-        <div className="fb-section fb-reco">
-          <div className="fb-title" style={{color:"#38bdf8"}}>Recomendaciones</div>
-          {parsed.recommendations.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>{cleanText(s)}</p>)}
-        </div>
-      )}
-      {parsed.expected&&(
-        <div className="fb-section fb-answer">
-          <div className="fb-title" style={{color:"#a78bfa"}}>Respuesta esperada</div>
-          <p className="fb-text">{cleanText(parsed.expected)}</p>
-        </div>
-      )}
-      {!parsed.strengths&&!parsed.improve&&!parsed.recommendations&&!parsed.expected&&(
-        <div className="fb-section fb-reco">
-          <div className="fb-title" style={{color:"#38bdf8"}}>Retroalimentacion</div>
-          <p className="fb-text">{cleanText(fb.explanation)}</p>
-        </div>
-      )}
+      {parsed.strengths?.length>0&&(<div className="fb-section fb-strengths"><div className="fb-title" style={{color:"#34d399"}}>Fortalezas</div>{parsed.strengths.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>{cleanText(s)}</p>)}</div>)}
+      {parsed.improve?.length>0&&(<div className="fb-section fb-improve"><div className="fb-title" style={{color:"#fbbf24"}}>Aspectos a mejorar</div>{parsed.improve.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>{cleanText(s)}</p>)}</div>)}
+      {parsed.recommendations?.length>0&&(<div className="fb-section fb-reco"><div className="fb-title" style={{color:"#38bdf8"}}>Recomendaciones</div>{parsed.recommendations.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>{cleanText(s)}</p>)}</div>)}
+      {parsed.expected&&(<div className="fb-section fb-answer"><div className="fb-title" style={{color:"#a78bfa"}}>Respuesta esperada</div><p className="fb-text">{cleanText(parsed.expected)}</p></div>)}
+      {!parsed.strengths&&!parsed.improve&&!parsed.recommendations&&!parsed.expected&&(<div className="fb-section fb-reco"><div className="fb-title" style={{color:"#38bdf8"}}>Retroalimentacion</div><p className="fb-text">{cleanText(fb.explanation)}</p></div>)}
     </div>
   );
 }
@@ -502,7 +494,7 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
     if(!devText.trim()||checking)return;
     setChecking(true);setAns(cur,devText);
     try{
-      const res=await callClaude([{role:"user",content:"Pregunta: \""+q.question+"\"\nRespuesta del estudiante: \""+devText+"\"\nRespuesta esperada: \""+q.answer+"\"\n\nEvalua la respuesta y devuelve SOLO un JSON con esta estructura exacta:\n{\"strengths\":[\"...\"],\"improve\":[\"...\"],\"recommendations\":[\"...\"],\"expected\":\"...\"}\nSe breve, pedagogico y en espanol. Maximo 2 items por campo."}],"Eres un profesor evaluador experto. Responde SOLO con JSON valido, sin texto adicional.");
+      const res=await callClaude([{role:"user",content:"Pregunta: \""+q.question+"\"\nRespuesta del estudiante: \""+devText+"\"\nRespuesta esperada: \""+q.answer+"\"\n\nEvalua la respuesta y devuelve SOLO un JSON:\n{\"strengths\":[\"...\"],\"improve\":[\"...\"],\"recommendations\":[\"...\"],\"expected\":\"...\"}\nSe breve y pedagogico en espanol. Maximo 2 items por campo."}],"Eres un profesor evaluador experto. Responde SOLO con JSON valido.");
       const parsed=parseFeedback(res);
       setFB(cur,{correct:null,explanation:res,parsed});
     }
@@ -518,7 +510,7 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
             <button className="btn-ghost" onClick={onRestart} style={{padding:"6px 12px",fontSize:13}}>Salir</button>
-            <span style={{color:"#475569",fontSize:13,fontWeight:500}}>Pregunta <span style={{color:"#e2e8f0",fontWeight:700}}>{cur+1}</span> de <span style={{color:"#e2e8f0",fontWeight:700}}>{quiz.length}</span></span>
+            <span style={{color:"#475569",fontSize:13}}>Pregunta <span style={{color:"#e2e8f0",fontWeight:700}}>{cur+1}</span> de <span style={{color:"#e2e8f0",fontWeight:700}}>{quiz.length}</span></span>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:12}}>
             <span style={{color:"#34d399",fontWeight:700,fontSize:13}}>{correctCount} correctas</span>
@@ -551,7 +543,7 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
         )}
         {q.type==="development"&&(
           <div>
-            <textarea rows={5} placeholder="Escribe aqui tu respuesta de manera detallada..." value={devText} onChange={e=>setDevText(e.target.value)} disabled={answered} style={{marginBottom:12,lineHeight:1.7}}/>
+            <textarea rows={5} placeholder="Escribe aqui tu respuesta..." value={devText} onChange={e=>setDevText(e.target.value)} disabled={answered} style={{marginBottom:12,lineHeight:1.7}}/>
             {!answered&&<button className="btn btn-sky" onClick={handleDev} disabled={!devText.trim()||checking} style={{height:44}}>
               {checking?<><div className="spinner" style={{borderTopColor:"#fff"}}/>Evaluando con IA...</>:"Verificar mi respuesta"}
             </button>}
@@ -609,7 +601,7 @@ function Results({quiz,result,onRestart,onHome}) {
           <span style={{fontFamily:"'JetBrains Mono'",fontSize:32,fontWeight:700,color:clr,lineHeight:1}}>{pct}%</span>
           <span style={{fontSize:11,color:"#475569",marginTop:4}}>{result.correctCount}/{total}</span>
         </div>
-        <h2 style={{fontSize:24,fontWeight:800,color:clr,marginBottom:8,letterSpacing:"-.02em"}}>{grade}</h2>
+        <h2 style={{fontSize:24,fontWeight:800,color:clr,marginBottom:8}}>{grade}</h2>
         <p style={{color:"#94a3b8",fontSize:14,marginBottom:4}}>{result.correctCount} de {total} preguntas correctas</p>
         <p style={{color:"#64748b",fontSize:13,fontStyle:"italic",marginBottom:20}}>{motivational}</p>
         <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap",marginBottom:20}}>
@@ -618,25 +610,15 @@ function Results({quiz,result,onRestart,onHome}) {
         </div>
         {(weakTopics.length>0||strongTopics.length>0)&&(
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,textAlign:"left"}}>
-            {strongTopics.length>0&&(
-              <div style={{padding:"14px 16px",borderRadius:14,background:"rgba(16,185,129,.08)",border:"1px solid rgba(16,185,129,.2)"}}>
-                <div style={{fontSize:11,fontWeight:700,color:"#34d399",letterSpacing:".06em",marginBottom:8}}>FORTALEZAS</div>
-                {strongTopics.map((t,i)=><div key={i} style={{fontSize:12,color:"#86efac",marginTop:i>0?4:0}}>{t}</div>)}
-              </div>
-            )}
-            {weakTopics.length>0&&(
-              <div style={{padding:"14px 16px",borderRadius:14,background:"rgba(245,158,11,.08)",border:"1px solid rgba(245,158,11,.2)"}}>
-                <div style={{fontSize:11,fontWeight:700,color:"#fbbf24",letterSpacing:".06em",marginBottom:8}}>REFORZAR</div>
-                {weakTopics.map((t,i)=><div key={i} style={{fontSize:12,color:"#fde68a",marginTop:i>0?4:0}}>{t}</div>)}
-              </div>
-            )}
+            {strongTopics.length>0&&(<div style={{padding:"14px 16px",borderRadius:14,background:"rgba(16,185,129,.08)",border:"1px solid rgba(16,185,129,.2)"}}><div style={{fontSize:11,fontWeight:700,color:"#34d399",letterSpacing:".06em",marginBottom:8}}>FORTALEZAS</div>{strongTopics.map((t,i)=><div key={i} style={{fontSize:12,color:"#86efac",marginTop:i>0?4:0}}>{t}</div>)}</div>)}
+            {weakTopics.length>0&&(<div style={{padding:"14px 16px",borderRadius:14,background:"rgba(245,158,11,.08)",border:"1px solid rgba(245,158,11,.2)"}}><div style={{fontSize:11,fontWeight:700,color:"#fbbf24",letterSpacing:".06em",marginBottom:8}}>REFORZAR</div>{weakTopics.map((t,i)=><div key={i} style={{fontSize:12,color:"#fde68a",marginTop:i>0?4:0}}>{t}</div>)}</div>)}
           </div>
         )}
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(110px,1fr))",gap:10,marginTop:20}}>
           {[{type:"multiple",label:"Seleccion",color:"#38bdf8"},{type:"development",label:"Desarrollo",color:"#fbbf24"}].filter(s=>typeCount(s.type)>0).map(s=>(
             <div key={s.type} className="stat-box" style={{textAlign:"center"}}>
               <span style={{fontFamily:"'JetBrains Mono'",fontSize:20,fontWeight:600,color:s.color}}>{typeOk(s.type)}/{typeCount(s.type)}</span>
-              <span style={{fontSize:10,color:"#475569",marginTop:4,display:"block",letterSpacing:".04em"}}>{s.label.toUpperCase()}</span>
+              <span style={{fontSize:10,color:"#475569",marginTop:4,display:"block"}}>{s.label.toUpperCase()}</span>
             </div>
           ))}
         </div>
@@ -663,7 +645,7 @@ function History() {
   return (
     <div style={{maxWidth:680,margin:"0 auto",padding:"36px 16px 40px"}} className="fu">
       <div style={{marginBottom:28}}>
-        <h1 style={{fontSize:24,fontWeight:800,marginBottom:4,color:"#fff",letterSpacing:"-.02em"}}>Mi historial</h1>
+        <h1 style={{fontSize:24,fontWeight:800,marginBottom:4,color:"#fff"}}>Mi historial</h1>
         <p style={{color:"#475569",fontSize:13}}>{results.length} evaluaciones completadas</p>
       </div>
       {results.length===0?(
@@ -697,6 +679,7 @@ const SCREEN = { AUTH:0, HOME:1, QUIZ_INPUT:2, QUIZ_LOADING:3, QUIZ_ACTIVE:4, RE
 export default function App() {
   const [user,setUser] = useState(null);
   const [screen,setScreen] = useState(SCREEN.AUTH);
+  const [loading,setLoading] = useState(true);
   const [phase,setPhase] = useState(0);
   const [quiz,setQuiz] = useState(null);
   const [resources,setResources] = useState([]);
@@ -704,10 +687,22 @@ export default function App() {
   const [topic,setTopic] = useState("");
   const {Toast,show} = useToast();
 
-  useEffect(()=>{ const u=getMe(); if(u){setUser(u);setScreen(SCREEN.HOME);} },[]);
+  useEffect(()=>{
+    const unsub = onAuthStateChanged(auth, u => {
+      if(u) {
+        setUser({name:u.displayName||"Usuario",email:u.email,photo:u.photoURL,uid:u.uid});
+        setScreen(SCREEN.HOME);
+      } else {
+        setUser(null);
+        setScreen(SCREEN.AUTH);
+      }
+      setLoading(false);
+    });
+    return ()=>unsub();
+  },[]);
 
   const handleLogin = u => { setUser(u); setScreen(SCREEN.HOME); };
-  const handleLogout = () => { logout(); setUser(null); setScreen(SCREEN.AUTH); };
+  const handleLogout = async () => { await signOut(auth); setUser(null); setScreen(SCREEN.AUTH); };
 
   const nav = p => {
     if(p==="home") setScreen(SCREEN.HOME);
@@ -720,12 +715,11 @@ export default function App() {
     try {
       let content=text;
       if(mode==="image"&&imgData){
-        content=await callClaude([{role:"user",content:[{type:"image",source:{type:"base64",media_type:"image/jpeg",data:imgData}},{type:"text",text:"Transcribe y resume todo el contenido educativo visible en la imagen."}]}],"Eres un experto en educacion. Transcribe el contenido de manera clara y estructurada. Responde en espanol.");
+        content=await callClaude([{role:"user",content:[{type:"image",source:{type:"base64",media_type:"image/jpeg",data:imgData}},{type:"text",text:"Transcribe y resume todo el contenido educativo visible en la imagen."}]}],"Eres un experto en educacion. Transcribe el contenido de manera clara. Responde en espanol.");
       }
       setPhase(1);
-      const prompt="Genera exactamente "+numMC+" preguntas de seleccion multiple y "+numDev+" preguntas de desarrollo sobre el siguiente contenido educativo.\n\nContenido:\n"+content+"\n\nDevuelve SOLO un JSON valido con esta estructura exacta (sin texto adicional):\n{\"topic\":\"tema principal del contenido\",\"questions\":[\n{\"type\":\"multiple\",\"question\":\"pregunta clara y especifica\",\"options\":[\"opcion A\",\"opcion B\",\"opcion C\",\"opcion D\"],\"answer\":0,\"explanation\":\"explicacion breve de por que es correcta\",\"topic\":\"subtema\"},\n{\"type\":\"development\",\"question\":\"pregunta de desarrollo que requiera analisis\",\"answer\":\"respuesta modelo completa\",\"explanation\":\"criterios de evaluacion\",\"topic\":\"subtema\"}\n]}\n\nREGLAS: Total exacto de "+(numMC+numDev)+" preguntas. Solo tipos: multiple y development. Preguntas claras, sin ambiguedad. Opciones plausibles para las de seleccion multiple.";
-
-      const raw=await callClaude([{role:"user",content:prompt}],"Eres un asistente academico especializado en generar cuestionarios educativos confiables. Prioriza SIEMPRE la precision y veracidad. Cada pregunta debe tener una unica respuesta claramente correcta y verificable academicamente. Evita preguntas ambiguas. Las explicaciones deben ser breves, claras y pedagogicas. NO inventes informacion. Responde SOLO con JSON valido.");
+      const prompt="Genera exactamente "+numMC+" preguntas de seleccion multiple y "+numDev+" preguntas de desarrollo sobre el siguiente contenido educativo.\n\nContenido:\n"+content+"\n\nDevuelve SOLO un JSON valido:\n{\"topic\":\"tema principal\",\"questions\":[\n{\"type\":\"multiple\",\"question\":\"...\",\"options\":[\"A\",\"B\",\"C\",\"D\"],\"answer\":0,\"explanation\":\"...\",\"topic\":\"subtema\"},\n{\"type\":\"development\",\"question\":\"...\",\"answer\":\"respuesta modelo\",\"explanation\":\"criterios\",\"topic\":\"subtema\"}\n]}\n\nTotal exacto: "+(numMC+numDev)+" preguntas.";
+      const raw=await callClaude([{role:"user",content:prompt}],"Eres un asistente academico especializado. Prioriza precision y veracidad. Cada pregunta debe tener una unica respuesta claramente correcta. No inventes informacion. Responde SOLO con JSON valido.");
       const parsed=parseJSON(raw);
       if(!parsed?.questions?.length) throw new Error("Error al generar");
       setTopic(parsed.topic||"Cuestionario"); setQuiz(parsed.questions);
@@ -748,14 +742,23 @@ export default function App() {
   const resetQuiz = () => { setScreen(SCREEN.QUIZ_INPUT); setQuiz(null); setResult(null); };
   const isQuizScreen = [SCREEN.QUIZ_INPUT,SCREEN.QUIZ_LOADING,SCREEN.QUIZ_ACTIVE,SCREEN.RESULTS].includes(screen);
 
+  if(loading) return (
+    <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"#000"}}>
+      <div style={{textAlign:"center"}}>
+        <Logo size={48}/>
+        <p style={{color:"#475569",fontSize:13,marginTop:16}}>Cargando...</p>
+      </div>
+    </div>
+  );
+
   return (
     <>
       <style>{CSS}</style>
       <div style={{position:"fixed",top:0,left:0,right:0,height:1,background:"linear-gradient(90deg,transparent,#0ea5e9,#8b5cf6,transparent)",zIndex:200}}/>
-      {screen===SCREEN.AUTH && <Auth onLogin={handleLogin} showToast={show}/>}
+      {screen===SCREEN.AUTH && <Auth onLogin={handleLogin}/>}
       {user && screen!==SCREEN.AUTH && (
         <>
-          <TopBar user={user} page={screen===SCREEN.HOME?"home":screen===SCREEN.HISTORY?"history":"quiz"} onNav={nav} onLogout={handleLogout}/>
+          <TopBar user={user} onNav={nav} onLogout={handleLogout}/>
           <div style={{minHeight:"100vh",paddingTop:62,paddingBottom:20}}>
             <div style={{maxWidth:960,margin:"0 auto",padding:"0 16px"}}>
               {isQuizScreen && screen!==SCREEN.QUIZ_LOADING && (
