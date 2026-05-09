@@ -859,6 +859,11 @@ REGLAS: Total exacto de ${numMC+numDev} preguntas. Solo tipos: multiple y develo
         </>
       )}
       {Toast}
+      {user && screen!==SCREEN.AUTH && (
+        <div style={{textAlign:"center",padding:"20px 16px",borderTop:"1px solid #0f0f1a",marginTop:"auto"}}>
+          <p style={{fontSize:11,color:"#334155",fontWeight:500}}>© 2025 EduQuiz IA. Todos los derechos reservados.</p>
+        </div>
+      )}
     </>
   );
 }
