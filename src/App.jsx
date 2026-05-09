@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+﻿import { useState, useRef, useCallback, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
 
@@ -291,7 +291,7 @@ function Auth({onLogin}) {
 
           <div className="divider">
             <div className="divider-line"/>
-            <span className="divider-text">o continua como</span>
+            <span className="divider-text">o</span>
             <div className="divider-line"/>
           </div>
 
@@ -863,6 +863,7 @@ export default function App() {
     </>
   );
 }
+
 
 
 
