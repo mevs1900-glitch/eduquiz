@@ -216,6 +216,7 @@ function StepBar({step}) {
 
 function Auth({onLogin}) {
   const [loading,setLoading] = useState(false);
+  const [loadingGuest,setLoadingGuest] = useState(false);
   const [error,setError] = useState("");
 
   const loginWithGoogle = async () => {
@@ -229,12 +230,27 @@ function Auth({onLogin}) {
         email: u.email,
         photo: u.photoURL,
         uid: u.uid,
+        isGuest: false,
       });
     } catch(e) {
       setError("No se pudo iniciar sesion. Intenta de nuevo.");
       console.error(e);
     }
     setLoading(false);
+  };
+
+  const loginAsGuest = () => {
+    setLoadingGuest(true);
+    setTimeout(()=>{
+      onLogin({
+        name: "Invitado",
+        email: "",
+        photo: null,
+        uid: "guest-"+Date.now(),
+        isGuest: true,
+      });
+      setLoadingGuest(false);
+    }, 600);
   };
 
   return (
@@ -245,13 +261,16 @@ function Auth({onLogin}) {
       </div>
       <div style={{position:"absolute",top:0,left:0,right:0,height:1,background:"linear-gradient(90deg,transparent,#0ea5e9,#8b5cf6,transparent)"}}/>
       <div className="fu" style={{width:"100%",maxWidth:420,position:"relative",zIndex:1}}>
-        <div style={{textAlign:"center",marginBottom:40}}><Logo size={52}/></div>
+        <div style={{textAlign:"center",marginBottom:32}}><Logo size={52}/></div>
+        <div style={{textAlign:"center",marginBottom:24}}>
+          <p style={{fontSize:13,color:"#475569"}}>Genera cuestionarios educativos con inteligencia artificial</p>
+        </div>
         <div className="glass">
-          <div style={{textAlign:"center",marginBottom:28}}>
-            <h2 style={{fontSize:20,fontWeight:700,color:"#fff",marginBottom:8}}>Bienvenido a EduQuiz IA</h2>
-            <p style={{fontSize:13,color:"#475569"}}>Genera cuestionarios educativos con inteligencia artificial</p>
+          <div style={{textAlign:"center",marginBottom:20}}>
+            <h2 style={{fontSize:16,fontWeight:700,color:"#64748b",letterSpacing:".08em"}}>ACCESO A LOS CUESTIONARIOS</h2>
           </div>
-          <button className="btn btn-google btn-full" onClick={loginWithGoogle} disabled={loading} style={{height:52,fontSize:15,borderRadius:14}}>
+
+          <button className="btn btn-google btn-full" onClick={loginWithGoogle} disabled={loading||loadingGuest} style={{height:52,fontSize:15,borderRadius:14,marginBottom:12}}>
             {loading?(
               <><div className="spinner" style={{borderTopColor:"#1f1f1f",borderColor:"#ddd"}}/>Iniciando sesion...</>
             ):(
@@ -266,8 +285,20 @@ function Auth({onLogin}) {
               </>
             )}
           </button>
+
+          <div className="divider">
+            <div className="divider-line"/>
+            <span className="divider-text">o continua como</span>
+            <div className="divider-line"/>
+          </div>
+
+          <button className="btn btn-outline btn-full" onClick={loginAsGuest} disabled={loading||loadingGuest} style={{height:48,fontSize:14,borderRadius:14}}>
+            {loadingGuest?<><div className="spinner"/>Entrando...</>:"Entrar como Invitado"}
+          </button>
+
+          <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:16}}>El invitado puede hacer quizzes pero sin guardar historial</p>
+
           {error&&<p style={{textAlign:"center",color:D.ro,fontSize:12,marginTop:12}}>{error}</p>}
-          <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:20}}>Sin contrasenas. Sin registro. Solo un clic.</p>
         </div>
         <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:16}}>EduQuiz IA - Plataforma educativa con inteligencia artificial</p>
         <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:6}}>&copy; 2026 EduQuiz IA. Todos los derechos reservados.</p>
