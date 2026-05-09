@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+﻿import { useState, useRef, useCallback, useEffect } from "react";
 
 const D = {
   bg:"#000",s1:"#0a0a0a",card:"#111",border:"#1e1e1e",
@@ -195,7 +195,7 @@ function useToast() {
   const show = (msg,type="ok") => { setT({msg,type}); setTimeout(()=>setT(null),3000); };
   const Toast = t ? (
     <div className="toast">
-      <span style={{fontSize:16}}>{t.type==="ok"?"✓":t.type==="err"?"✕":"ℹ"}</span>
+      <span style={{fontSize:16}}>{t.type==="ok"?"âœ“":t.type==="err"?"âœ•":"â„¹"}</span>
       <span style={{color: t.type==="ok"?D.em:t.type==="err"?D.ro:D.sky,fontWeight:700}}>{t.msg}</span>
     </div>
   ) : null;
@@ -227,7 +227,7 @@ function StepBar({step}) {
               background:i<step?"linear-gradient(135deg,#10b981,#059669)":i===step?"linear-gradient(135deg,#0ea5e9,#0284c7)":"#1e1e2e",
               color:i<=step?"#fff":"#475569",transition:"all .4s",
               boxShadow:i===step?`0 0 16px rgba(14,165,233,.4)`:"none"}}>
-              {i<step?"✓":i+1}
+              {i<step?"âœ“":i+1}
             </div>
             <span style={{fontSize:10,fontWeight:600,color:i===step?"#0ea5e9":"#475569",whiteSpace:"nowrap"}}>{l}</span>
           </div>
@@ -285,16 +285,16 @@ function Auth({onLogin, showToast}) {
             <button className={`tab ${tab==="login"?"on":""}`} onClick={()=>setTab("login")}>Iniciar sesion</button>
             <button className={`tab ${tab==="register"?"on":""}`} onClick={()=>setTab("register")}>Crear cuenta</button>
           </div>
-          {tab==="register"&&(<div className="field"><label>Nombre completo</label><input type="text" className={errs.name?"err":""} placeholder="Tu nombre" value={f.name} onChange={e=>set("name",e.target.value)}/>{errs.name&&<div className="field-err">⚠ {errs.name}</div>}</div>)}
-          <div className="field"><label>Correo electronico</label><input type="email" className={errs.email?"err":""} placeholder="tu@email.com" value={f.email} onChange={e=>set("email",e.target.value)}/>{errs.email&&<div className="field-err">⚠ {errs.email}</div>}</div>
-          <div className="field"><label>Contrasena</label><input type="password" className={errs.pass?"err":""} placeholder="Minimo 6 caracteres" value={f.pass} onChange={e=>set("pass",e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>{errs.pass&&<div className="field-err">⚠ {errs.pass}</div>}</div>
-          {tab==="register"&&(<div className="field"><label>Confirmar contrasena</label><input type="password" className={errs.confirm?"err":""} placeholder="Repite tu contrasena" value={f.confirm} onChange={e=>set("confirm",e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>{errs.confirm&&<div className="field-err">⚠ {errs.confirm}</div>}</div>)}
+          {tab==="register"&&(<div className="field"><label>Nombre completo</label><input type="text" className={errs.name?"err":""} placeholder="Tu nombre" value={f.name} onChange={e=>set("name",e.target.value)}/>{errs.name&&<div className="field-err">âš  {errs.name}</div>}</div>)}
+          <div className="field"><label>Correo electronico</label><input type="email" className={errs.email?"err":""} placeholder="tu@email.com" value={f.email} onChange={e=>set("email",e.target.value)}/>{errs.email&&<div className="field-err">âš  {errs.email}</div>}</div>
+          <div className="field"><label>Contrasena</label><input type="password" className={errs.pass?"err":""} placeholder="Minimo 6 caracteres" value={f.pass} onChange={e=>set("pass",e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>{errs.pass&&<div className="field-err">âš  {errs.pass}</div>}</div>
+          {tab==="register"&&(<div className="field"><label>Confirmar contrasena</label><input type="password" className={errs.confirm?"err":""} placeholder="Repite tu contrasena" value={f.confirm} onChange={e=>set("confirm",e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/>{errs.confirm&&<div className="field-err">âš  {errs.confirm}</div>}</div>)}
           <button className="btn btn-sky btn-full" onClick={submit} disabled={loading} style={{marginTop:6,height:48}}>
             {loading?<><div className="spinner" style={{borderTopColor:"#fff"}}/>Procesando...</>:tab==="login"?"Ingresar a EduQuiz IA":"Crear mi cuenta gratis"}
           </button>
           {tab==="login"&&<div style={{textAlign:"center",marginTop:16}}><button className="btn-ghost" style={{fontSize:13}} onClick={()=>setTab("register")}>No tienes cuenta? Registrate gratis</button></div>}
         </div>
-        <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:20}}>EduQuiz IA — Plataforma educativa con inteligencia artificial</p>
+        <p style={{textAlign:"center",color:"#334155",fontSize:11,marginTop:20}}>EduQuiz IA â€” Plataforma educativa con inteligencia artificial</p>
       </div>
     </div>
   );
@@ -330,7 +330,7 @@ function Home({user,onNav}) {
     <div style={{maxWidth:720,margin:"0 auto",padding:"36px 16px 80px"}} className="fu">
       <div style={{marginBottom:32}}>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}}>
-          <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,rgba(14,165,233,.15),rgba(139,92,246,.15))",border:"1px solid rgba(14,165,233,.2)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>👋</div>
+          <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,rgba(14,165,233,.15),rgba(139,92,246,.15))",border:"1px solid rgba(14,165,233,.2)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>ðŸ‘‹</div>
           <div>
             <h1 style={{fontSize:22,fontWeight:800,color:"#fff",letterSpacing:"-.02em"}}>{greeting}, {user.name.split(" ")[0]}</h1>
             <p style={{color:"#475569",fontSize:13,marginTop:2}}>Listo para aprender hoy?</p>
@@ -340,9 +340,9 @@ function Home({user,onNav}) {
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,marginBottom:20}}>
         {[
-          {label:"Evaluaciones",val:stats.total||"0",color:"#38bdf8",icon:"📊"},
-          {label:"Promedio",val:stats.total?`${stats.avgPct}%`:"—",color:pctColor(stats.avgPct),icon:"📈"},
-          {label:"Mejor nota",val:stats.total?`${stats.best}%`:"—",color:"#34d399",icon:"🏆"},
+          {label:"Evaluaciones",val:stats.total||"0",color:"#38bdf8",icon:"ðŸ“Š"},
+          {label:"Promedio",val:stats.total?`${stats.avgPct}%`:"â€”",color:pctColor(stats.avgPct),icon:"ðŸ“ˆ"},
+          {label:"Mejor nota",val:stats.total?`${stats.best}%`:"â€”",color:"#34d399",icon:"ðŸ†"},
         ].map((s,i)=>(
           <div key={i} className="stat-box">
             <div style={{fontSize:20,marginBottom:8}}>{s.icon}</div>
@@ -353,14 +353,14 @@ function Home({user,onNav}) {
       </div>
 
       <button className="btn btn-sky btn-full" style={{fontSize:15,height:54,borderRadius:14,marginBottom:16,letterSpacing:"-.01em"}} onClick={()=>onNav("quiz")}>
-        ✦ Generar nuevo cuestionario con IA
+        âœ¦ Generar nuevo cuestionario con IA
       </button>
 
       <div className="card">
         <h3 style={{fontWeight:700,fontSize:12,marginBottom:16,color:"#334155",letterSpacing:".08em"}}>ACCESO RAPIDO</h3>
         {[
-          {icon:"✍️",label:"Nuevo cuestionario",sub:"Escribe o pega tu contenido educativo",action:"quiz",color:"#0ea5e9"},
-          {icon:"📋",label:"Mi historial",sub:`${stats.total} evaluaciones completadas`,action:"history",color:"#f59e0b"},
+          {icon:"âœï¸",label:"Nuevo cuestionario",sub:"Escribe o pega tu contenido educativo",action:"quiz",color:"#0ea5e9"},
+          {icon:"ðŸ“‹",label:"Mi historial",sub:`${stats.total} evaluaciones completadas`,action:"history",color:"#f59e0b"},
         ].map((a,i)=>(
           <button key={i} onClick={()=>onNav(a.action)} style={{all:"unset",cursor:"pointer",width:"100%",display:"block",marginBottom:i===0?10:0}}>
             <div style={{display:"flex",alignItems:"center",gap:14,padding:"15px 16px",borderRadius:14,background:"#0a0a0f",border:"1.5px solid #1e1e2e",transition:"all .2s"}}
@@ -368,7 +368,7 @@ function Home({user,onNav}) {
               onMouseLeave={e=>{e.currentTarget.style.borderColor="#1e1e2e";e.currentTarget.style.background="#0a0a0f"}}>
               <div style={{width:40,height:40,borderRadius:11,background:`${a.color}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{a.icon}</div>
               <div style={{flex:1}}><div style={{fontWeight:600,fontSize:14,color:"#e2e8f0"}}>{a.label}</div><div style={{fontSize:12,color:"#475569",marginTop:2}}>{a.sub}</div></div>
-              <span style={{color:"#334155",fontSize:18}}>›</span>
+              <span style={{color:"#334155",fontSize:18}}>â€º</span>
             </div>
           </button>
         ))}
@@ -402,8 +402,8 @@ function QuizInput({onGenerate}) {
       </div>
       <div className="card">
         <div className="tog-group" style={{marginBottom:24}}>
-          <button className={`tog-item ${mode==="text"?"on":""}`} onClick={()=>setMode("text")}>✍️ Escribe el contenido</button>
-          <button className={`tog-item ${mode==="image"?"on":""}`} onClick={()=>setMode("image")}>📷 Foto del cuaderno</button>
+          <button className={`tog-item ${mode==="text"?"on":""}`} onClick={()=>setMode("text")}>âœï¸ Escribe el contenido</button>
+          <button className={`tog-item ${mode==="image"?"on":""}`} onClick={()=>setMode("image")}>ðŸ“· Foto del cuaderno</button>
         </div>
 
         {mode==="text"&&(
@@ -418,16 +418,16 @@ function QuizInput({onGenerate}) {
         {mode==="image"&&(imgPrev?(
           <div style={{position:"relative"}}>
             <img src={imgPrev} alt="prev" style={{width:"100%",borderRadius:14,maxHeight:240,objectFit:"cover"}}/>
-            <button className="btn btn-outline" onClick={()=>{setImgData(null);setImgPrev(null);}} style={{position:"absolute",top:10,right:10,fontSize:12,padding:"7px 14px",background:"rgba(0,0,0,.8)"}}>✕ Cambiar</button>
+            <button className="btn btn-outline" onClick={()=>{setImgData(null);setImgPrev(null);}} style={{position:"absolute",top:10,right:10,fontSize:12,padding:"7px 14px",background:"rgba(0,0,0,.8)"}}>âœ• Cambiar</button>
           </div>
         ):(
           <div className={`drop ${drag?"over":""}`} onDragOver={e=>{e.preventDefault();setDrag(true);}} onDragLeave={()=>setDrag(false)} onDrop={onDrop} onClick={()=>fileRef.current.click()}>
-            <div style={{fontSize:40,marginBottom:12}}>📷</div>
+            <div style={{fontSize:40,marginBottom:12}}>ðŸ“·</div>
             <p style={{fontWeight:700,marginBottom:6,color:"#e2e8f0",fontSize:15}}>Arrastra la foto o haz clic aqui</p>
             <p style={{fontSize:13,color:"#475569",marginBottom:20}}>Cuaderno, pizarra, libro, apunte fotografiado</p>
             <div style={{display:"flex",gap:10,justifyContent:"center"}}>
-              <button onClick={e=>{e.stopPropagation();fileRef.current.click();}} className="btn btn-outline" style={{fontSize:13,padding:"9px 16px"}}>🗂 Galeria</button>
-              <button onClick={e=>{e.stopPropagation();camRef.current.click();}} className="btn btn-outline" style={{fontSize:13,padding:"9px 16px"}}>📸 Camara</button>
+              <button onClick={e=>{e.stopPropagation();fileRef.current.click();}} className="btn btn-outline" style={{fontSize:13,padding:"9px 16px"}}>ðŸ—‚ Galeria</button>
+              <button onClick={e=>{e.stopPropagation();camRef.current.click();}} className="btn btn-outline" style={{fontSize:13,padding:"9px 16px"}}>ðŸ“¸ Camara</button>
             </div>
           </div>
         ))}
@@ -461,7 +461,7 @@ function QuizInput({onGenerate}) {
         </div>
 
         <button className="btn btn-sky btn-full" disabled={!canGo||total===0} onClick={()=>onGenerate({mode,text,imgData,numMC,numDev})} style={{marginTop:20,height:52,fontSize:15,borderRadius:14}}>
-          ✦ Generar cuestionario con IA
+          âœ¦ Generar cuestionario con IA
         </button>
       </div>
     </div>
@@ -472,14 +472,14 @@ function Loading({phase}) {
   const phases=["Analizando el contenido...","Generando preguntas con IA...","Preparando tu cuestionario..."];
   return (
     <div style={{maxWidth:380,margin:"80px auto",textAlign:"center"}} className="fi">
-      <div style={{width:72,height:72,borderRadius:20,background:"linear-gradient(135deg,rgba(14,165,233,.15),rgba(139,92,246,.15))",border:`1px solid rgba(14,165,233,.2)`,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 24px",fontSize:30,animation:"pulse 1.8s infinite,glow 2s infinite"}}>🧠</div>
+      <div style={{width:72,height:72,borderRadius:20,background:"linear-gradient(135deg,rgba(14,165,233,.15),rgba(139,92,246,.15))",border:`1px solid rgba(14,165,233,.2)`,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 24px",fontSize:30,animation:"pulse 1.8s infinite,glow 2s infinite"}}>ðŸ§ </div>
       <h2 style={{fontSize:20,fontWeight:700,marginBottom:8,color:"#fff"}}>{phases[phase]}</h2>
       <p style={{color:"#475569",fontSize:14,marginBottom:40}}>La IA esta trabajando para ti...</p>
       <div style={{display:"flex",flexDirection:"column",gap:14,textAlign:"left"}}>
         {phases.map((p,i)=>(
           <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 16px",borderRadius:12,background:i<=phase?"rgba(14,165,233,.06)":"#0a0a0f",border:`1px solid ${i<=phase?"rgba(14,165,233,.15)":"#1e1e2e"}`,transition:"all .4s"}}>
             <div style={{width:24,height:24,borderRadius:"50%",background:i<phase?"linear-gradient(135deg,#10b981,#059669)":i===phase?"rgba(14,165,233,.2)":"#1e1e2e",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:i<phase?"#fff":i===phase?"#0ea5e9":"#334155",flexShrink:0,transition:"all .3s"}}>
-              {i<phase?"✓":i===phase?<div className="spinner" style={{width:12,height:12,borderWidth:2}}/>:i+1}
+              {i<phase?"âœ“":i===phase?<div className="spinner" style={{width:12,height:12,borderWidth:2}}/>:i+1}
             </div>
             <span style={{fontSize:13,color:i<=phase?"#e2e8f0":"#334155",fontWeight:i===phase?600:400,transition:"color .3s"}}>{p}</span>
           </div>
@@ -494,7 +494,7 @@ function FeedbackCard({fb}) {
   if(fb.correct===true) return (
     <div className="fu" style={{marginTop:16}}>
       <div className="fb-section fb-strengths">
-        <div className="fb-title" style={{color:"#34d399"}}>✅ Respuesta Correcta</div>
+        <div className="fb-title" style={{color:"#34d399"}}>âœ… Respuesta Correcta</div>
         <p className="fb-text">{cleanText(fb.explanation)}</p>
       </div>
     </div>
@@ -502,7 +502,7 @@ function FeedbackCard({fb}) {
   if(fb.correct===false) return (
     <div className="fu" style={{marginTop:16}}>
       <div className="fb-section fb-improve" style={{marginBottom:0}}>
-        <div className="fb-title" style={{color:"#fbbf24"}}>ℹ️ Respuesta Incorrecta</div>
+        <div className="fb-title" style={{color:"#fbbf24"}}>â„¹ï¸ Respuesta Incorrecta</div>
         <p className="fb-text">{cleanText(fb.explanation)}</p>
       </div>
     </div>
@@ -512,31 +512,31 @@ function FeedbackCard({fb}) {
     <div className="fu" style={{marginTop:16,display:"flex",flexDirection:"column",gap:8}}>
       {parsed.strengths?.length>0&&(
         <div className="fb-section fb-strengths">
-          <div className="fb-title" style={{color:"#34d399"}}>✅ Fortalezas</div>
-          {parsed.strengths.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>• {cleanText(s)}</p>)}
+          <div className="fb-title" style={{color:"#34d399"}}>âœ… Fortalezas</div>
+          {parsed.strengths.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>â€¢ {cleanText(s)}</p>)}
         </div>
       )}
       {parsed.improve?.length>0&&(
         <div className="fb-section fb-improve">
-          <div className="fb-title" style={{color:"#fbbf24"}}>⚠️ Aspectos a mejorar</div>
-          {parsed.improve.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>• {cleanText(s)}</p>)}
+          <div className="fb-title" style={{color:"#fbbf24"}}>âš ï¸ Aspectos a mejorar</div>
+          {parsed.improve.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>â€¢ {cleanText(s)}</p>)}
         </div>
       )}
       {parsed.recommendations?.length>0&&(
         <div className="fb-section fb-reco">
-          <div className="fb-title" style={{color:"#38bdf8"}}>💡 Recomendaciones</div>
-          {parsed.recommendations.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0:4:0}}>• {cleanText(s)}</p>)}
+          <div className="fb-title" style={{color:"#38bdf8"}}>ðŸ’¡ Recomendaciones</div>
+          {parsed.recommendations.map((s,i)=><p key={i} className="fb-text" style={{marginTop:i>0?4:0}}>â€¢ {cleanText(s)}</p>)}
         </div>
       )}
       {parsed.expected&&(
         <div className="fb-section fb-answer">
-          <div className="fb-title" style={{color:"#a78bfa"}}>📘 Respuesta esperada</div>
+          <div className="fb-title" style={{color:"#a78bfa"}}>ðŸ“˜ Respuesta esperada</div>
           <p className="fb-text">{cleanText(parsed.expected)}</p>
         </div>
       )}
       {!parsed.strengths&&!parsed.improve&&!parsed.recommendations&&!parsed.expected&&(
         <div className="fb-section fb-reco">
-          <div className="fb-title" style={{color:"#38bdf8"}}>📘 Retroalimentacion</div>
+          <div className="fb-title" style={{color:"#38bdf8"}}>ðŸ“˜ Retroalimentacion</div>
           <p className="fb-text">{cleanText(fb.explanation)}</p>
         </div>
       )}
@@ -557,7 +557,7 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
     if(!devText.trim()||checking)return;
     setChecking(true);setAns(cur,devText);
     try{
-      const res=await callClaude([{role:"user",content:`Pregunta: "${q.question}"\nRespuesta del estudiante: "${devText}"\nRespuesta esperada: "${q.answer}"\n\nEvalua la respuesta y devuelve SOLO un JSON con esta estructura exacta:\n{"strengths":["..."],"improve":["..."],"recommendations":["..."],"expected":"..."}\nSe breve, pedagogico y en español. Maximo 2 items por campo.`}],"Eres un profesor evaluador experto. Responde SOLO con JSON valido, sin texto adicional.");
+      const res=await callClaude([{role:"user",content:`Pregunta: "${q.question}"\nRespuesta del estudiante: "${devText}"\nRespuesta esperada: "${q.answer}"\n\nEvalua la respuesta y devuelve SOLO un JSON con esta estructura exacta:\n{"strengths":["..."],"improve":["..."],"recommendations":["..."],"expected":"..."}\nSe breve, pedagogico y en espaÃ±ol. Maximo 2 items por campo.`}],"Eres un profesor evaluador experto. Responde SOLO con JSON valido, sin texto adicional.");
       const parsed=parseFeedback(res);
       setFB(cur,{correct:null,explanation:res,parsed});
     }
@@ -572,12 +572,12 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
       <div style={{marginBottom:20}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
-            <button className="btn-ghost" onClick={onRestart} style={{padding:"6px 12px",fontSize:13}}>← Salir</button>
+            <button className="btn-ghost" onClick={onRestart} style={{padding:"6px 12px",fontSize:13}}>â† Salir</button>
             <span style={{color:"#475569",fontSize:13,fontWeight:500}}>Pregunta <span style={{color:"#e2e8f0",fontWeight:700}}>{cur+1}</span> de <span style={{color:"#e2e8f0",fontWeight:700}}>{quiz.length}</span></span>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:12}}>
             <span style={{color:"#34d399",fontWeight:700,fontSize:13}}>{correctCount} correctas</span>
-            {resources?.length>0&&<button className="btn btn-outline" style={{fontSize:11,padding:"6px 12px",height:32}} onClick={()=>setShowRes(true)}>🌐 Recursos</button>}
+            {resources?.length>0&&<button className="btn btn-outline" style={{fontSize:11,padding:"6px 12px",height:32}} onClick={()=>setShowRes(true)}>ðŸŒ Recursos</button>}
           </div>
         </div>
         <div className="prog-track">
@@ -592,7 +592,7 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
       <div className="card sr" key={cur} style={{marginBottom:16}}>
         <div style={{display:"flex",gap:7,flexWrap:"wrap",marginBottom:18}}>
           <span className={`chip ${typeMap[q.type]?.cls||"chip-dark"}`}>{typeMap[q.type]?.label||q.type}</span>
-          {q.topic&&<span className="chip chip-dark">📚 {q.topic}</span>}
+          {q.topic&&<span className="chip chip-dark">ðŸ“š {q.topic}</span>}
         </div>
         <h2 style={{fontSize:18,fontWeight:600,lineHeight:1.6,marginBottom:24,color:"#f1f5f9"}}>{q.question}</h2>
 
@@ -602,8 +602,8 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
               <button key={i} className={`opt ${isOk?"correct":isBad?"wrong":isSel?"chosen":""}`} onClick={()=>handleMC(i)} disabled={answered}>
                 <span className="letter">{["A","B","C","D"][i]}</span>
                 <span style={{flex:1,textAlign:"left",color:"#e2e8f0",lineHeight:1.5}}>{opt}</span>
-                {isOk&&<span style={{color:"#34d399",fontWeight:700,fontSize:16}}>✓</span>}
-                {isBad&&<span style={{color:"#f87171",fontWeight:700,fontSize:16}}>✕</span>}
+                {isOk&&<span style={{color:"#34d399",fontWeight:700,fontSize:16}}>âœ“</span>}
+                {isBad&&<span style={{color:"#f87171",fontWeight:700,fontSize:16}}>âœ•</span>}
               </button>
             );})}
           </div>
@@ -613,7 +613,7 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
           <div>
             <textarea rows={5} placeholder="Escribe aqui tu respuesta de manera detallada..." value={devText} onChange={e=>setDevText(e.target.value)} disabled={answered} style={{marginBottom:12,lineHeight:1.7}}/>
             {!answered&&<button className="btn btn-sky" onClick={handleDev} disabled={!devText.trim()||checking} style={{height:44}}>
-              {checking?<><div className="spinner" style={{borderTopColor:"#fff"}}/>Evaluando con IA...</>:"Verificar mi respuesta →"}
+              {checking?<><div className="spinner" style={{borderTopColor:"#fff"}}/>Evaluando con IA...</>:"Verificar mi respuesta â†’"}
             </button>}
           </div>
         )}
@@ -623,11 +623,11 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
 
       <div className="sticky-nav">
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",maxWidth:720,margin:"0 auto"}}>
-          <div>{cur>0&&<button className="btn btn-outline" onClick={goPrev} style={{height:46}}>← Anterior</button>}</div>
+          <div>{cur>0&&<button className="btn btn-outline" onClick={goPrev} style={{height:46}}>â† Anterior</button>}</div>
           <div>
             {!isLast
-              ?<button className="btn btn-sky" onClick={goNext} disabled={!answered} style={{height:46,minWidth:140}}>Siguiente →</button>
-              :<button className="btn btn-sky" onClick={()=>onFinish({feedback,correctCount})} disabled={!answered} style={{height:46,minWidth:160,background:"linear-gradient(135deg,#10b981,#059669)"}}>Ver resultados →</button>
+              ?<button className="btn btn-sky" onClick={goNext} disabled={!answered} style={{height:46,minWidth:140}}>Siguiente â†’</button>
+              :<button className="btn btn-sky" onClick={()=>onFinish({feedback,correctCount})} disabled={!answered} style={{height:46,minWidth:160,background:"linear-gradient(135deg,#10b981,#059669)"}}>Ver resultados â†’</button>
             }
           </div>
         </div>
@@ -637,8 +637,8 @@ function Quiz({quiz,resources,onFinish,onRestart}) {
         <div className="modal-bg" onClick={()=>setShowRes(false)}>
           <div className="modal" onClick={e=>e.stopPropagation()}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
-              <h2 style={{fontSize:17,fontWeight:700,color:"#fff"}}>🌐 Recursos relacionados</h2>
-              <button className="btn-ghost" onClick={()=>setShowRes(false)}>✕</button>
+              <h2 style={{fontSize:17,fontWeight:700,color:"#fff"}}>ðŸŒ Recursos relacionados</h2>
+              <button className="btn-ghost" onClick={()=>setShowRes(false)}>âœ•</button>
             </div>
             <div style={{display:"flex",flexDirection:"column",gap:10}}>
               {resources.slice(0,5).map((r,i)=>(
@@ -660,7 +660,7 @@ function Results({quiz,result,onRestart,onHome}) {
   const [open,setOpen]=useState(null);
   const total=quiz.length, pct=Math.round((result.correctCount/total)*100), clr=pctColor(pct);
   const grade=pct>=90?"Sobresaliente":pct>=80?"Excelente":pct>=65?"Muy bien":pct>=50?"Regular":"A repasar";
-  const emoji=pct>=80?"🏆":pct>=65?"🎯":pct>=50?"📚":"💪";
+  const emoji=pct>=80?"ðŸ†":pct>=65?"ðŸŽ¯":pct>=50?"ðŸ“š":"ðŸ’ª";
   const motivational=pct>=80?"Excelente desempeno! Dominas muy bien este tema.":pct>=65?"Buen trabajo! Sigue practicando para mejorar.":pct>=50?"Vas por buen camino. Repasa los temas marcados.":"No te rindas. Revisa el contenido y vuelve a intentarlo.";
   const typeCount=t=>quiz.filter(q=>q.type===t).length;
   const typeOk=t=>quiz.reduce((a,q,i)=>q.type===t&&result.feedback[i]?.correct===true?a+1:a,0);
@@ -678,22 +678,22 @@ function Results({quiz,result,onRestart,onHome}) {
         <p style={{color:"#94a3b8",fontSize:14,marginBottom:4}}>{result.correctCount} de {total} preguntas correctas</p>
         <p style={{color:"#64748b",fontSize:13,fontStyle:"italic",marginBottom:20}}>{motivational}</p>
         <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
-          <button className="btn btn-sky" onClick={onRestart} style={{flex:"1 1 140px",maxWidth:200,height:44,fontSize:14}}>✦ Nuevo Quiz</button>
-          <button className="btn btn-outline" onClick={onHome} style={{flex:"1 1 140px",maxWidth:200,height:44,fontSize:14}}>← Volver al Inicio</button>
+          <button className="btn btn-sky" onClick={onRestart} style={{flex:"1 1 140px",maxWidth:200,height:44,fontSize:14}}>âœ¦ Nuevo Quiz</button>
+          <button className="btn btn-outline" onClick={onHome} style={{flex:"1 1 140px",maxWidth:200,height:44,fontSize:14}}>â† Volver al Inicio</button>
         </div>
 
         {(weakTopics.length>0||strongTopics.length>0)&&(
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginTop:24,textAlign:"left"}}>
             {strongTopics.length>0&&(
               <div style={{padding:"14px 16px",borderRadius:14,background:"rgba(16,185,129,.08)",border:"1px solid rgba(16,185,129,.2)"}}>
-                <div style={{fontSize:11,fontWeight:700,color:"#34d399",letterSpacing:".06em",marginBottom:8}}>✅ FORTALEZAS</div>
-                {strongTopics.map((t,i)=><div key={i} style={{fontSize:12,color:"#86efac",marginTop:i>0?4:0}}>• {t}</div>)}
+                <div style={{fontSize:11,fontWeight:700,color:"#34d399",letterSpacing:".06em",marginBottom:8}}>âœ… FORTALEZAS</div>
+                {strongTopics.map((t,i)=><div key={i} style={{fontSize:12,color:"#86efac",marginTop:i>0?4:0}}>â€¢ {t}</div>)}
               </div>
             )}
             {weakTopics.length>0&&(
               <div style={{padding:"14px 16px",borderRadius:14,background:"rgba(245,158,11,.08)",border:"1px solid rgba(245,158,11,.2)"}}>
-                <div style={{fontSize:11,fontWeight:700,color:"#fbbf24",letterSpacing:".06em",marginBottom:8}}>⚠️ REFORZAR</div>
-                {weakTopics.map((t,i)=><div key={i} style={{fontSize:12,color:"#fde68a",marginTop:i>0?4:0}}>• {t}</div>)}
+                <div style={{fontSize:11,fontWeight:700,color:"#fbbf24",letterSpacing:".06em",marginBottom:8}}>âš ï¸ REFORZAR</div>
+                {weakTopics.map((t,i)=><div key={i} style={{fontSize:12,color:"#fde68a",marginTop:i>0?4:0}}>â€¢ {t}</div>)}
               </div>
             )}
           </div>
@@ -709,7 +709,7 @@ function Results({quiz,result,onRestart,onHome}) {
         </div>
 
         <div style={{display:"flex",gap:10,justifyContent:"center",marginTop:24,flexWrap:"wrap"}}>
-          <button className="btn btn-sky" style={{flex:1,maxWidth:200,height:46}} onClick={onRestart}>Nuevo quiz →</button>
+          <button className="btn btn-sky" style={{flex:1,maxWidth:200,height:46}} onClick={onRestart}>Nuevo quiz â†’</button>
           <button className="btn btn-outline" style={{flex:1,maxWidth:200,height:46}} onClick={onHome}>Ir al inicio</button>
         </div>
       </div>
@@ -718,12 +718,12 @@ function Results({quiz,result,onRestart,onHome}) {
       <div style={{display:"flex",flexDirection:"column",gap:8}}>
         {quiz.map((q,i)=>{const fb=result.feedback[i],ok=fb?.correct===true,bad=fb?.correct===false;return(
           <button key={i} className="res-row" onClick={()=>setOpen(open===i?null:i)}>
-            <div style={{width:26,height:26,borderRadius:"50%",flexShrink:0,background:ok?"rgba(16,185,129,.2)":bad?"rgba(244,63,94,.2)":"rgba(255,255,255,.05)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:ok?"#34d399":bad?"#f87171":"#475569",marginTop:1}}>{ok?"✓":bad?"✕":"~"}</div>
+            <div style={{width:26,height:26,borderRadius:"50%",flexShrink:0,background:ok?"rgba(16,185,129,.2)":bad?"rgba(244,63,94,.2)":"rgba(255,255,255,.05)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:ok?"#34d399":bad?"#f87171":"#475569",marginTop:1}}>{ok?"âœ“":bad?"âœ•":"~"}</div>
             <div style={{flex:1,minWidth:0}}>
               <div style={{fontSize:13,fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:open===i?"normal":"nowrap",color:"#e2e8f0",lineHeight:1.5}}>{i+1}. {q.question}</div>
               {open===i&&fb?.explanation&&<div className="fu" style={{fontSize:12,color:"#94a3b8",marginTop:8,lineHeight:1.7}}>{cleanText(fb.explanation)}</div>}
             </div>
-            <span style={{fontSize:12,color:"#334155",flexShrink:0,marginTop:2}}>{open===i?"▲":"▼"}</span>
+            <span style={{fontSize:12,color:"#334155",flexShrink:0,marginTop:2}}>{open===i?"â–²":"â–¼"}</span>
           </button>
         );})}
       </div>
@@ -741,7 +741,7 @@ function History() {
       </div>
       {results.length===0?(
         <div className="card" style={{textAlign:"center",padding:"56px 24px"}}>
-          <div style={{fontSize:48,marginBottom:16}}>📋</div>
+          <div style={{fontSize:48,marginBottom:16}}>ðŸ“‹</div>
           <p style={{fontWeight:700,marginBottom:6,color:"#e2e8f0",fontSize:16}}>Sin evaluaciones aun</p>
           <p style={{color:"#475569",fontSize:13}}>Genera tu primer cuestionario para ver tu historial aqui.</p>
         </div>
@@ -755,7 +755,7 @@ function History() {
               </div>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{fontWeight:600,fontSize:14,marginBottom:3,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",color:"#e2e8f0"}}>{r.topic}</div>
-                <div style={{fontSize:12,color:"#475569"}}>{r.correct}/{r.total} correctas · {fmtDate(r.ts)}</div>
+                <div style={{fontSize:12,color:"#475569"}}>{r.correct}/{r.total} correctas Â· {fmtDate(r.ts)}</div>
               </div>
               <span className={`chip ${r.pct>=75?"chip-em":r.pct>=50?"chip-am":"chip-dark"}`}>{r.pct>=75?"Excelente":r.pct>=50?"Regular":"Repasar"}</span>
             </div>
@@ -794,7 +794,7 @@ export default function App() {
     try {
       let content=text;
       if(mode==="image"&&imgData){
-        content=await callClaude([{role:"user",content:[{type:"image",source:{type:"base64",media_type:"image/jpeg",data:imgData}},{type:"text",text:"Transcribe y resume todo el contenido educativo visible en la imagen."}]}],"Eres un experto en educacion. Transcribe el contenido de manera clara y estructurada. Responde en español.");
+        content=await callClaude([{role:"user",content:[{type:"image",source:{type:"base64",media_type:"image/jpeg",data:imgData}},{type:"text",text:"Transcribe y resume todo el contenido educativo visible en la imagen."}]}],"Eres un experto en educacion. Transcribe el contenido de manera clara y estructurada. Responde en espaÃ±ol.");
       }
       setPhase(1);
       const prompt=`Genera exactamente ${numMC} preguntas de seleccion multiple y ${numDev} preguntas de desarrollo sobre el siguiente contenido educativo.
@@ -826,7 +826,7 @@ REGLAS: Total exacto de ${numMC+numDev} preguntas. Solo tipos: multiple y develo
   const handleFinish = r => {
     setResult(r);
     addResult({ts:Date.now(),topic,pct:Math.round((r.correctCount/quiz.length)*100),correct:r.correctCount,total:quiz.length});
-    show("Resultado guardado ✓","ok");
+    show("Resultado guardado âœ“","ok");
     setScreen(SCREEN.RESULTS);
   };
 
@@ -861,10 +861,11 @@ REGLAS: Total exacto de ${numMC+numDev} preguntas. Solo tipos: multiple y develo
       {Toast}
       {user && screen!==SCREEN.AUTH && (
         <div style={{textAlign:"center",padding:"20px 16px",borderTop:"1px solid #0f0f1a",marginTop:"auto"}}>
-          <p style={{fontSize:11,color:"#334155",fontWeight:500}}>© 2025 EduQuiz IA. Todos los derechos reservados.</p>
+          <p style={{fontSize:11,color:"#334155",fontWeight:500}}>Â© 2025 EduQuiz IA. Todos los derechos reservados.</p>
         </div>
       )}
     </>
   );
 }
+
 
