@@ -502,14 +502,29 @@ function ScoreBadge({score}) {
   );
 }
 
-function FeedbackCard({fb, source}) {
-  if(!fb) return null;
-  const sourceBlock = source ? (
-    <div style={{padding:"8px 12px",borderRadius:10,background:"rgba(139,92,246,.08)",border:"1px solid rgba(139,92,246,.2)",marginTop:8}}>
-      <span style={{fontSize:10,fontWeight:700,color:"#a78bfa",letterSpacing:".06em"}}>FUENTE SUGERIDA: </span>
-      <span style={{fontSize:11,color:"#94a3b8"}}>{source}</span>
+function SourceBlock({q}) {
+  const title = q.source_title || q.source || "Fuente no verificada. Revisar con material de estudio.";
+  const url = q.source_url || "";
+  const confidence = q.confidence || "";
+  const confColor = confidence==="alto"?"#34d399":confidence==="medio"?"#fbbf24":"#94a3b8";
+  return (
+    <div style={{padding:"10px 14px",borderRadius:10,background:"rgba(139,92,246,.08)",border:"1px solid rgba(139,92,246,.25)",marginTop:10}}>
+      <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}>
+        <span style={{fontSize:10,fontWeight:700,color:"#a78bfa",letterSpacing:".06em"}}>FUENTE</span>
+        {confidence&&<span style={{fontSize:9,fontWeight:700,color:confColor,background:confColor+"20",padding:"1px 6px",borderRadius:4}}>{confidence.toUpperCase()}</span>}
+      </div>
+      {url ? (
+        <a href={url} target="_blank" rel="noreferrer" style={{fontSize:12,color:"#38bdf8",textDecoration:"underline",wordBreak:"break-all"}}>{title}</a>
+      ) : (
+        <span style={{fontSize:12,color:"#94a3b8"}}>{title}</span>
+      )}
     </div>
-  ) : null;
+  );
+}
+
+function FeedbackCard({fb, question}) {
+  if(!fb) return null;
+  const sourceBlock = question ? <SourceBlock q={question}/> : null;
   if(fb.correct===true) return (
     <div className="fu" style={{marginTop:16}}>
       <div className="fb-section fb-strengths">
@@ -615,7 +630,7 @@ Niveles: 0-1=Insuficiente, 2=Basico, 3-4=Bueno, 5=Excelente. Max 2 items por cam
             </button>}
           </div>
         )}
-        <FeedbackCard fb={fb} source={q.source}/>
+        <FeedbackCard fb={fb} question={q}/>
       </div>
       <div className="sticky-nav">
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",maxWidth:720,margin:"0 auto"}}>
@@ -697,6 +712,7 @@ function Results({quiz,result,onRestart,onHome}) {
             <div style={{flex:1,minWidth:0}}>
               <div style={{fontSize:13,fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:open===i?"normal":"nowrap",color:"#e2e8f0",lineHeight:1.5}}>{i+1}. {q.question}</div>
               {open===i&&fb?.explanation&&<div className="fu" style={{fontSize:12,color:"#94a3b8",marginTop:8,lineHeight:1.7}}>{cleanText(fb.explanation)}</div>}
+              {open===i&&q.source_title&&<div style={{padding:"6px 10px",borderRadius:8,background:"rgba(139,92,246,.08)",border:"1px solid rgba(139,92,246,.2)",marginTop:6}}>{q.source_url?<a href={q.source_url} target="_blank" rel="noreferrer" style={{fontSize:11,color:"#38bdf8",textDecoration:"underline"}}>{q.source_title}</a>:<span style={{fontSize:11,color:"#94a3b8"}}>{q.source_title}</span>}</div>}
             </div>
             <span style={{fontSize:12,color:"#334155",flexShrink:0,marginTop:2}}>{open===i?"^":"v"}</span>
           </button>
@@ -784,8 +800,8 @@ export default function App() {
         content=await callClaude([{role:"user",content:[{type:"image",source:{type:"base64",media_type:"image/jpeg",data:imgData}},{type:"text",text:"Transcribe y resume todo el contenido educativo visible en la imagen."}]}],"Eres un experto en educacion. Transcribe el contenido de manera clara. Responde en espanol.");
       }
       setPhase(1);
-      const prompt="Genera exactamente "+numMC+" preguntas de seleccion multiple y "+numDev+" preguntas de desarrollo sobre el siguiente contenido educativo.\n\nContenido:\n"+content+"\n\nDevuelve SOLO un JSON valido:\n{\"topic\":\"tema principal\",\"questions\":[\n{\"type\":\"multiple\",\"question\":\"pregunta con una sola respuesta correcta\",\"options\":[\"A\",\"B\",\"C\",\"D\"],\"answer\":0,\"explanation\":\"explicacion factualmente correcta\",\"topic\":\"subtema\",\"source\":\"fuente confiable o Fuente no verificada. Revisar con material de estudio.\"},\n{\"type\":\"development\",\"question\":\"pregunta que requiera analisis\",\"answer\":\"respuesta modelo completa\",\"explanation\":\"criterios de evaluacion\",\"topic\":\"subtema\",\"source\":\"fuente confiable o Fuente no verificada. Revisar con material de estudio.\"}\n]}\n\nREGLAS:\n1. Una sola respuesta correcta por pregunta.\n2. NO inventes informacion ni fechas.\n3. Para source usa SOLO: Curriculo Nacional MINEDUC, Khan Academy, Britannica, NASA, NIH, UNESCO, Biblioteca Nacional, o escribe: Fuente no verificada. Revisar con material de estudio.\n4. Total exacto: "+(numMC+numDev)+" preguntas.";
-      const raw=await callClaude([{role:"user",content:prompt}],"Eres un asistente academico especializado en educacion chilena. Prioriza SIEMPRE precision y veracidad factual. Verifica que cada respuesta sea correcta. No inventes informacion. Si una pregunta tiene riesgo de error, simplificala. Responde SOLO con JSON valido.",null,HAIKU);
+      const prompt="Genera exactamente "+numMC+" preguntas de seleccion multiple y "+numDev+" preguntas de desarrollo sobre este contenido educativo.\n\nContenido:\n"+content+"\n\nDevuelve SOLO un JSON valido con esta estructura exacta:\n{\n  \"topic\": \"tema principal\",\n  \"questions\": [\n    {\n      \"type\": \"multiple\",\n      \"question\": \"pregunta clara con una sola respuesta correcta\",\n      \"options\": [\"opcion A\", \"opcion B\", \"opcion C\", \"opcion D\"],\n      \"answer\": 0,\n      \"explanation\": \"explicacion breve y factualmente correcta\",\n      \"topic\": \"subtema\",\n      \"source_title\": \"titulo de la fuente academica\",\n      \"source_url\": \"URL real o vacia si no hay\",\n      \"source_type\": \"oficial o academica o educativa\",\n      \"confidence\": \"alto o medio o bajo\"\n    }\n  ]\n}\n\nREGLAS CRITICAS:\n1. CADA pregunta DEBE tener source_title obligatoriamente.\n2. Para source_title usa SOLO fuentes reales: Curriculo Nacional MINEDUC, BCN - Biblioteca del Congreso Nacional, Memoria Chilena - DIBAM, Khan Academy, Britannica, NASA, NIH, UNESCO, o escribe: Fuente no verificada.\n3. Para source_url pon la URL real si la conoces con certeza, si no deja vacia.\n4. NO inventes informacion, fechas ni datos.\n5. Si una pregunta tiene ambiguedad, reformulala.\n6. Total exacto: "+(numMC+numDev)+" preguntas.";
+      const raw=await callClaude([{role:"user",content:prompt}],"Eres un asistente academico especializado en educacion chilena de ensenanza media. Prioriza SIEMPRE precision y veracidad factual. Cada pregunta DEBE incluir source_title con una fuente real y verificable. No inventes informacion. Responde SOLO con JSON valido sin texto adicional.",null,HAIKU);
       const parsed=parseJSON(raw);
       if(!parsed?.questions?.length) throw new Error("Error al generar");
       setTopic(parsed.topic||"Cuestionario"); setQuiz(parsed.questions);
