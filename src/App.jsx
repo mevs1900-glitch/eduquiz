@@ -464,7 +464,7 @@ function QuizInput({onGenerate}) {
 }
 
 function Loading({phase}) {
-  const phases=["Analizando el contenido...","Generando preguntas con IA...","Preparando tu cuestionario..."];
+  const phases=["Analizando el contenido...","Generando preguntas con IA...","Listo!"];
   return (
     <div style={{maxWidth:380,margin:"80px auto",textAlign:"center"}} className="fi">
       <div style={{width:72,height:72,borderRadius:20,background:"linear-gradient(135deg,rgba(14,165,233,.15),rgba(139,92,246,.15))",border:"1px solid rgba(14,165,233,.2)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 24px",fontSize:24,fontWeight:800,color:"#0ea5e9",animation:"pulse 1.8s infinite"}}>IA</div>
@@ -803,10 +803,8 @@ export default function App() {
       const parsed=parseJSON(raw);
       if(!parsed?.questions?.length) throw new Error("Error al generar");
       setTopic(parsed.topic||"Cuestionario"); setQuiz(parsed.questions);
-      setPhase(2);
-      let webRes=[];
-      try{const sr=await callClaude([{role:"user",content:"Busca recursos educativos sobre: \""+parsed.topic+"\""}],"Investigador educativo. SOLO JSON: [{\"title\":\"...\",\"url\":\"...\",\"snippet\":\"...\"}]",[{type:"web_search_20250305",name:"web_search"}]);const arr=parseJSON(sr);webRes=Array.isArray(arr)?arr:[];}catch{}
-      setResources(webRes); setScreen(SCREEN.QUIZ_ACTIVE);
+      setResources([]);
+      setScreen(SCREEN.QUIZ_ACTIVE);
     } catch(e) {
       console.error(e); show("Error al generar. Intenta de nuevo.","err"); setScreen(SCREEN.QUIZ_INPUT);
     }
