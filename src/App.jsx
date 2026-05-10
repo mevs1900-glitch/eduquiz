@@ -123,18 +123,17 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 }
 `;
 
-const SK = { results:"eq:results" };
 const LS = {
   get: k => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch { return null; } },
   set: (k,v) => { try { localStorage.setItem(k,JSON.stringify(v)); } catch {} },
 };
-const getResults = () => LS.get(SK.results) || [];
-const addResult = r => { const arr = [r, ...getResults()].slice(0,100); LS.set(SK.results, arr); };
+const getResultsForUser = (uid) => LS.get("eq:results:"+uid) || [];
+const addResultForUser = (uid, r) => { const arr = [r, ...getResultsForUser(uid)].slice(0,100); LS.set("eq:results:"+uid, arr); };
 
 const API_KEY = import.meta.env.VITE_ANTHROPIC_KEY;
 
 async function callClaude(messages, system, tools=null, model="claude-haiku-4-5-20251001") {
-  const body = { model, max_tokens:4000, system, messages };
+  const body = { model, max_tokens:8000, system, messages };
   if (tools) body.tools = tools;
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method:"POST",
@@ -333,7 +332,7 @@ function TopBar({user,onNav,onLogout}) {
 }
 
 function Home({user,onNav}) {
-  const results = getResults();
+  const results = getResultsForUser(user.uid);
   const stats = { total:results.length, avgPct:results.length?Math.round(results.reduce((a,r)=>a+r.pct,0)/results.length):0, best:results.length?Math.max(...results.map(r=>r.pct)):0 };
   const hour = new Date().getHours();
   const greeting = hour<12?"Buenos dias":hour<18?"Buenas tardes":"Buenas noches";
@@ -718,8 +717,8 @@ function Results({quiz,result,onRestart,onHome}) {
   );
 }
 
-function History() {
-  const results = getResults();
+function History({user}) {
+  const results = getResultsForUser(user.uid);
   return (
     <div style={{maxWidth:680,margin:"0 auto",padding:"36px 16px 40px"}} className="fu">
       <div style={{marginBottom:28}}>
@@ -812,7 +811,7 @@ export default function App() {
 
   const handleFinish = r => {
     setResult(r);
-    addResult({ts:Date.now(),topic,pct:Math.round((r.correctCount/quiz.length)*100),correct:r.correctCount,total:quiz.length});
+    addResultForUser(user.uid, {ts:Date.now(),topic,pct:Math.round((r.correctCount/quiz.length)*100),correct:r.correctCount,total:quiz.length});
     show("Resultado guardado","ok");
     setScreen(SCREEN.RESULTS);
   };
@@ -849,7 +848,7 @@ export default function App() {
               {screen===SCREEN.QUIZ_LOADING && <Loading phase={phase}/>}
               {screen===SCREEN.QUIZ_ACTIVE && quiz && <Quiz quiz={quiz} resources={resources} onFinish={handleFinish} onRestart={resetQuiz}/>}
               {screen===SCREEN.RESULTS && quiz && result && <Results quiz={quiz} result={result} onRestart={resetQuiz} onHome={()=>setScreen(SCREEN.HOME)}/>}
-              {screen===SCREEN.HISTORY && <History/>}
+              {screen===SCREEN.HISTORY && <History user={user}/>}
             </div>
           </div>
           <Footer/>
@@ -858,4 +857,4 @@ export default function App() {
       {Toast}
     </>
   );
-} 
+}
