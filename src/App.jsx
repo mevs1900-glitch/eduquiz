@@ -1,4 +1,4 @@
-﻿import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
 
@@ -799,7 +799,7 @@ export default function App() {
       }
       setPhase(1);
       const prompt="Genera exactamente "+numMC+" preguntas de seleccion multiple y "+numDev+" preguntas de desarrollo sobre este contenido educativo.\n\nContenido:\n"+content+"\n\nDevuelve SOLO un JSON valido con esta estructura exacta:\n{\n  \"topic\": \"tema principal\",\n  \"questions\": [\n    {\n      \"type\": \"multiple\",\n      \"question\": \"pregunta clara con una sola respuesta correcta\",\n      \"options\": [\"opcion A\", \"opcion B\", \"opcion C\", \"opcion D\"],\n      \"answer\": 0,\n      \"explanation\": \"explicacion breve y factualmente correcta\",\n      \"topic\": \"subtema\",\n      \"source_title\": \"titulo de la fuente academica\",\n      \"source_url\": \"URL real o vacia si no hay\",\n      \"source_type\": \"oficial o academica o educativa\",\n      \"confidence\": \"alto o medio o bajo\"\n    }\n  ]\n}\n\nREGLAS CRITICAS:\n1. CADA pregunta DEBE tener source_title obligatoriamente.\n2. Para source_title usa SOLO fuentes reales: Curriculo Nacional MINEDUC, BCN - Biblioteca del Congreso Nacional, Memoria Chilena - DIBAM, Khan Academy, Britannica, NASA, NIH, UNESCO, o escribe: Fuente no verificada.\n3. Para source_url pon la URL real si la conoces con certeza, si no deja vacia.\n4. NO inventes informacion, fechas ni datos.\n5. Si una pregunta tiene ambiguedad, reformulala.\n6. Total exacto: "+(numMC+numDev)+" preguntas.";
-      const raw=await callClaude([{role:"user",content:prompt}],"Eres un asistente academico especializado en educacion chilena de ensenanza media. Prioriza SIEMPRE precision y veracidad factual. Cada pregunta DEBE incluir source_title con una fuente real y verificable. No inventes informacion. Responde SOLO con JSON valido sin texto adicional.",null,SONNET);
+      const raw=await callClaude([{role:"user",content:prompt}],"Eres un asistente academico especializado en educacion chilena de ensenanza media. Prioriza SIEMPRE precision y veracidad factual. Cada pregunta DEBE incluir source_title con una fuente real y verificable. No inventes informacion. Responde SOLO con JSON valido sin texto adicional.",null,HAIKU);
       const parsed=parseJSON(raw);
       if(!parsed?.questions?.length) throw new Error("Error al generar");
       setTopic(parsed.topic||"Cuestionario"); setQuiz(parsed.questions);
