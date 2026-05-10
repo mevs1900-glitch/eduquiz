@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+﻿import { useState, useRef, useCallback, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
 
@@ -513,7 +513,7 @@ function SourceBlock({q}) {
         {confidence&&<span style={{fontSize:9,fontWeight:700,color:confColor,background:confColor+"20",padding:"1px 6px",borderRadius:4}}>{confidence.toUpperCase()}</span>}
       </div>
       {url ? (
-        <a href={url} target="_blank" rel="noreferrer" style={{fontSize:12,color:"#38bdf8",textDecoration:"underline",wordBreak:"break-all"}}>{title}</a>
+        <a href={url.startsWith("http) ? url : https:// + url} target="_blank" rel="noreferrer" style={{fontSize:12,color:"#38bdf8",textDecoration:"underline",wordBreak:"break-all"}}>{title}</a>
       ) : (
         <span style={{fontSize:12,color:"#94a3b8"}}>{title}</span>
       )}
