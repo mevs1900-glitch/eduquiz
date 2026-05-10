@@ -1,4 +1,4 @@
-﻿import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
 
@@ -513,7 +513,7 @@ function SourceBlock({q}) {
         {confidence&&<span style={{fontSize:9,fontWeight:700,color:confColor,background:confColor+"20",padding:"1px 6px",borderRadius:4}}>{confidence.toUpperCase()}</span>}
       </div>
       {url ? (
-        <a href={url.startsWith("http) ? url : https:// + url} target="_blank" rel="noreferrer" style={{fontSize:12,color:"#38bdf8",textDecoration:"underline",wordBreak:"break-all"}}>{title}</a>
+        <a href={url.startsWith("http") ? url : "https://" + url} target="_blank" rel="noreferrer" style={{fontSize:12,color:"#38bdf8",textDecoration:"underline",wordBreak:"break-all"}}>{title}</a>
       ) : (
         <span style={{fontSize:12,color:"#94a3b8"}}>{title}</span>
       )}
@@ -707,7 +707,7 @@ function Results({quiz,result,onRestart,onHome}) {
             <div style={{flex:1,minWidth:0}}>
               <div style={{fontSize:13,fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:open===i?"normal":"nowrap",color:"#e2e8f0",lineHeight:1.5}}>{i+1}. {q.question}</div>
               {open===i&&fb?.explanation&&<div className="fu" style={{fontSize:12,color:"#94a3b8",marginTop:8,lineHeight:1.7}}>{cleanText(fb.explanation)}</div>}
-              {open===i&&q.source_title&&<div style={{padding:"6px 10px",borderRadius:8,background:"rgba(139,92,246,.08)",border:"1px solid rgba(139,92,246,.2)",marginTop:6}}>{q.source_url?<a href={q.source_url} target="_blank" rel="noreferrer" style={{fontSize:11,color:"#38bdf8",textDecoration:"underline"}}>{q.source_title}</a>:<span style={{fontSize:11,color:"#94a3b8"}}>{q.source_title}</span>}</div>}
+              {open===i&&q.source_title&&<div style={{padding:"6px 10px",borderRadius:8,background:"rgba(139,92,246,.08)",border:"1px solid rgba(139,92,246,.2)",marginTop:6}}>{q.source_url?<a href={q.source_url.startsWith("http") ? q.source_url : "https://" + q.source_url} target="_blank" rel="noreferrer" style={{fontSize:11,color:"#38bdf8",textDecoration:"underline"}}>{q.source_title}</a>:<span style={{fontSize:11,color:"#94a3b8"}}>{q.source_title}</span>}</div>}
             </div>
             <span style={{fontSize:12,color:"#334155",flexShrink:0,marginTop:2}}>{open===i?"^":"v"}</span>
           </button>
@@ -717,11 +717,14 @@ function Results({quiz,result,onRestart,onHome}) {
   );
 }
 
-function History({user}) {
+function History({user, onNav}) {
   const results = getResultsForUser(user.uid);
   return (
     <div style={{maxWidth:680,margin:"0 auto",padding:"36px 16px 40px"}} className="fu">
       <div style={{marginBottom:28}}>
+        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
+          <button onClick={()=>onNav("home")} style={{background:"transparent",border:"1.5px solid #1e1e2e",borderRadius:10,color:"#94a3b8",cursor:"pointer",fontSize:13,fontWeight:600,padding:"8px 16px",fontFamily:"'Inter',sans-serif",transition:"all .2s"}} onMouseEnter={e=>{e.currentTarget.style.borderColor="#0ea5e9";e.currentTarget.style.color="#0ea5e9"}} onMouseLeave={e=>{e.currentTarget.style.borderColor="#1e1e2e";e.currentTarget.style.color="#94a3b8"}}>Volver al inicio</button>
+        </div>
         <h1 style={{fontSize:24,fontWeight:800,marginBottom:4,color:"#fff"}}>Mi historial</h1>
         <p style={{color:"#475569",fontSize:13}}>{results.length} evaluaciones completadas</p>
       </div>
@@ -848,7 +851,7 @@ export default function App() {
               {screen===SCREEN.QUIZ_LOADING && <Loading phase={phase}/>}
               {screen===SCREEN.QUIZ_ACTIVE && quiz && <Quiz quiz={quiz} resources={resources} onFinish={handleFinish} onRestart={resetQuiz}/>}
               {screen===SCREEN.RESULTS && quiz && result && <Results quiz={quiz} result={result} onRestart={resetQuiz} onHome={()=>setScreen(SCREEN.HOME)}/>}
-              {screen===SCREEN.HISTORY && <History user={user}/>}
+              {screen===SCREEN.HISTORY && <History user={user} onNav={nav}/>}
             </div>
           </div>
           <Footer/>
@@ -858,4 +861,3 @@ export default function App() {
     </>
   );
 }
-
